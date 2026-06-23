@@ -32,7 +32,7 @@
 			margin-bottom: 10px;
 		}
 
-		form>label {
+		form>label, form>span>label {
 			font-family: SFProText-Bold, SFUIText-Bold, SanFranciscoText-Bold, -apple-system, system-ui, HelveticaNeue-Light, Helvetica Neue, Helvetica, Verdana, Arial, sans-serif;
 			font-weight: bold;
 			top: 10px;
@@ -92,14 +92,14 @@
 
 <body>
 	<header>
-		<a href="/">
+		<a href="/" style='margin-top: auto;margin-bottom:auto;margin-left: 10px;'>
 			<img src="back.png" /><!--replace with actual back arrow ic-->
 		</a>
-		<h2 style="text-align: center;color: rgba(136, 0, 222, 1);">Welcome back</h2>
+		<h2 style='font-size: 24px ;margin: auto;color: rgba(136, 0, 222, 1);font-family: "Space Grotesk", sans-serif;'>Welcome back</h2>
 	</header>
 	<div style="margin: 16px;">
 		<div class="floaty"
-			style="background-color: cyan;left:calc((100% - 448px) / 2 + 300px);top: 96px;transform: rotate(20deg);">
+			style="background-color: cyan;left:calc((100% - 448px) / 2 + 300px);top: 64px;transform: rotate(20deg);">
 		</div>
 		<div class="floaty"
 			style="background-color: red;left:calc((100% - 448px) / 2 - 42px);top: 246px;transform: rotate(42deg);">
@@ -107,15 +107,16 @@
 		<div class="box" style="z-index:1;transform: rotate(-2deg);">
 			<form style="transform: rotate(2deg);">
 				<label for="Raine">email</label><br>
-				<input name="Raine" type="email" placeholder="username@example.com"></input><br>
-				<label for="Fear">password</label><br>
-				<span>
-				<input name="Fear" type="password" id="pasw"
-					placeholder="••••••••"></input>
-				<input type="checkbox"
-					onclick="var x = document.getElementById('pasw');if (x.type === 'password') {x.type = 'text';  } else {x.type = 'password';}"></button>
-			</span><br>
+				<input name="Raine" type="email" placeholder="username@example.com"></input>
+				<span style="margin-bottom: 5px;">
+				<label for="Fear" style="margin-bottom: 5px;">password</label>
+				<button style='stroke-color: rgb(87, 87, 87); color: rgb(247, 177, 65); margin-left: auto; margin-right: 13px;margin-bottom: 0;font-family: "Puritan", sans-serif;font-weight: 800;font-style: italic;'>Forgot Password?</button>
+				</span><span style="margin-top: 5px;">
+				<input name="Fear" type="password" id="pasw" placeholder="••••••••"></input>
+				<input type="checkbox" onclick="var x = document.getElementById('pasw');if (x.type === 'password') {x.type = 'text';  } else {x.type = 'password';}"></button>
+			</span>
 				<input type="submit" id="login"></input>
+			<hr/>
 				<span>
 					<p>Don't have an account yet? then </p><a style="margin-left:2pt;" href="example.com"><p> make one here</p></a>
 					<p>!</p>
