@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<!--© 2026 John Sencion, made using human-->
+<html>
+
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta charset="utf-8">
+	<style>
+		span {
+			display: flex;
+			width: 100%;
+		}
+		header {
+			display: flex;
+			border-bottom: 5px solid rgb(0, 0, 0);
+			left: 0;
+			right: 1vw;
+			box-shadow: 5px 5px rgb(0, 0, 0);
+			background-color: whitesmoke;
+		}
+
+		body {
+			margin: 0;
+			background-image: radial-gradient(black 1px, transparent 0);
+			background-size: 48px 48px;
+		}
+
+		.box>form {
+			margin-left: 10px;
+			margin-right: 10px;
+			margin-top: 20px;
+			margin-bottom: 10px;
+		}
+
+		form>label, form>span>label {
+			font-family: SFProText-Bold, SFUIText-Bold, SanFranciscoText-Bold, -apple-system, system-ui, HelveticaNeue-Light, Helvetica Neue, Helvetica, Verdana, Arial, sans-serif;
+			font-weight: bold;
+			top: 10px;
+			bottom: 10px;
+		}
+
+		.box>form>* {
+			margin-top: 10px;
+			margin-bottom: 10px;
+			margin-left: 5px;
+			margin-top: 15px;
+		}
+
+		form>input, form>span>input {
+			height: 32px;
+		}
+		form>input {
+			width: calc(100% - 20px);
+		}
+		form>span>input[type=password], form>span>input[type=text] {
+			width: calc(100% - 20px - 32px - 2pt);
+		}
+		form>span>input[type=checkbox] {
+			width: 32px;
+		}
+
+		#login {
+			height: 28pt;
+			width: calc(100% - 20px);
+			margin-left: 10px;
+			margin-right: 10px;
+			margin-top: 10px;
+			margin-bottom: 10px;
+			border: 5px solid rgb(0, 0, 0);
+			box-shadow: 10px 10px rgb(0, 0, 0);
+			background-color: rgba(0, 107, 10, 1);
+		}
+
+		.box {
+			background-color: whitesmoke;
+			margin: auto;
+			margin-top: 48px;
+			width: 448px;
+			border: 5px solid rgb(0, 0, 0);
+			box-shadow: 10px 10px rgb(0, 0, 0);
+		}
+
+		.floaty {
+			position: absolute;
+			z-index: -1;
+			margin: 0;
+			width: 64px;
+			height: 64px;
+		}
+	</style>
+</head>
+
+<body>
+	<header>
+		<a href="/" style='margin-top: auto;margin-bottom:auto;margin-left: 10px;'>
+			<img src="back.png" /><!--replace with actual back arrow ic-->
+		</a>
+		<h2 style='font-size: 24px ;margin: auto;color: rgba(136, 0, 222, 1);font-family: "Space Grotesk", sans-serif;'>Welcome back</h2>
+	</header>
+	<div style="margin: 16px;">
+		<div class="floaty"
+			style="background-color: cyan;left:calc((100% - 448px) / 2 + 300px);top: 64px;transform: rotate(20deg);">
+		</div>
+		<div class="floaty"
+			style="background-color: red;left:calc((100% - 448px) / 2 - 42px);top: 246px;transform: rotate(42deg);">
+		</div>
+		<div class="box" style="z-index:1;transform: rotate(-2deg);">
+			<form style="transform: rotate(2deg);">
+				<label for="Raine">email</label><br>
+				<input name="Raine" type="email" placeholder="username@example.com"></input>
+				<span style="margin-bottom: 5px;">
+				<label for="Fear" style="margin-bottom: 5px;">password</label>
+				<button style='stroke-color: rgb(87, 87, 87); color: rgb(247, 177, 65); margin-left: auto; margin-right: 13px;margin-bottom: 0;font-family: "Puritan", sans-serif;font-weight: 800;font-style: italic;'>Forgot Password?</button>
+				</span><span style="margin-top: 5px;">
+				<input name="Fear" type="password" id="pasw" placeholder="••••••••"></input>
+				<input type="checkbox" onclick="var x = document.getElementById('pasw');if (x.type === 'password') {x.type = 'text';  } else {x.type = 'password';}"></button>
+			</span>
+				<input type="submit" id="login"></input>
+			<hr/>
+				<span>
+					<p>Don't have an account yet? then </p><a style="margin-left:2pt;" href="example.com"><p> make one here</p></a>
+					<p>!</p>
+				</span>
+			</form>
+		</div>
+
+	</div>
+</body>
+
+</html>
