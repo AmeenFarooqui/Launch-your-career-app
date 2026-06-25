@@ -1,219 +1,356 @@
 import React from "react";
 import {
-  Home,
-  Trophy,
-  Store,
-  User,
-  Flame,
-  Gem,
-} from "lucide-react";
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
+
+import {
+  Ionicons,
+  MaterialCommunityIcons,
+  FontAwesome5,
+} from "@expo/vector-icons";
 
 export default function LeaderboardScreen() {
   return (
-    <div className="min-h-screen bg-white flex justify-center">
-      <div className="w-[393px] bg-white p-4">
+    <ScrollView style={styles.container}>
 
-        {/* Header */}
-        <div
-          className="rounded-b-3xl p-5 text-white shadow-xl"
-          style={{
-            background:
-              "linear-gradient(135deg,#5B00FF,#A100FF)",
-          }}
-        >
-          <h1 className="text-3xl font-bold mb-4">
-            Leaderboard
-          </h1>
+      {/* Header */}
+      <View style={styles.header}>
+        <Text style={styles.title}>Leaderboard</Text>
 
-          <div className="grid grid-cols-3 gap-3">
-            {["My State", "My City", "My School"].map(
-              (item) => (
-                <button
-                  key={item}
-                  className="bg-purple-700 border-4 border-purple-800 rounded-2xl py-3 font-bold text-xl"
-                >
-                  {item}
-                </button>
-              )
-            )}
-          </div>
-        </div>
+        <View style={styles.filterContainer}>
+          <TouchableOpacity style={styles.filterBtn}>
+            <Text style={styles.filterText}>My State</Text>
+          </TouchableOpacity>
 
-        {/* Podium */}
-        <div className="flex justify-center items-end gap-4 mt-10">
+          <TouchableOpacity style={styles.filterBtn}>
+            <Text style={styles.filterText}>My City</Text>
+          </TouchableOpacity>
 
-          {/* 2nd */}
-          <div className="w-28 bg-gray-300 rounded-3xl border-4 border-gray-200 p-3 text-center shadow">
-            <div className="w-10 h-10 bg-white rounded-full mx-auto mb-2" />
-            <h3 className="font-bold">Full Name</h3>
-            <p className="text-sm">School</p>
+          <TouchableOpacity style={styles.filterBtn}>
+            <Text style={styles.filterText}>My School</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
 
-            <div className="flex justify-center gap-1 mt-2">
-              <Flame size={16} color="orange" />
-              <span>20 Day Streak</span>
-            </div>
+      {/* Podium */}
+      <View style={styles.podiumRow}>
 
-            <div className="flex justify-center gap-1 mt-1">
-              <Gem size={16} color="limegreen" />
-              <span>2000 XP</span>
-            </div>
+        <View style={[styles.podiumCard, styles.silver]}>
+          <Text style={styles.medal}>🥈</Text>
+          <View style={styles.avatar} />
+          <Text style={styles.name}>Full Name</Text>
+          <Text>School</Text>
 
-            <div className="absolute" />
-          </div>
+          <Text style={styles.stat}>🔥 20 Day Streak</Text>
+          <Text style={styles.stat}>💎 2000 XP</Text>
+        </View>
 
-          {/* 1st */}
-          <div className="w-32 bg-yellow-300 rounded-3xl border-4 border-yellow-400 p-3 text-center shadow-lg">
-            <div className="w-12 h-12 bg-white rounded-full mx-auto mb-2" />
-            <h3 className="font-bold">Full Name</h3>
-            <p>School</p>
+        <View style={[styles.podiumCard, styles.gold]}>
+          <Text style={styles.medal}>🥇</Text>
+          <View style={styles.avatar} />
+          <Text style={styles.name}>Full Name</Text>
+          <Text>School</Text>
 
-            <div className="flex justify-center gap-1 mt-2">
-              <Flame size={16} color="orange" />
-              <span>30 Day Streak</span>
-            </div>
+          <Text style={styles.stat}>🔥 30 Day Streak</Text>
+          <Text style={styles.stat}>💎 3200 XP</Text>
+        </View>
 
-            <div className="flex justify-center gap-1 mt-1">
-              <Gem size={16} color="limegreen" />
-              <span>3200 XP</span>
-            </div>
-          </div>
+        <View style={[styles.podiumCard, styles.bronze]}>
+          <Text style={styles.medal}>🥉</Text>
+          <View style={styles.avatar} />
+          <Text style={styles.name}>Full Name</Text>
+          <Text>School</Text>
 
-          {/* 3rd */}
-          <div className="w-28 bg-orange-300 rounded-3xl border-4 border-orange-500 p-3 text-center shadow">
-            <div className="w-10 h-10 bg-white rounded-full mx-auto mb-2" />
-            <h3 className="font-bold">Full Name</h3>
-            <p className="text-sm">School</p>
+          <Text style={styles.stat}>🔥 15 Day Streak</Text>
+          <Text style={styles.stat}>💎 1000 XP</Text>
+        </View>
 
-            <div className="flex justify-center gap-1 mt-2">
-              <Flame size={16} color="orange" />
-              <span>15 Day Streak</span>
-            </div>
+      </View>
 
-            <div className="flex justify-center gap-1 mt-1">
-              <Gem size={16} color="limegreen" />
-              <span>1000 XP</span>
-            </div>
-          </div>
-        </div>
+      {/* Rankings */}
+      <View style={styles.rankContainer}>
+        {[4, 5, 6, 7].map((rank) => (
+          <View key={rank} style={styles.rankRow}>
+            <Text style={styles.rankNumber}>{rank}</Text>
 
-        {/* Rankings */}
-        <div className="bg-white rounded-3xl shadow-lg p-4 mt-6 border">
+            <View style={styles.smallAvatar} />
 
-          {[4, 5, 6, 7].map((rank) => (
-            <div
-              key={rank}
-              className="flex items-center justify-between py-3 border-b"
-            >
-              <div className="flex items-center gap-3">
-                <span className="font-bold text-3xl">
-                  {rank}
-                </span>
+            <View style={{ flex: 1 }}>
+              <Text style={styles.rankName}>Full Name</Text>
+              <Text>School</Text>
+            </View>
 
-                <div className="w-10 h-10 bg-black rounded-full" />
+            <Text>🔥 10</Text>
+            <Text>💎 860</Text>
 
-                <div>
-                  <h4 className="font-bold">
-                    Full Name
-                  </h4>
-                  <p className="text-sm">
-                    School
-                  </p>
-                </div>
-              </div>
+            <Text style={styles.points}>
+              380 pts
+            </Text>
+          </View>
+        ))}
+      </View>
 
-              <div className="flex items-center gap-3">
-                <Flame
-                  size={18}
-                  color="orange"
-                />
-                <span>10 Days</span>
+      {/* User Card */}
+      <View style={styles.userCard}>
+        <View>
+          <Text style={styles.userRank}>
+            #21 Alexandrina B.
+          </Text>
 
-                <Gem
-                  size={18}
-                  color="limegreen"
-                />
-                <span>860 XP</span>
+          <Text>
+            Mount Prospect, IL
+          </Text>
+        </View>
 
-                <span className="font-bold">
-                  380 pts
-                </span>
-              </div>
-            </div>
-          ))}
+        <Text style={styles.userPoints}>
+          60 pts
+        </Text>
+      </View>
 
-          {/* User */}
-          <div
-            className="rounded-2xl mt-4 p-3 flex justify-between items-center"
-            style={{
-              background:
-                "linear-gradient(90deg,#A66BFF,#B38AFF)",
-            }}
-          >
-            <div>
-              <h3 className="text-red-700 font-bold text-2xl">
-                #21 Alexandrina B.
-              </h3>
-              <p>Mount Prospect, IL</p>
-            </div>
+      <TouchableOpacity>
+        <Text style={styles.fullBoard}>
+          View Full Leaderboard
+        </Text>
+      </TouchableOpacity>
 
-            <div className="text-5xl font-bold">
-              60
-              <span className="text-2xl">
-                pts
-              </span>
-            </div>
-          </div>
+      {/* Bottom Cards */}
+      <View style={styles.statsRow}>
 
-          <button className="w-full mt-4 text-purple-700 font-bold text-xl">
-            View Full Leaderboard
-          </button>
-        </div>
+        <View style={styles.redCard}>
+          <Text style={styles.bigIcon}>🔥</Text>
 
-        {/* Stats */}
-        <div className="grid grid-cols-2 gap-4 mt-6">
+          <View>
+            <Text style={styles.bigNumber}>
+              8
+            </Text>
 
-          <div className="bg-red-700 rounded-3xl p-4 text-white">
-            <div className="flex items-center gap-3">
-              <Flame
-                size={60}
-                color="#FFD34D"
-              />
-              <div>
-                <div className="text-3xl font-bold">
-                  8
-                </div>
-                <div>Day Streak</div>
-                <div>x0.2</div>
-              </div>
-            </div>
-          </div>
+            <Text style={styles.white}>
+              Day Streak
+            </Text>
 
-          <div className="bg-red-700 rounded-3xl p-4 text-white">
-            <div className="flex items-center gap-3">
-              <div className="w-20 h-20 rounded-full border-8 border-green-400 flex items-center justify-center text-3xl font-bold">
-                5
-              </div>
+            <Text style={styles.white}>
+              x0.2
+            </Text>
+          </View>
+        </View>
 
-              <div>
-                <div>to beat</div>
-                <div className="font-bold">
-                  Amy D.
-                </div>
-                <div>(#20)</div>
-              </div>
-            </div>
-          </div>
+        <View style={styles.redCard}>
+          <Text style={styles.bigNumber}>
+            5
+          </Text>
 
-        </div>
+          <View>
+            <Text style={styles.white}>
+              to beat
+            </Text>
 
-        {/* Bottom Nav */}
-        <div className="fixed bottom-0 w-[393px] bg-gray-100 border-t flex justify-around py-3">
-          <Home />
-          <Trophy color="#7B4DFF" />
-          <Store />
-          <User />
-        </div>
-      </div>
-    </div>
+            <Text style={styles.whiteBold}>
+              Amy D.
+            </Text>
+
+            <Text style={styles.white}>
+              (#20)
+            </Text>
+          </View>
+        </View>
+
+      </View>
+
+    </ScrollView>
   );
 }
+
+const PURPLE = "#7B4DFF";
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+  },
+
+  header: {
+    backgroundColor: PURPLE,
+    paddingTop: 70,
+    paddingBottom: 35,
+    paddingHorizontal: 20,
+    borderBottomLeftRadius: 40,
+    borderBottomRightRadius: 40,
+  },
+
+  title: {
+    color: "#fff",
+    fontSize: 40,
+    fontWeight: "bold",
+    marginBottom: 20,
+  },
+
+  filterContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+
+  filterBtn: {
+    backgroundColor: "#5E31E6",
+    paddingVertical: 12,
+    paddingHorizontal: 15,
+    borderRadius: 15,
+  },
+
+  filterText: {
+    color: "white",
+    fontWeight: "700",
+  },
+
+  podiumRow: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginTop: 25,
+    paddingHorizontal: 10,
+  },
+
+  podiumCard: {
+    width: 110,
+    borderRadius: 25,
+    padding: 12,
+    alignItems: "center",
+  },
+
+  silver: {
+    backgroundColor: "#E8E8E8",
+  },
+
+  gold: {
+    backgroundColor: "#FFD84D",
+  },
+
+  bronze: {
+    backgroundColor: "#FFC48A",
+  },
+
+  medal: {
+    fontSize: 35,
+  },
+
+  avatar: {
+    width: 65,
+    height: 65,
+    borderRadius: 32,
+    backgroundColor: "#fff",
+    marginVertical: 10,
+  },
+
+  name: {
+    fontWeight: "bold",
+    fontSize: 16,
+  },
+
+  stat: {
+    marginTop: 8,
+  },
+
+  rankContainer: {
+    margin: 20,
+    backgroundColor: "#fff",
+    borderRadius: 25,
+    padding: 10,
+    elevation: 5,
+  },
+
+  rankRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginVertical: 12,
+  },
+
+  rankNumber: {
+    fontSize: 28,
+    fontWeight: "bold",
+    width: 40,
+  },
+
+  smallAvatar: {
+    width: 45,
+    height: 45,
+    borderRadius: 25,
+    backgroundColor: "#000",
+    marginHorizontal: 10,
+  },
+
+  rankName: {
+    fontWeight: "bold",
+  },
+
+  points: {
+    fontWeight: "bold",
+    marginLeft: 10,
+  },
+
+  userCard: {
+    backgroundColor: "#DDB9FF",
+    marginHorizontal: 20,
+    borderRadius: 25,
+    padding: 20,
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+
+  userRank: {
+    color: "#B00000",
+    fontSize: 26,
+    fontWeight: "bold",
+  },
+
+  userPoints: {
+    color: PURPLE,
+    fontWeight: "bold",
+    fontSize: 36,
+  },
+
+  fullBoard: {
+    color: PURPLE,
+    textAlign: "center",
+    fontSize: 22,
+    fontWeight: "bold",
+    marginVertical: 20,
+  },
+
+  statsRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingHorizontal: 20,
+    marginBottom: 40,
+  },
+
+  redCard: {
+    backgroundColor: "#D90429",
+    width: "48%",
+    borderRadius: 25,
+    padding: 15,
+    flexDirection: "row",
+    alignItems: "center",
+  },
+
+  bigIcon: {
+    fontSize: 50,
+    marginRight: 10,
+  },
+
+  bigNumber: {
+    fontSize: 40,
+    fontWeight: "bold",
+    color: "#fff",
+  },
+
+  white: {
+    color: "#fff",
+  },
+
+  whiteBold: {
+    color: "#fff",
+    fontWeight: "bold",
+  },
+});
