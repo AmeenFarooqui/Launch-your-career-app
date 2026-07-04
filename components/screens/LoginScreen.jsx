@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import a from "../../screens/Login/back.png"
+import { router } from "expo-router";
 import {
   View,
   Text,
@@ -55,7 +56,10 @@ export default function LoginScreen() {
             </View>
 
 
-            <TouchableOpacity style={styles.loginButton}>
+            <TouchableOpacity
+              style={styles.loginButton}
+              onPress={() => router.replace("/(tabs)/home")}
+            >
               <Text style={styles.loginButtonText}>Login</Text>
             </TouchableOpacity>
 
@@ -64,7 +68,7 @@ export default function LoginScreen() {
 
             <View style={styles.footerRow}>
               <Text style={styles.footerText}>Don't have an account yet? then </Text>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={() => router.push("/(auth)/signup")}>
                 <Text style={styles.linkText}>make one here</Text>
               </TouchableOpacity>
               <Text style={styles.footerText}>!</Text>
