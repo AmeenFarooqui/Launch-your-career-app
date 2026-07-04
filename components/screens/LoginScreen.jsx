@@ -8,8 +8,8 @@ import {
   TouchableOpacity,
   StyleSheet,
   Image,
-  SafeAreaView
 } from 'react-native';
+import { SafeAreaView } from "react-native-safe-area-context";
 //Designed Via Human; Copr. John Sencion 2026
 export default function LoginScreen() {
   const [showPassword, setShowPassword] = useState(false);
