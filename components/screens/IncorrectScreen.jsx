@@ -2,10 +2,10 @@ import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { router } from "expo-router";
 
-export default function CorrectScreen() {
+export default function IncorrectScreen() {
   return (
     <View style={styles.screen}>
-      <Text style={styles.text}>Correct Screen</Text>
+      <Text style={styles.text}>Incorrect</Text>
       <TouchableOpacity
         style={styles.continueButton}
         onPress={() => router.replace("/(tabs)/home")}

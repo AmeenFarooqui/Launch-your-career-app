@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from "react-native";
+import { router } from "expo-router";
 
 export default function HomeScreen() {
   return (
@@ -36,7 +37,10 @@ export default function HomeScreen() {
             ⏰ Ends in 14h 22m
           </Text>
 
-          <TouchableOpacity style={styles.startButton}>
+          <TouchableOpacity
+            style={styles.startButton}
+            onPress={() => router.push("/challenge")}
+          >
             <Text style={styles.startText}>Start Mission</Text>
             <Text style={styles.buttonFire}>🔥</Text>
           </TouchableOpacity>

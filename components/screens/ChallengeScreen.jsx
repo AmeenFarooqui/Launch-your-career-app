@@ -1,5 +1,6 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { router } from "expo-router";
 
 export default function ChallengeScreen() {
   return (
@@ -22,13 +23,13 @@ export default function ChallengeScreen() {
 
       <Answer top={340} roundedTop text="Blah blah bleh blah\nblah blah bleh blah." />
       <Answer top={442} text="Blah blah bleh blah\nblah blah bleh blah but longer." />
-      <Answer top={545} text="Blah blah bleh blah\nblah blah bleh blah and correct." />
+      <Answer top={545} text="Blah blah bleh blah\nblah blah bleh blah and correct." isCorrect />
       <Answer top={648} roundedBottom text="Blah blah bleh blah\nblah blah bleh blah." />
     </View>
   );
 }
 
-function Answer({ top, text, roundedTop, roundedBottom }) {
+function Answer({ top, text, roundedTop, roundedBottom, isCorrect }) {
   return (
     <>
       <TouchableOpacity
@@ -38,6 +39,12 @@ function Answer({ top, text, roundedTop, roundedBottom }) {
           roundedTop && styles.roundedTop,
           roundedBottom && styles.roundedBottom,
         ]}
+        onPress={() =>
+          router.push({
+            pathname: "/result",
+            params: { correct: isCorrect ? "1" : "0" },
+          })
+        }
       >
         <Text style={styles.answerText}>{text}</Text>
       </TouchableOpacity>
