@@ -7,12 +7,6 @@ import {
   TouchableOpacity,
 } from "react-native";
 
-import {
-  Ionicons,
-  MaterialCommunityIcons,
-  FontAwesome5,
-} from "@expo/vector-icons";
-
 export default function LeaderboardScreen() {
   return (
     <ScrollView style={styles.container}>

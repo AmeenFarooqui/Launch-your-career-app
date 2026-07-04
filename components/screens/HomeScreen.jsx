@@ -65,30 +65,6 @@ export default function HomeScreen() {
           15 pts away from Top 20
         </Text>
       </View>
-
-
-      {/* BOTTOM NAV */}
-      <View style={styles.bottomNav}>
-        <View style={styles.activeTab}>
-          <Text style={styles.navIcon}>🏠</Text>
-          <Text style={styles.activeLabel}>Home</Text>
-        </View>
-
-        <View style={styles.navTab}>
-          <Text style={styles.navIcon}>🏆</Text>
-          <Text style={styles.navLabel}>Rank</Text>
-        </View>
-
-        <View style={styles.navTab}>
-          <Text style={styles.navIcon}>🛍️</Text>
-          <Text style={styles.navLabel}>Store</Text>
-        </View>
-
-        <View style={styles.navTab}>
-          <Text style={styles.navIcon}>👤</Text>
-          <Text style={styles.navLabel}>Profile</Text>
-        </View>
-      </View>
     </SafeAreaView>
   );
 }
@@ -309,41 +285,5 @@ const styles = StyleSheet.create({
   prizeText: {
     fontSize: 15,
     lineHeight: 22,
-  },
-
-  bottomNav: {
-    marginTop: "auto",
-    flexDirection: "row",
-    height: 75,
-    backgroundColor: "#EAEAEA",
-  },
-
-  activeTab: {
-    flex: 1,
-    backgroundColor: PURPLE,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-
-  navTab: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-
-  navIcon: {
-    fontSize: 22,
-  },
-
-  activeLabel: {
-    color: "#fff",
-    fontWeight: "bold",
-    fontSize: 16,
-  },
-
-  navLabel: {
-    color: "#666",
-    fontWeight: "bold",
-    fontSize: 16,
   },
 });
