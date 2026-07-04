@@ -14,7 +14,7 @@ export default function BottomTabBar({ state, navigation }) {
   return (
     <View style={styles.bottomNav}>
       {TABS.map((tab, i) => {
-        const isActive = state.index === i;
+        const isActive = state.routes[state.index].name === tab.name;
         return (
           <TouchableOpacity
             key={tab.name}
