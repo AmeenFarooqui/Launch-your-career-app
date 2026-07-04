@@ -3,6 +3,7 @@
     "name": "Launch Your Career",
     "slug": "launch-your-career-app",
     "version": "1.0.0",
+    "scheme": "launchyourcareer",
     "orientation": "portrait",
     "icon": "./src/images/player/appicon.png",
     "userInterfaceStyle": "light",
@@ -25,7 +26,8 @@
     },
     "plugins": [
       "expo-asset",
-      "expo-font"
+      "expo-font",
+      "expo-router"
     ]
   }
 }
