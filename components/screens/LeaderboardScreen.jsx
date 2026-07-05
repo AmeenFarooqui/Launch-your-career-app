@@ -1,9 +1,44 @@
-import React, { useState } from "react";
-import { View, Text, StyleSheet, ScrollView } from "react-native";
+import React, { useState, useRef } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  Pressable,
+  Animated,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
 import PressableScale from "../PressableScale";
 import { COLORS, RADIUS, clay } from "../../constants/theme";
+
+// Podium cards wobble when tapped.
+function WobbleCard({ style, children }) {
+  const wob = useRef(new Animated.Value(0)).current;
+
+  const wobble = () => {
+    wob.setValue(0);
+    Animated.timing(wob, {
+      toValue: 1,
+      duration: 500,
+      useNativeDriver: true,
+    }).start();
+  };
+
+  const rotate = wob.interpolate({
+    inputRange: [0, 0.2, 0.4, 0.6, 0.8, 1],
+    outputRange: ["0deg", "-8deg", "7deg", "-5deg", "3deg", "0deg"],
+  });
+
+  return (
+    <Pressable onPress={wobble}>
+      <Animated.View style={[style, { transform: [{ rotate }] }]}>
+        {children}
+      </Animated.View>
+    </Pressable>
+  );
+}
 
 const FILTERS = ["My State", "My City", "My School"];
 
@@ -18,7 +53,14 @@ export default function LeaderboardScreen() {
 
   return (
     <SafeAreaView style={styles.safe} edges={["top"]}>
-      <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+      <LinearGradient
+        colors={[COLORS.purpleLight, "#E9E1FA"]}
+        style={styles.gradient}
+      >
+        <ScrollView
+          style={styles.container}
+          showsVerticalScrollIndicator={false}
+        >
         {/* Header */}
         <View style={styles.header}>
           <Text style={styles.title}>Leaderboard</Text>
@@ -42,7 +84,10 @@ export default function LeaderboardScreen() {
         {/* Podium */}
         <View style={styles.podiumRow}>
           {PODIUM.map((p) => (
-            <View key={p.place} style={[styles.podiumCard, styles[p.style]]}>
+            <WobbleCard
+              key={p.place}
+              style={[styles.podiumCard, styles[p.style]]}
+            >
               <Ionicons name="medal" size={34} color={p.medal} />
               <View style={styles.avatar}>
                 <Ionicons name="person" size={30} color={COLORS.purpleLight} />
@@ -58,7 +103,7 @@ export default function LeaderboardScreen() {
                 <Ionicons name="diamond" size={14} color={COLORS.purpleLight} />
                 <Text style={styles.stat}>{p.xp} XP</Text>
               </View>
-            </View>
+            </WobbleCard>
           ))}
         </View>
 
@@ -125,7 +170,8 @@ export default function LeaderboardScreen() {
             </View>
           </View>
         </View>
-      </ScrollView>
+        </ScrollView>
+      </LinearGradient>
     </SafeAreaView>
   );
 }
@@ -136,9 +182,12 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.purpleLight,
   },
 
+  gradient: {
+    flex: 1,
+  },
+
   container: {
     flex: 1,
-    backgroundColor: COLORS.bg,
   },
 
   header: {
@@ -246,11 +295,12 @@ const styles = StyleSheet.create({
 
   rankContainer: {
     margin: 20,
-    backgroundColor: COLORS.card,
+    backgroundColor: "rgba(255,255,255,0.4)",
+    borderWidth: 1.5,
+    borderColor: "rgba(255,255,255,0.75)",
     borderRadius: RADIUS.lg,
     paddingHorizontal: 14,
     paddingVertical: 6,
-    ...clay("#000", 5),
   },
 
   rankRow: {
@@ -289,14 +339,15 @@ const styles = StyleSheet.create({
   },
 
   userCard: {
-    backgroundColor: COLORS.purpleSoft,
+    backgroundColor: "rgba(255,255,255,0.5)",
+    borderWidth: 1.5,
+    borderColor: "rgba(255,255,255,0.85)",
     marginHorizontal: 20,
     borderRadius: RADIUS.lg,
     padding: 20,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    ...clay(COLORS.purpleDark, 5),
   },
 
   userRank: {
@@ -317,7 +368,7 @@ const styles = StyleSheet.create({
   },
 
   fullBoard: {
-    color: COLORS.purpleLight,
+    color: COLORS.purpleDark,
     textAlign: "center",
     fontSize: 20,
     fontWeight: "900",

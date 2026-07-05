@@ -1,117 +1,174 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import PressableScale from "../PressableScale";
-import { COLORS, RADIUS, clay } from "../../constants/theme";
+import { COLORS, RADIUS } from "../../constants/theme";
+
+// Hard offset shadow (neubrutalist, per the Proto.io design): a black
+// backing view with the button lifted up-left off it.
+function HardShadowButton({ style, rotate, onPress, children }) {
+  return (
+    <View style={{ transform: [{ rotate }] }}>
+      <View style={styles.hardShadow}>
+        <PressableScale style={[styles.buttonFace, style]} onPress={onPress}>
+          {children}
+        </PressableScale>
+      </View>
+    </View>
+  );
+}
 
 export default function StartPageScreen() {
   return (
-    <LinearGradient
-      colors={[COLORS.purple, COLORS.purpleDark]}
-      style={styles.gradient}
-    >
-      <SafeAreaView style={styles.container}>
-        <View style={styles.hero}>
-          <View style={styles.badge}>
-            <Ionicons name="rocket" size={64} color={COLORS.gold} />
-          </View>
-          <Text style={styles.title}>Launch Your Career</Text>
-          <Text style={styles.tagline}>
-            One mission a day. Build your streak, climb your school's
-            leaderboard, and turn points into prizes.
-          </Text>
+    <SafeAreaView style={styles.screen}>
+      {/* Purple hero block */}
+      <View style={styles.hero}>
+        <Text style={styles.title}>LAUNCH{"\n"}YOUR{"\n"}CAREER</Text>
+        <View style={styles.logoCircle}>
+          <Ionicons name="rocket" size={34} color={COLORS.white} />
         </View>
+      </View>
 
-        <View style={styles.ctas}>
-          <PressableScale
-            style={[styles.button, styles.primaryButton]}
-            onPress={() => router.push("/(auth)/signup")}
-          >
-            <Text style={styles.primaryText}>Sign Up</Text>
-            <Ionicons name="arrow-forward" size={22} color={COLORS.ink} />
-          </PressableScale>
+      {/* CTAs */}
+      <View style={styles.ctas}>
+        <HardShadowButton
+          style={styles.getStarted}
+          rotate="-3deg"
+          onPress={() => router.push("/(auth)/signup")}
+        >
+          <Text style={styles.getStartedText}>GET STARTED</Text>
+        </HardShadowButton>
 
-          <PressableScale
-            style={[styles.button, styles.secondaryButton]}
-            onPress={() => router.push("/(auth)/login")}
-          >
-            <Text style={styles.secondaryText}>Log In</Text>
-          </PressableScale>
-        </View>
-      </SafeAreaView>
-    </LinearGradient>
+        <HardShadowButton
+          style={styles.login}
+          rotate="-2deg"
+          onPress={() => router.push("/(auth)/login")}
+        >
+          <Text style={styles.loginText}>LOGIN</Text>
+        </HardShadowButton>
+      </View>
+
+      {/* Green jagged hills */}
+      <View style={styles.hills} pointerEvents="none">
+        <View style={[styles.hill, styles.hillLeft]} />
+        <View style={[styles.hill, styles.hillMid]} />
+        <View style={[styles.hill, styles.hillRight]} />
+      </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  gradient: {
+  screen: {
     flex: 1,
+    backgroundColor: COLORS.white,
+    overflow: "hidden",
   },
-  container: {
-    flex: 1,
-    paddingHorizontal: 28,
-    justifyContent: "space-between",
-  },
+
   hero: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  badge: {
-    width: 128,
-    height: 128,
+    backgroundColor: "#8E00E8",
+    marginHorizontal: 10,
+    marginTop: 6,
     borderRadius: RADIUS.xl,
-    backgroundColor: "rgba(255,255,255,0.14)",
-    justifyContent: "center",
+    paddingTop: 36,
+    paddingBottom: 30,
     alignItems: "center",
-    marginBottom: 28,
-    transform: [{ rotate: "-6deg" }],
   },
+
   title: {
     color: COLORS.white,
-    fontSize: 40,
+    fontSize: 52,
+    lineHeight: 60,
     fontWeight: "900",
     textAlign: "center",
-    marginBottom: 14,
   },
-  tagline: {
-    color: "rgba(255,255,255,0.85)",
-    fontSize: 17,
-    lineHeight: 25,
-    textAlign: "center",
-  },
-  ctas: {
-    paddingBottom: 28,
-    gap: 14,
-  },
-  button: {
-    height: 58,
-    borderRadius: RADIUS.lg,
-    flexDirection: "row",
+
+  logoCircle: {
+    width: 76,
+    height: 76,
+    borderRadius: 38,
+    backgroundColor: "#000",
     justifyContent: "center",
     alignItems: "center",
-    gap: 10,
+    marginTop: 18,
   },
-  primaryButton: {
-    backgroundColor: COLORS.gold,
-    ...clay(COLORS.goldDark, 6),
+
+  ctas: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 34,
+    zIndex: 2,
   },
-  primaryText: {
-    color: COLORS.ink,
-    fontSize: 20,
-    fontWeight: "900",
+
+  hardShadow: {
+    backgroundColor: "#000",
+    borderRadius: RADIUS.md,
   },
-  secondaryButton: {
-    backgroundColor: "rgba(255,255,255,0.16)",
-    borderWidth: 2,
-    borderColor: "rgba(255,255,255,0.45)",
+
+  buttonFace: {
+    borderRadius: RADIUS.md,
+    paddingVertical: 16,
+    paddingHorizontal: 40,
+    transform: [{ translateX: -6 }, { translateY: -6 }],
   },
-  secondaryText: {
+
+  getStarted: {
+    backgroundColor: "#B01342",
+  },
+
+  getStartedText: {
     color: COLORS.white,
-    fontSize: 20,
-    fontWeight: "800",
+    fontSize: 22,
+    fontWeight: "900",
+    letterSpacing: 0.5,
+  },
+
+  login: {
+    backgroundColor: "#F5E11A",
+    paddingHorizontal: 52,
+  },
+
+  loginText: {
+    color: "#000",
+    fontSize: 22,
+    fontWeight: "900",
+    letterSpacing: 0.5,
+  },
+
+  hills: {
+    height: 130,
+    justifyContent: "flex-end",
+  },
+
+  hill: {
+    position: "absolute",
+    backgroundColor: "#4ADE33",
+    borderWidth: 4,
+    borderColor: "#000",
+    width: 220,
+    height: 220,
+    borderRadius: 24,
+  },
+
+  hillLeft: {
+    left: -70,
+    bottom: -130,
+    transform: [{ rotate: "35deg" }],
+  },
+
+  hillMid: {
+    left: 90,
+    bottom: -170,
+    transform: [{ rotate: "45deg" }],
+    backgroundColor: "#3BCC28",
+  },
+
+  hillRight: {
+    right: -60,
+    bottom: -120,
+    transform: [{ rotate: "-30deg" }],
   },
 });
