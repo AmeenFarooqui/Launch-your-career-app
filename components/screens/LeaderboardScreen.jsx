@@ -1,174 +1,149 @@
-import React from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-} from "react-native";
+import React, { useState } from "react";
+import { View, Text, StyleSheet, ScrollView } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { Ionicons } from "@expo/vector-icons";
+import PressableScale from "../PressableScale";
+import { COLORS, RADIUS, clay } from "../../constants/theme";
+
+const FILTERS = ["My State", "My City", "My School"];
+
+const PODIUM = [
+  { medal: "#C0C0C0", place: 2, streak: 20, xp: 2000, style: "silver" },
+  { medal: "#FFD700", place: 1, streak: 30, xp: 3200, style: "gold" },
+  { medal: "#CD7F32", place: 3, streak: 15, xp: 1000, style: "bronze" },
+];
 
 export default function LeaderboardScreen() {
+  const [activeFilter, setActiveFilter] = useState(0);
+
   return (
-    <ScrollView style={styles.container}>
+    <SafeAreaView style={styles.safe} edges={["top"]}>
+      <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+        {/* Header */}
+        <View style={styles.header}>
+          <Text style={styles.title}>Leaderboard</Text>
 
-      {/* Header */}
-      <View style={styles.header}>
-        <Text style={styles.title}>Leaderboard</Text>
-
-        <View style={styles.filterContainer}>
-          <TouchableOpacity style={styles.filterBtn}>
-            <Text style={styles.filterText}>My State</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.filterBtn}>
-            <Text style={styles.filterText}>My City</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.filterBtn}>
-            <Text style={styles.filterText}>My School</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-
-      {/* Podium */}
-      <View style={styles.podiumRow}>
-
-        <View style={[styles.podiumCard, styles.silver]}>
-          <Text style={styles.medal}>🥈</Text>
-          <View style={styles.avatar} />
-          <Text style={styles.name}>Full Name</Text>
-          <Text>School</Text>
-
-          <Text style={styles.stat}>🔥 20 Day Streak</Text>
-          <Text style={styles.stat}>💎 2000 XP</Text>
+          <View style={styles.filterContainer}>
+            {FILTERS.map((label, i) => (
+              <PressableScale
+                key={label}
+                style={[
+                  styles.filterBtn,
+                  i === activeFilter && styles.filterBtnActive,
+                ]}
+                onPress={() => setActiveFilter(i)}
+              >
+                <Text style={styles.filterText}>{label}</Text>
+              </PressableScale>
+            ))}
+          </View>
         </View>
 
-        <View style={[styles.podiumCard, styles.gold]}>
-          <Text style={styles.medal}>🥇</Text>
-          <View style={styles.avatar} />
-          <Text style={styles.name}>Full Name</Text>
-          <Text>School</Text>
+        {/* Podium */}
+        <View style={styles.podiumRow}>
+          {PODIUM.map((p) => (
+            <View key={p.place} style={[styles.podiumCard, styles[p.style]]}>
+              <Ionicons name="medal" size={34} color={p.medal} />
+              <View style={styles.avatar}>
+                <Ionicons name="person" size={30} color={COLORS.purpleLight} />
+              </View>
+              <Text style={styles.name}>Full Name</Text>
+              <Text style={styles.school}>School</Text>
 
-          <Text style={styles.stat}>🔥 30 Day Streak</Text>
-          <Text style={styles.stat}>💎 3200 XP</Text>
-        </View>
-
-        <View style={[styles.podiumCard, styles.bronze]}>
-          <Text style={styles.medal}>🥉</Text>
-          <View style={styles.avatar} />
-          <Text style={styles.name}>Full Name</Text>
-          <Text>School</Text>
-
-          <Text style={styles.stat}>🔥 15 Day Streak</Text>
-          <Text style={styles.stat}>💎 1000 XP</Text>
-        </View>
-
-      </View>
-
-      {/* Rankings */}
-      <View style={styles.rankContainer}>
-        {[4, 5, 6, 7].map((rank) => (
-          <View key={rank} style={styles.rankRow}>
-            <Text style={styles.rankNumber}>{rank}</Text>
-
-            <View style={styles.smallAvatar} />
-
-            <View style={{ flex: 1 }}>
-              <Text style={styles.rankName}>Full Name</Text>
-              <Text>School</Text>
+              <View style={styles.statRow}>
+                <Ionicons name="flame" size={14} color={COLORS.red} />
+                <Text style={styles.stat}>{p.streak} Day Streak</Text>
+              </View>
+              <View style={styles.statRow}>
+                <Ionicons name="diamond" size={14} color={COLORS.purpleLight} />
+                <Text style={styles.stat}>{p.xp} XP</Text>
+              </View>
             </View>
-
-            <Text>🔥 10</Text>
-            <Text>💎 860</Text>
-
-            <Text style={styles.points}>
-              380 pts
-            </Text>
-          </View>
-        ))}
-      </View>
-
-      {/* User Card */}
-      <View style={styles.userCard}>
-        <View>
-          <Text style={styles.userRank}>
-            #21 Alexandrina B.
-          </Text>
-
-          <Text>
-            Mount Prospect, IL
-          </Text>
+          ))}
         </View>
 
-        <Text style={styles.userPoints}>
-          60 pts
-        </Text>
-      </View>
+        {/* Rankings */}
+        <View style={styles.rankContainer}>
+          {[4, 5, 6, 7].map((rank) => (
+            <View key={rank} style={styles.rankRow}>
+              <Text style={styles.rankNumber}>{rank}</Text>
 
-      <TouchableOpacity>
-        <Text style={styles.fullBoard}>
-          View Full Leaderboard
-        </Text>
-      </TouchableOpacity>
+              <View style={styles.smallAvatar}>
+                <Ionicons name="person" size={22} color={COLORS.white} />
+              </View>
 
-      {/* Bottom Cards */}
-      <View style={styles.statsRow}>
+              <View style={{ flex: 1 }}>
+                <Text style={styles.rankName}>Full Name</Text>
+                <Text style={styles.school}>School</Text>
+              </View>
 
-        <View style={styles.redCard}>
-          <Text style={styles.bigIcon}>🔥</Text>
+              <View style={styles.statRow}>
+                <Ionicons name="flame" size={14} color={COLORS.red} />
+                <Text style={styles.stat}>10</Text>
+              </View>
+              <View style={styles.statRow}>
+                <Ionicons name="diamond" size={14} color={COLORS.purpleLight} />
+                <Text style={styles.stat}>860</Text>
+              </View>
 
+              <Text style={styles.points}>380 pts</Text>
+            </View>
+          ))}
+        </View>
+
+        {/* User Card */}
+        <View style={styles.userCard}>
           <View>
-            <Text style={styles.bigNumber}>
-              8
-            </Text>
-
-            <Text style={styles.white}>
-              Day Streak
-            </Text>
-
-            <Text style={styles.white}>
-              x0.2
-            </Text>
+            <Text style={styles.userRank}>#21 Alexandrina B.</Text>
+            <Text style={styles.userCity}>Mount Prospect, IL</Text>
           </View>
+
+          <Text style={styles.userPoints}>60 pts</Text>
         </View>
 
-        <View style={styles.redCard}>
-          <Text style={styles.bigNumber}>
-            5
-          </Text>
+        <PressableScale onPress={() => {}}>
+          <Text style={styles.fullBoard}>View Full Leaderboard</Text>
+        </PressableScale>
 
-          <View>
-            <Text style={styles.white}>
-              to beat
-            </Text>
+        {/* Bottom Cards */}
+        <View style={styles.statsRow}>
+          <View style={styles.redCard}>
+            <Ionicons name="flame" size={44} color={COLORS.gold} />
+            <View style={styles.redCardBody}>
+              <Text style={styles.bigNumber}>8</Text>
+              <Text style={styles.white}>Day Streak</Text>
+              <Text style={styles.white}>x0.2</Text>
+            </View>
+          </View>
 
-            <Text style={styles.whiteBold}>
-              Amy D.
-            </Text>
-
-            <Text style={styles.white}>
-              (#20)
-            </Text>
+          <View style={styles.redCard}>
+            <Text style={styles.bigNumber}>5</Text>
+            <View style={styles.redCardBody}>
+              <Text style={styles.white}>to beat</Text>
+              <Text style={styles.whiteBold}>Amy D.</Text>
+              <Text style={styles.white}>(#20)</Text>
+            </View>
           </View>
         </View>
-
-      </View>
-
-    </ScrollView>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
-const PURPLE = "#7B4DFF";
-
 const styles = StyleSheet.create({
+  safe: {
+    flex: 1,
+    backgroundColor: COLORS.purpleLight,
+  },
+
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: COLORS.bg,
   },
 
   header: {
-    backgroundColor: PURPLE,
-    paddingTop: 70,
+    backgroundColor: COLORS.purpleLight,
+    paddingTop: 18,
     paddingBottom: 35,
     paddingHorizontal: 20,
     borderBottomLeftRadius: 40,
@@ -176,27 +151,35 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    color: "#fff",
+    color: COLORS.white,
     fontSize: 40,
-    fontWeight: "bold",
+    fontWeight: "900",
     marginBottom: 20,
   },
 
   filterContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
+    gap: 10,
   },
 
   filterBtn: {
+    flex: 1,
     backgroundColor: "#5E31E6",
     paddingVertical: 12,
-    paddingHorizontal: 15,
-    borderRadius: 15,
+    alignItems: "center",
+    borderRadius: RADIUS.md,
+  },
+
+  filterBtnActive: {
+    backgroundColor: COLORS.purpleDark,
+    borderWidth: 2,
+    borderColor: "rgba(255,255,255,0.6)",
   },
 
   filterText: {
-    color: "white",
-    fontWeight: "700",
+    color: COLORS.white,
+    fontWeight: "800",
   },
 
   podiumRow: {
@@ -207,10 +190,11 @@ const styles = StyleSheet.create({
   },
 
   podiumCard: {
-    width: 110,
-    borderRadius: 25,
+    width: 112,
+    borderRadius: RADIUS.lg,
     padding: 12,
     alignItems: "center",
+    ...clay("#000", 5),
   },
 
   silver: {
@@ -218,97 +202,125 @@ const styles = StyleSheet.create({
   },
 
   gold: {
-    backgroundColor: "#FFD84D",
+    backgroundColor: COLORS.gold,
+    marginTop: -12,
   },
 
   bronze: {
     backgroundColor: "#FFC48A",
   },
 
-  medal: {
-    fontSize: 35,
-  },
-
   avatar: {
-    width: 65,
-    height: 65,
+    width: 64,
+    height: 64,
     borderRadius: 32,
-    backgroundColor: "#fff",
+    backgroundColor: COLORS.white,
+    justifyContent: "center",
+    alignItems: "center",
     marginVertical: 10,
   },
 
   name: {
-    fontWeight: "bold",
-    fontSize: 16,
+    fontWeight: "800",
+    fontSize: 15,
+    color: COLORS.ink,
+  },
+
+  school: {
+    color: COLORS.muted,
+    fontSize: 13,
+  },
+
+  statRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+    marginTop: 6,
   },
 
   stat: {
-    marginTop: 8,
+    fontSize: 13,
+    color: COLORS.ink,
+    fontWeight: "600",
   },
 
   rankContainer: {
     margin: 20,
-    backgroundColor: "#fff",
-    borderRadius: 25,
-    padding: 10,
-    elevation: 5,
+    backgroundColor: COLORS.card,
+    borderRadius: RADIUS.lg,
+    paddingHorizontal: 14,
+    paddingVertical: 6,
+    ...clay("#000", 5),
   },
 
   rankRow: {
     flexDirection: "row",
     alignItems: "center",
     marginVertical: 12,
+    gap: 8,
   },
 
   rankNumber: {
-    fontSize: 28,
-    fontWeight: "bold",
-    width: 40,
+    fontSize: 26,
+    fontWeight: "900",
+    width: 32,
+    color: COLORS.ink,
   },
 
   smallAvatar: {
     width: 45,
     height: 45,
-    borderRadius: 25,
-    backgroundColor: "#000",
-    marginHorizontal: 10,
+    borderRadius: 23,
+    backgroundColor: COLORS.purpleLight,
+    justifyContent: "center",
+    alignItems: "center",
+    marginRight: 4,
   },
 
   rankName: {
-    fontWeight: "bold",
+    fontWeight: "800",
+    color: COLORS.ink,
   },
 
   points: {
-    fontWeight: "bold",
-    marginLeft: 10,
+    fontWeight: "900",
+    marginLeft: 6,
+    color: COLORS.purpleLight,
   },
 
   userCard: {
-    backgroundColor: "#DDB9FF",
+    backgroundColor: COLORS.purpleSoft,
     marginHorizontal: 20,
-    borderRadius: 25,
+    borderRadius: RADIUS.lg,
     padding: 20,
     flexDirection: "row",
     justifyContent: "space-between",
+    alignItems: "center",
+    ...clay(COLORS.purpleDark, 5),
   },
 
   userRank: {
-    color: "#B00000",
-    fontSize: 26,
-    fontWeight: "bold",
+    color: COLORS.red,
+    fontSize: 24,
+    fontWeight: "900",
+  },
+
+  userCity: {
+    color: COLORS.ink,
+    marginTop: 2,
   },
 
   userPoints: {
-    color: PURPLE,
-    fontWeight: "bold",
-    fontSize: 36,
+    color: COLORS.purpleLight,
+    fontWeight: "900",
+    fontSize: 34,
   },
 
   fullBoard: {
-    color: PURPLE,
+    color: COLORS.purpleLight,
     textAlign: "center",
-    fontSize: 22,
-    fontWeight: "bold",
+    fontSize: 20,
+    fontWeight: "900",
     marginVertical: 20,
   },
 
@@ -317,34 +329,36 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingHorizontal: 20,
     marginBottom: 40,
+    gap: 12,
   },
 
   redCard: {
-    backgroundColor: "#D90429",
-    width: "48%",
-    borderRadius: 25,
+    backgroundColor: COLORS.red,
+    flex: 1,
+    borderRadius: RADIUS.lg,
     padding: 15,
     flexDirection: "row",
     alignItems: "center",
+    gap: 10,
+    ...clay(COLORS.red, 5),
   },
 
-  bigIcon: {
-    fontSize: 50,
-    marginRight: 10,
+  redCardBody: {
+    flexShrink: 1,
   },
 
   bigNumber: {
-    fontSize: 40,
-    fontWeight: "bold",
-    color: "#fff",
+    fontSize: 38,
+    fontWeight: "900",
+    color: COLORS.white,
   },
 
   white: {
-    color: "#fff",
+    color: COLORS.white,
   },
 
   whiteBold: {
-    color: "#fff",
-    fontWeight: "bold",
+    color: COLORS.white,
+    fontWeight: "800",
   },
 });

@@ -1,42 +1,186 @@
-import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import React, { useState } from "react";
+import { View, Text, StyleSheet, ScrollView, Switch } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
+import PressableScale from "../PressableScale";
+import { COLORS, RADIUS, clay } from "../../constants/theme";
 
 export default function SettingsScreen() {
+  const [reminders, setReminders] = useState(true);
+  const [visible, setVisible] = useState(true);
+
   return (
-    <View style={styles.screen}>
-      <Text style={styles.text}>Settings Screen</Text>
-      <TouchableOpacity
-        style={styles.logoutButton}
-        onPress={() => router.replace("/(auth)/start")}
-      >
-        <Text style={styles.logoutText}>Log Out</Text>
-      </TouchableOpacity>
-    </View>
+    <SafeAreaView style={styles.safe}>
+      <View style={styles.header}>
+        <PressableScale style={styles.backButton} onPress={() => router.back()}>
+          <Ionicons name="chevron-back" size={26} color={COLORS.purple} />
+        </PressableScale>
+        <Text style={styles.headerTitle}>Settings</Text>
+      </View>
+
+      <ScrollView contentContainerStyle={styles.scroll}>
+        {/* Account */}
+        <Text style={styles.sectionTitle}>Account</Text>
+        <View style={styles.card}>
+          <View style={styles.row}>
+            <Ionicons name="person" size={20} color={COLORS.purple} />
+            <Text style={styles.rowLabel}>Alexandrina B.</Text>
+          </View>
+          <View style={styles.separator} />
+          <View style={styles.row}>
+            <Ionicons name="mail" size={20} color={COLORS.purple} />
+            <Text style={styles.rowLabel}>rainey@example.com</Text>
+          </View>
+          <View style={styles.separator} />
+          <View style={styles.row}>
+            <Ionicons name="school" size={20} color={COLORS.purple} />
+            <Text style={styles.rowLabel}>Prospect High School</Text>
+          </View>
+        </View>
+
+        {/* Preferences */}
+        <Text style={styles.sectionTitle}>Preferences</Text>
+        <View style={styles.card}>
+          <View style={styles.row}>
+            <Ionicons name="alarm" size={20} color={COLORS.purple} />
+            <Text style={styles.rowLabel}>Daily mission reminder</Text>
+            <Switch
+              value={reminders}
+              onValueChange={setReminders}
+              trackColor={{ true: COLORS.purple, false: COLORS.line }}
+              thumbColor={COLORS.white}
+            />
+          </View>
+          <View style={styles.separator} />
+          <View style={styles.row}>
+            <Ionicons name="trophy" size={20} color={COLORS.purple} />
+            <Text style={styles.rowLabel}>Show me on leaderboards</Text>
+            <Switch
+              value={visible}
+              onValueChange={setVisible}
+              trackColor={{ true: COLORS.purple, false: COLORS.line }}
+              thumbColor={COLORS.white}
+            />
+          </View>
+        </View>
+
+        {/* Session */}
+        <PressableScale
+          style={styles.logoutButton}
+          onPress={() => router.replace("/(auth)/start")}
+        >
+          <Ionicons name="log-out" size={22} color={COLORS.white} />
+          <Text style={styles.logoutText}>Log Out</Text>
+        </PressableScale>
+
+        <PressableScale style={styles.deleteButton} onPress={() => {}}>
+          <Text style={styles.deleteText}>Delete Account</Text>
+        </PressableScale>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  screen: {
+  safe: {
     flex: 1,
-    backgroundColor: "#000",
+    backgroundColor: COLORS.bg,
+  },
+
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: 14,
+    paddingHorizontal: 16,
+    gap: 8,
+  },
+
+  backButton: {
+    width: 44,
+    height: 44,
+    borderRadius: RADIUS.md,
+    backgroundColor: COLORS.card,
     justifyContent: "center",
     alignItems: "center",
+    ...clay(COLORS.purpleDark, 4),
   },
-  text: {
-    color: "#fff",
-    fontSize: 24,
+
+  headerTitle: {
+    fontSize: 26,
+    color: COLORS.purple,
+    fontWeight: "900",
   },
-  logoutButton: {
-    marginTop: 24,
-    backgroundColor: "#D90429",
-    paddingVertical: 12,
-    paddingHorizontal: 32,
-    borderRadius: 16,
+
+  scroll: {
+    padding: 16,
+    paddingBottom: 40,
   },
-  logoutText: {
-    color: "#fff",
-    fontWeight: "bold",
+
+  sectionTitle: {
+    fontSize: 15,
+    fontWeight: "800",
+    color: COLORS.muted,
+    textTransform: "uppercase",
+    letterSpacing: 0.5,
+    marginBottom: 8,
+    marginTop: 16,
+    marginLeft: 4,
+  },
+
+  card: {
+    backgroundColor: COLORS.card,
+    borderRadius: RADIUS.lg,
+    paddingHorizontal: 16,
+    ...clay("#000", 4),
+  },
+
+  row: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
+    paddingVertical: 16,
+  },
+
+  rowLabel: {
+    flex: 1,
     fontSize: 16,
+    fontWeight: "600",
+    color: COLORS.ink,
+  },
+
+  separator: {
+    height: 1,
+    backgroundColor: COLORS.line,
+  },
+
+  logoutButton: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 10,
+    height: 56,
+    backgroundColor: COLORS.red,
+    borderRadius: RADIUS.lg,
+    marginTop: 32,
+    ...clay(COLORS.red, 5),
+  },
+
+  logoutText: {
+    color: COLORS.white,
+    fontWeight: "900",
+    fontSize: 18,
+  },
+
+  deleteButton: {
+    alignItems: "center",
+    paddingVertical: 18,
+  },
+
+  deleteText: {
+    color: COLORS.muted,
+    fontWeight: "700",
+    fontSize: 14,
+    textDecorationLine: "underline",
   },
 });

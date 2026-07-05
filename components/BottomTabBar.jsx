@@ -1,31 +1,43 @@
 import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
-
-const PURPLE = "#8A00E6";
+import { View, Text, Pressable, StyleSheet } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { Ionicons } from "@expo/vector-icons";
+import { COLORS, RADIUS } from "../constants/theme";
 
 const TABS = [
-  { name: "home", icon: "🏠", label: "Home" },
-  { name: "leaderboard", icon: "🏆", label: "Rank" },
-  { name: "store", icon: "🛍️", label: "Store" },
-  { name: "profile", icon: "👤", label: "Profile" },
+  { name: "home", icon: "home", label: "Home" },
+  { name: "leaderboard", icon: "trophy", label: "Rank" },
+  { name: "store", icon: "storefront", label: "Store" },
+  { name: "profile", icon: "person", label: "Profile" },
 ];
 
 export default function BottomTabBar({ state, navigation }) {
+  const insets = useSafeAreaInsets();
+
   return (
-    <View style={styles.bottomNav}>
-      {TABS.map((tab, i) => {
+    <View style={[styles.bottomNav, { paddingBottom: insets.bottom }]}>
+      {TABS.map((tab) => {
         const isActive = state.routes[state.index].name === tab.name;
         return (
-          <TouchableOpacity
+          <Pressable
             key={tab.name}
-            style={isActive ? styles.activeTab : styles.navTab}
+            style={styles.navTab}
             onPress={() => navigation.navigate(tab.name)}
+            accessibilityRole="button"
+            accessibilityLabel={tab.label}
+            accessibilityState={{ selected: isActive }}
           >
-            <Text style={styles.navIcon}>{tab.icon}</Text>
-            <Text style={isActive ? styles.activeLabel : styles.navLabel}>
-              {tab.label}
-            </Text>
-          </TouchableOpacity>
+            <View style={[styles.tabPill, isActive && styles.tabPillActive]}>
+              <Ionicons
+                name={isActive ? tab.icon : `${tab.icon}-outline`}
+                size={24}
+                color={isActive ? COLORS.white : COLORS.muted}
+              />
+              <Text style={isActive ? styles.activeLabel : styles.navLabel}>
+                {tab.label}
+              </Text>
+            </View>
+          </Pressable>
         );
       })}
     </View>
@@ -34,33 +46,36 @@ export default function BottomTabBar({ state, navigation }) {
 
 const styles = StyleSheet.create({
   bottomNav: {
-    marginTop: "auto",
     flexDirection: "row",
-    height: 75,
-    backgroundColor: "#EAEAEA",
-  },
-  activeTab: {
-    flex: 1,
-    backgroundColor: PURPLE,
-    justifyContent: "center",
-    alignItems: "center",
+    backgroundColor: COLORS.card,
+    borderTopWidth: 1,
+    borderTopColor: COLORS.line,
   },
   navTab: {
     flex: 1,
-    justifyContent: "center",
     alignItems: "center",
+    paddingVertical: 8,
   },
-  navIcon: {
-    fontSize: 22,
+  tabPill: {
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 8,
+    paddingHorizontal: 18,
+    borderRadius: RADIUS.lg,
+    gap: 2,
+    minWidth: 76,
+  },
+  tabPillActive: {
+    backgroundColor: COLORS.purple,
   },
   activeLabel: {
-    color: "#fff",
-    fontWeight: "bold",
-    fontSize: 16,
+    color: COLORS.white,
+    fontWeight: "800",
+    fontSize: 12,
   },
   navLabel: {
-    color: "#666",
-    fontWeight: "bold",
-    fontSize: 16,
+    color: COLORS.muted,
+    fontWeight: "700",
+    fontSize: 12,
   },
 });
