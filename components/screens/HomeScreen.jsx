@@ -1,225 +1,210 @@
 import React from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-} from "react-native";
+import { View, Text, StyleSheet, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { LinearGradient } from "expo-linear-gradient";
+import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
+import PressableScale from "../PressableScale";
+import { COLORS, RADIUS, clay } from "../../constants/theme";
 
 export default function HomeScreen() {
   return (
     <SafeAreaView style={styles.container} edges={["top"]}>
-      {/* HEADER */}
-      <View style={styles.header}>
-        <View>
-          <Text style={styles.goodMorning}>Good Morning</Text>
-          <Text style={styles.username}>Name</Text>
-        </View>
-
-        <View style={styles.streakCard}>
-          <Text style={styles.fire}>🔥</Text>
-          <Text style={styles.streakDays}>7 Days</Text>
-        </View>
-      </View>
-
-      {/* MISSION CARD */}
-      <View style={styles.missionOuter}>
-        <View style={styles.missionInner}>
-          <Text style={styles.missionTitle}>Today's Mission</Text>
-
-          <Text style={styles.question}>
-            Which planet is known as the Red Planet?
-          </Text>
-
-          <Text style={styles.countdown}>
-            ⏰ Ends in 14h 22m
-          </Text>
-
-          <TouchableOpacity
-            style={styles.startButton}
-            onPress={() => router.push("/challenge")}
-          >
-            <Text style={styles.startText}>Start Mission</Text>
-            <Text style={styles.buttonFire}>🔥</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-
-      {/* RANKING CARD */}
-      <View style={styles.rankCard}>
-        <Text style={styles.rankTitle}>Your Ranking</Text>
-
-        <View style={styles.rankRow}>
-          <Text style={styles.rankNumber}>#22</Text>
-
-          <View>
-            <Text style={styles.rankInfo}>
-              in the state • 50 pts
+      <ScrollView showsVerticalScrollIndicator={false}>
+        {/* HEADER */}
+        <LinearGradient
+          colors={[COLORS.purple, COLORS.purpleDark]}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={styles.header}
+        >
+          <View style={styles.headerText}>
+            <Text style={styles.goodMorning}>Good Morning</Text>
+            <Text
+              style={styles.username}
+              numberOfLines={1}
+              adjustsFontSizeToFit
+            >
+              Name
             </Text>
+          </View>
+
+          <View style={styles.streakCard}>
+            <Ionicons name="flame" size={30} color={COLORS.red} />
+            <Text style={styles.streakDays}>7 Days</Text>
+          </View>
+        </LinearGradient>
+
+        {/* MISSION CARD */}
+        <View style={styles.missionOuter}>
+          <View style={styles.missionInner}>
+            <Text style={styles.missionTitle}>Today's Mission</Text>
+
+            <Text style={styles.question}>
+              Which planet is known as the Red Planet?
+            </Text>
+
+            <View style={styles.countdownRow}>
+              <Ionicons name="alarm" size={18} color={COLORS.white} />
+              <Text style={styles.countdown}>Ends in 14h 22m</Text>
+            </View>
+
+            <PressableScale
+              style={styles.startButton}
+              onPress={() => router.push("/challenge")}
+            >
+              <Text style={styles.startText}>Start Mission</Text>
+              <Ionicons name="flame" size={30} color={COLORS.red} />
+            </PressableScale>
           </View>
         </View>
 
-        <View style={styles.progressBackground}>
-          <View style={styles.progressFill} />
-        </View>
+        {/* RANKING CARD */}
+        <View style={styles.rankCard}>
+          <Text style={styles.rankTitle}>Your Ranking</Text>
 
-        <Text style={styles.rankMessage}>
-          15 pts away from Top 20
-        </Text>
-      </View>
+          <View style={styles.rankRow}>
+            <Text style={styles.rankNumber}>#22</Text>
+
+            <View>
+              <Text style={styles.rankInfo}>in the state • 50 pts</Text>
+            </View>
+          </View>
+
+          <View style={styles.progressBackground}>
+            <View style={styles.progressFill} />
+          </View>
+
+          <Text style={styles.rankMessage}>15 pts away from Top 20</Text>
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }
 
-const PURPLE = "#8A00E6";
-const GREEN = "#52F04A";
-const GOLD = "#FFD93D";
-const PINK = "#C70F52";
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F8F8F8",
+    backgroundColor: COLORS.bg,
   },
 
   header: {
-    backgroundColor: PURPLE,
     margin: 12,
     padding: 20,
-    borderRadius: 25,
+    borderRadius: RADIUS.xl,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    ...clay(COLORS.purpleDark, 8),
+  },
 
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.25,
-    shadowRadius: 8,
-    elevation: 12,
+  headerText: {
+    flex: 1,
+    marginRight: 12,
   },
 
   goodMorning: {
-    color: GOLD,
+    color: COLORS.gold,
     fontSize: 24,
     fontStyle: "italic",
+    fontWeight: "600",
   },
 
   username: {
-    color: "#fff",
-    fontSize: 58,
+    color: COLORS.white,
+    fontSize: 52,
     fontWeight: "900",
   },
 
   streakCard: {
-    width: 110,
-    height: 110,
-    backgroundColor: GOLD,
-    borderRadius: 30,
+    width: 108,
+    height: 108,
+    backgroundColor: COLORS.gold,
+    borderRadius: RADIUS.xl,
     justifyContent: "center",
     alignItems: "center",
-  },
-
-  fire: {
-    fontSize: 28,
-  },
-
-  streakNumber: {
-    fontSize: 28,
-    fontWeight: "bold",
+    gap: 4,
+    ...clay(COLORS.goldDark, 5),
   },
 
   streakDays: {
     fontSize: 18,
-    fontWeight: "bold",
+    fontWeight: "800",
+    color: COLORS.ink,
   },
 
   missionOuter: {
-    backgroundColor: "#119600",
+    backgroundColor: COLORS.greenDark,
     marginHorizontal: 20,
     marginTop: 15,
-    borderRadius: 30,
+    borderRadius: RADIUS.xl,
     padding: 14,
-
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.25,
-    shadowRadius: 8,
-    elevation: 12,
+    ...clay(COLORS.greenDark, 8),
   },
 
   missionInner: {
-    backgroundColor: GREEN,
-    borderRadius: 20,
+    backgroundColor: COLORS.green,
+    borderRadius: RADIUS.lg,
     padding: 20,
   },
 
   missionTitle: {
-    color: "#fff",
-    fontSize: 36,
+    color: COLORS.white,
+    fontSize: 34,
     fontWeight: "900",
     textAlign: "center",
     marginBottom: 15,
   },
 
   question: {
-    color: "#fff",
+    color: COLORS.white,
     fontSize: 18,
     textAlign: "center",
     marginBottom: 10,
     fontWeight: "600",
   },
 
-  countdown: {
-    textAlign: "center",
+  countdownRow: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 6,
     marginBottom: 20,
-    color: "#fff",
+  },
+
+  countdown: {
+    color: COLORS.white,
     fontWeight: "700",
   },
 
   startButton: {
-    backgroundColor: GOLD,
-    borderRadius: 20,
+    backgroundColor: COLORS.gold,
+    borderRadius: RADIUS.lg,
     paddingVertical: 18,
     paddingHorizontal: 25,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 5 },
-    shadowOpacity: 0.25,
-    shadowRadius: 5,
-    elevation: 8,
+    ...clay(COLORS.goldDark, 5),
   },
 
   startText: {
     fontSize: 24,
     fontWeight: "900",
-    color: "#000",
-  },
-
-  buttonFire: {
-    fontSize: 34,
+    color: COLORS.ink,
   },
 
   rankCard: {
-    backgroundColor: PINK,
+    backgroundColor: COLORS.pink,
     marginHorizontal: 20,
-    marginTop: 25,
-    borderRadius: 30,
+    marginVertical: 25,
+    borderRadius: RADIUS.xl,
     padding: 20,
-
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.25,
-    shadowRadius: 8,
-    elevation: 12,
+    ...clay(COLORS.pink, 8),
   },
 
   rankTitle: {
-    color: "#fff",
+    color: COLORS.white,
     textAlign: "center",
     fontSize: 28,
     fontWeight: "900",
@@ -233,22 +218,22 @@ const styles = StyleSheet.create({
   },
 
   rankNumber: {
-    color: "#fff",
+    color: COLORS.white,
     fontSize: 72,
     fontWeight: "900",
     marginRight: 15,
   },
 
   rankInfo: {
-    color: "#fff",
+    color: COLORS.white,
     fontSize: 22,
     fontWeight: "700",
   },
 
   progressBackground: {
-    backgroundColor: "#E5E5E5",
+    backgroundColor: "rgba(255,255,255,0.35)",
     height: 24,
-    borderRadius: 30,
+    borderRadius: RADIUS.lg,
     overflow: "hidden",
     marginBottom: 10,
   },
@@ -256,38 +241,14 @@ const styles = StyleSheet.create({
   progressFill: {
     width: "72%",
     height: "100%",
-    backgroundColor: GREEN,
-    borderRadius: 30,
+    backgroundColor: COLORS.green,
+    borderRadius: RADIUS.lg,
   },
 
   rankMessage: {
     textAlign: "center",
-    color: "#fff",
+    color: COLORS.white,
     fontWeight: "800",
     fontSize: 18,
-  },
-
-  prizeCard: {
-    backgroundColor: GOLD,
-    marginHorizontal: 20,
-    marginTop: 20,
-    borderRadius: 25,
-    padding: 20,
-  },
-
-  prizeTitle: {
-    fontSize: 20,
-    fontWeight: "800",
-  },
-
-  prizeAmount: {
-    fontSize: 42,
-    fontWeight: "900",
-    marginVertical: 8,
-  },
-
-  prizeText: {
-    fontSize: 15,
-    lineHeight: 22,
   },
 });

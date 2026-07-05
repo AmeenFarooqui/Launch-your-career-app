@@ -34,7 +34,7 @@ test("tapping the correct answer navigates to the Correct result screen", async 
   fireEvent.press(screen.getByText(/and correct/));
 
   expect(screen).toHavePathname("/result");
-  expect(screen.getByText("Correct Screen")).toBeTruthy();
+  expect(screen.getByText("You got it!")).toBeTruthy();
 });
 
 test("tapping a wrong answer navigates to the Incorrect result screen", async () => {
@@ -43,7 +43,7 @@ test("tapping a wrong answer navigates to the Incorrect result screen", async ()
   fireEvent.press(screen.getByText(/but longer/));
 
   expect(screen).toHavePathname("/result");
-  expect(screen.getByText("Incorrect")).toBeTruthy();
+  expect(screen.getByText("Not quite!")).toBeTruthy();
 });
 
 test("the Login screen's login button navigates into the app", async () => {

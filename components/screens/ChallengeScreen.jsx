@@ -1,179 +1,178 @@
 import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
+import PressableScale from "../PressableScale";
+import { COLORS, RADIUS, clay } from "../../constants/theme";
+
+const ANSWERS = [
+  { text: "Blah blah bleh blah\nblah blah bleh blah.", isCorrect: false },
+  {
+    text: "Blah blah bleh blah\nblah blah bleh blah but longer.",
+    isCorrect: false,
+  },
+  {
+    text: "Blah blah bleh blah\nblah blah bleh blah and correct.",
+    isCorrect: true,
+  },
+  { text: "Blah blah bleh blah\nblah blah bleh blah.", isCorrect: false },
+];
 
 export default function ChallengeScreen() {
   return (
     <View style={styles.screen}>
-      <View style={styles.header} />
+      <SafeAreaView style={styles.safe} edges={["top", "bottom"]}>
+        {/* HEADER */}
+        <View style={styles.header}>
+          <Text style={styles.challengeText}>Challenge #08</Text>
+          <Text style={styles.pointsText}>10 pts</Text>
+        </View>
 
-      <Text style={styles.challengeText}>Challenge #08</Text>
-      <Text style={styles.pointsText}>10 pts</Text>
+        {/* TIMER */}
+        <View style={styles.timerBox}>
+          <Text style={styles.timerText}>00:14</Text>
+        </View>
 
-      <View style={styles.timerBox}>
-        <Text style={styles.timerText}>00:14</Text>
-      </View>
+        {/* QUESTION */}
+        <View style={styles.questionBox}>
+          <Text style={styles.questionText}>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce
+            convallis pellentesque metu
+          </Text>
+        </View>
 
-      <View style={styles.questionBox}>
-        <Text style={styles.questionText}>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce
-          convallis pellentesque metu
-        </Text>
-      </View>
-
-      <Answer top={340} roundedTop text="Blah blah bleh blah\nblah blah bleh blah." />
-      <Answer top={442} text="Blah blah bleh blah\nblah blah bleh blah but longer." />
-      <Answer top={545} text="Blah blah bleh blah\nblah blah bleh blah and correct." isCorrect />
-      <Answer top={648} roundedBottom text="Blah blah bleh blah\nblah blah bleh blah." />
+        {/* ANSWERS */}
+        <View style={styles.answers}>
+          {ANSWERS.map((answer, i) => (
+            <Answer key={i} text={answer.text} isCorrect={answer.isCorrect} />
+          ))}
+        </View>
+      </SafeAreaView>
     </View>
   );
 }
 
-function Answer({ top, text, roundedTop, roundedBottom, isCorrect }) {
+function Answer({ text, isCorrect }) {
   return (
-    <>
-      <TouchableOpacity
-        style={[
-          styles.answerBox,
-          { top },
-          roundedTop && styles.roundedTop,
-          roundedBottom && styles.roundedBottom,
-        ]}
-        onPress={() =>
-          router.push({
-            pathname: "/result",
-            params: { correct: isCorrect ? "1" : "0" },
-          })
-        }
-      >
-        <Text style={styles.answerText}>{text}</Text>
-      </TouchableOpacity>
-
-      <View style={[styles.circle, { top: top + 36 }]} />
-    </>
+    <PressableScale
+      style={styles.answerBox}
+      onPress={() =>
+        router.push({
+          pathname: "/result",
+          params: { correct: isCorrect ? "1" : "0" },
+        })
+      }
+    >
+      <View style={styles.circle} />
+      <Text style={styles.answerText}>{text}</Text>
+    </PressableScale>
   );
 }
 
 const styles = StyleSheet.create({
   screen: {
-    width: 393,
-    height: 852,
+    flex: 1,
     backgroundColor: "rgba(0,0,0,0.93)",
-    position: "relative",
+  },
+
+  safe: {
+    flex: 1,
+    paddingHorizontal: 16,
   },
 
   header: {
-    position: "absolute",
-    left: 0,
-    top: -12,
-    width: 393,
-    height: 92,
-    backgroundColor: "rgba(95,2,176,1)",
-    borderRadius: 20,
+    backgroundColor: COLORS.purpleDark,
+    borderRadius: RADIUS.lg,
+    marginTop: 8,
+    paddingVertical: 14,
+    paddingHorizontal: 18,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    ...clay(COLORS.purpleDark, 6),
   },
 
   challengeText: {
-    position: "absolute",
-    left: 15,
-    top: 11,
-    width: 160,
-    height: 50,
-    color: "#FFFFFF",
+    color: COLORS.white,
     fontSize: 21,
     fontStyle: "italic",
-    fontFamily: "Verdana",
-    textAlign: "center",
+    fontWeight: "700",
   },
 
   pointsText: {
-    position: "absolute",
-    left: 255,
-    top: 5,
-    width: 138,
-    height: 46,
-    color: "rgba(254,239,0,1)",
-    fontSize: 36,
-    fontWeight: "700",
-    textAlign: "center",
+    color: COLORS.gold,
+    fontSize: 30,
+    fontWeight: "900",
   },
 
   timerBox: {
-    position: "absolute",
-    left: 86,
-    top: 51,
-    width: 220,
-    height: 89,
-    backgroundColor: "rgba(136,0,222,1)",
-    borderRadius: 20,
-    justifyContent: "center",
-    alignItems: "center",
+    alignSelf: "center",
+    marginTop: 18,
+    paddingVertical: 12,
+    paddingHorizontal: 42,
+    backgroundColor: COLORS.purple,
+    borderRadius: RADIUS.lg,
+    ...clay(COLORS.purpleDark, 6),
   },
 
   timerText: {
-    color: "rgba(89,238,80,1)",
-    fontSize: 55,
-    fontWeight: "700",
-    fontFamily: "Verdana",
+    color: COLORS.green,
+    fontSize: 50,
+    fontWeight: "900",
+    fontVariant: ["tabular-nums"],
   },
 
   questionBox: {
-    position: "absolute",
-    left: 12,
-    top: 149,
-    width: 369,
-    height: 168,
-    borderRadius: 20,
+    marginTop: 18,
+    borderRadius: RADIUS.lg,
     backgroundColor: "rgba(80,80,80,1)",
+    padding: 22,
+    minHeight: 140,
+    justifyContent: "center",
   },
 
   questionText: {
-    position: "absolute",
-    left: 30,
-    top: 0,
-    width: 309,
-    height: 145,
-    color: "#FFFFFF",
-    fontSize: 24,
+    color: COLORS.white,
+    fontSize: 22,
     fontWeight: "700",
     lineHeight: 29,
     textAlign: "center",
   },
 
+  answers: {
+    flex: 1,
+    marginTop: 20,
+    marginBottom: 8,
+    gap: 10,
+    justifyContent: "flex-end",
+  },
+
   answerBox: {
-    position: "absolute",
-    left: 30,
-    width: 329,
-    height: 93,
+    minHeight: 88,
     backgroundColor: "#EDEDED",
-    justifyContent: "center",
+    borderRadius: RADIUS.lg,
+    flexDirection: "row",
     alignItems: "center",
-  },
-
-  roundedTop: {
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-  },
-
-  roundedBottom: {
-    left: 32,
-    borderBottomLeftRadius: 20,
-    borderBottomRightRadius: 20,
-  },
-
-  answerText: {
-    color: "#000000",
-    fontSize: 23,
-    fontWeight: "700",
-    textAlign: "center",
-    lineHeight: 28,
+    paddingHorizontal: 18,
+    gap: 14,
+    ...clay("#000", 4),
   },
 
   circle: {
-    position: "absolute",
-    left: 42,
     width: 20,
     height: 20,
     borderRadius: 10,
-    backgroundColor: "rgba(0,0,0,0.5)",
+    borderWidth: 3,
+    borderColor: "rgba(0,0,0,0.45)",
+    backgroundColor: COLORS.white,
+  },
+
+  answerText: {
+    flex: 1,
+    color: "#000",
+    fontSize: 20,
+    fontWeight: "700",
+    lineHeight: 26,
+    textAlign: "center",
   },
 });
