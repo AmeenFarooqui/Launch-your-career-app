@@ -4,7 +4,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import PressableScale from "../PressableScale";
-import { COLORS, RADIUS } from "../../constants/theme";
+import { COLORS, RADIUS, FONTS } from "../../constants/theme";
 
 // Hard offset shadow (neubrutalist, per the Proto.io design): a black
 // backing view with the button lifted up-left off it.
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
     color: COLORS.white,
     fontSize: 52,
     lineHeight: 60,
-    fontWeight: "900",
+    fontFamily: FONTS.heading,
     textAlign: "center",
   },
 
@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
   getStartedText: {
     color: COLORS.white,
     fontSize: 22,
-    fontWeight: "900",
+    fontFamily: FONTS.heading,
     letterSpacing: 0.5,
   },
 
@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
   loginText: {
     color: "#000",
     fontSize: 22,
-    fontWeight: "900",
+    fontFamily: FONTS.heading,
     letterSpacing: 0.5,
   },
 

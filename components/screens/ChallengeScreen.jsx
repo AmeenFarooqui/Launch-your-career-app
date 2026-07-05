@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import PressableScale from "../PressableScale";
-import { COLORS, RADIUS, clay } from "../../constants/theme";
+import { COLORS, RADIUS, FONTS, clay } from "../../constants/theme";
+
+const LETTERS = ["A", "B", "C", "D"];
 
 const ANSWERS = [
   { text: "Blah blah bleh blah\nblah blah bleh blah.", isCorrect: false },
@@ -18,7 +20,24 @@ const ANSWERS = [
   { text: "Blah blah bleh blah\nblah blah bleh blah.", isCorrect: false },
 ];
 
+// Brief pause between picking an answer and navigating, so the selection
+// highlight registers before the screen changes.
+const SELECT_PAUSE_MS = 350;
+
 export default function ChallengeScreen() {
+  const [selected, setSelected] = useState(null);
+
+  const pick = (index) => {
+    if (selected !== null) return; // one answer per run
+    setSelected(index);
+    setTimeout(() => {
+      router.push({
+        pathname: "/result",
+        params: { correct: ANSWERS[index].isCorrect ? "1" : "0" },
+      });
+    }, SELECT_PAUSE_MS);
+  };
+
   return (
     <View style={styles.screen}>
       <SafeAreaView style={styles.safe} edges={["top", "bottom"]}>
@@ -44,7 +63,13 @@ export default function ChallengeScreen() {
         {/* ANSWERS */}
         <View style={styles.answers}>
           {ANSWERS.map((answer, i) => (
-            <Answer key={i} text={answer.text} isCorrect={answer.isCorrect} />
+            <Answer
+              key={i}
+              letter={LETTERS[i]}
+              text={answer.text}
+              isSelected={selected === i}
+              onPick={() => pick(i)}
+            />
           ))}
         </View>
       </SafeAreaView>
@@ -52,18 +77,19 @@ export default function ChallengeScreen() {
   );
 }
 
-function Answer({ text, isCorrect }) {
+function Answer({ letter, text, isSelected, onPick }) {
   return (
     <PressableScale
-      style={styles.answerBox}
-      onPress={() =>
-        router.push({
-          pathname: "/result",
-          params: { correct: isCorrect ? "1" : "0" },
-        })
-      }
+      style={[styles.answerBox, isSelected && styles.answerBoxSelected]}
+      onPress={onPick}
     >
-      <View style={styles.circle} />
+      <View style={[styles.letterChip, isSelected && styles.letterChipSelected]}>
+        <Text
+          style={[styles.letterText, isSelected && styles.letterTextSelected]}
+        >
+          {letter}
+        </Text>
+      </View>
       <Text style={styles.answerText}>{text}</Text>
     </PressableScale>
   );
@@ -102,7 +128,7 @@ const styles = StyleSheet.create({
   pointsText: {
     color: COLORS.gold,
     fontSize: 30,
-    fontWeight: "900",
+    fontFamily: FONTS.heading,
   },
 
   timerBox: {
@@ -118,7 +144,7 @@ const styles = StyleSheet.create({
   timerText: {
     color: COLORS.green,
     fontSize: 50,
-    fontWeight: "900",
+    fontFamily: FONTS.heading,
     fontVariant: ["tabular-nums"],
   },
 
@@ -151,20 +177,44 @@ const styles = StyleSheet.create({
     minHeight: 88,
     backgroundColor: "#EDEDED",
     borderRadius: RADIUS.lg,
+    borderWidth: 3,
+    borderColor: "transparent",
     flexDirection: "row",
     alignItems: "center",
-    paddingHorizontal: 18,
+    paddingHorizontal: 16,
     gap: 14,
     ...clay("#000", 4),
   },
 
-  circle: {
-    width: 20,
-    height: 20,
-    borderRadius: 10,
-    borderWidth: 3,
-    borderColor: "rgba(0,0,0,0.45)",
+  answerBoxSelected: {
+    borderColor: COLORS.purple,
+    backgroundColor: "#F3E6FF",
+  },
+
+  letterChip: {
+    width: 40,
+    height: 40,
+    borderRadius: 13,
     backgroundColor: COLORS.white,
+    borderWidth: 2,
+    borderColor: "rgba(0,0,0,0.35)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+  letterChipSelected: {
+    backgroundColor: COLORS.purple,
+    borderColor: COLORS.purple,
+  },
+
+  letterText: {
+    fontSize: 18,
+    fontFamily: FONTS.heading,
+    color: "rgba(0,0,0,0.6)",
+  },
+
+  letterTextSelected: {
+    color: COLORS.white,
   },
 
   answerText: {

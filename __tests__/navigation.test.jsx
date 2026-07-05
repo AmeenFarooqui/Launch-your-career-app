@@ -1,5 +1,5 @@
 import { renderRouter, screen } from "expo-router/testing-library";
-import { fireEvent } from "@testing-library/react-native";
+import { act, fireEvent } from "@testing-library/react-native";
 
 test("app boots by redirecting to the Start Page", async () => {
   renderRouter("./app", { initialUrl: "/" });
@@ -11,7 +11,7 @@ test("app boots by redirecting to the Start Page", async () => {
 test("tapping the Rank tab navigates to the Leaderboard screen", async () => {
   renderRouter("./app", { initialUrl: "/(tabs)/home" });
 
-  expect(screen.getByText("Good Morning")).toBeTruthy();
+  expect(screen.getByText(/Good (Morning|Afternoon|Evening)/)).toBeTruthy();
 
   fireEvent.press(screen.getByText("Rank"));
 
@@ -29,21 +29,31 @@ test("Start Mission navigates from Home to the Challenge screen", async () => {
 });
 
 test("tapping the correct answer navigates to the Correct result screen", async () => {
+  jest.useFakeTimers();
   renderRouter("./app", { initialUrl: "/challenge" });
 
   fireEvent.press(screen.getByText(/and correct/));
+  act(() => {
+    jest.advanceTimersByTime(400); // flush the selection-highlight pause
+  });
 
   expect(screen).toHavePathname("/result");
   expect(screen.getByText("You got it!")).toBeTruthy();
+  jest.useRealTimers();
 });
 
 test("tapping a wrong answer navigates to the Incorrect result screen", async () => {
+  jest.useFakeTimers();
   renderRouter("./app", { initialUrl: "/challenge" });
 
   fireEvent.press(screen.getByText(/but longer/));
+  act(() => {
+    jest.advanceTimersByTime(400);
+  });
 
   expect(screen).toHavePathname("/result");
   expect(screen.getByText("Not quite!")).toBeTruthy();
+  jest.useRealTimers();
 });
 
 test("the Login screen's login button navigates into the app", async () => {

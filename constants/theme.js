@@ -25,6 +25,13 @@ export const RADIUS = {
   xl: 28,
 };
 
+// Display font for headings, big numbers, and buttons. Custom font families
+// encode their own weight — don't combine with fontWeight (breaks Android).
+export const FONTS = {
+  heading: "Baloo2_800ExtraBold",
+  subheading: "Baloo2_700Bold",
+};
+
 // Claymorphism depth: soft colored shadow on iOS, elevation on Android.
 export const clay = (shadowColor = "#000", depth = 8) => ({
   shadowColor,

@@ -11,7 +11,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import PressableScale from "../PressableScale";
-import { COLORS, RADIUS, clay } from "../../constants/theme";
+import { COLORS, RADIUS, FONTS, clay } from "../../constants/theme";
 
 export default function SignUpScreen() {
   return (
@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 26,
     color: COLORS.purple,
-    fontWeight: "900",
+    fontFamily: FONTS.heading,
   },
   scroll: {
     padding: 20,
@@ -148,7 +148,7 @@ const styles = StyleSheet.create({
   },
   submitText: {
     color: COLORS.ink,
-    fontWeight: "900",
+    fontFamily: FONTS.heading,
     fontSize: 19,
   },
   divider: {

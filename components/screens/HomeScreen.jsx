@@ -1,13 +1,48 @@
-import React from "react";
-import { View, Text, StyleSheet, ScrollView } from "react-native";
+import React, { useEffect, useRef, useState } from "react";
+import { View, Text, StyleSheet, ScrollView, Animated } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import PressableScale from "../PressableScale";
-import { COLORS, RADIUS, clay } from "../../constants/theme";
+import { COLORS, RADIUS, FONTS, clay } from "../../constants/theme";
+
+function getGreeting() {
+  const hour = new Date().getHours();
+  if (hour < 12) return "Good Morning";
+  if (hour < 18) return "Good Afternoon";
+  return "Good Evening";
+}
+
+// Time until midnight, when the next daily mission drops.
+function getTimeLeft() {
+  const now = new Date();
+  const midnight = new Date(now);
+  midnight.setHours(24, 0, 0, 0);
+  const total = Math.max(0, Math.floor((midnight - now) / 1000));
+  const h = Math.floor(total / 3600);
+  const m = Math.floor((total % 3600) / 60);
+  const s = total % 60;
+  return `${h}h ${String(m).padStart(2, "0")}m ${String(s).padStart(2, "0")}s`;
+}
 
 export default function HomeScreen() {
+  const [timeLeft, setTimeLeft] = useState(getTimeLeft);
+  const progress = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    const tick = setInterval(() => setTimeLeft(getTimeLeft()), 1000);
+    return () => clearInterval(tick);
+  }, []);
+
+  useEffect(() => {
+    Animated.timing(progress, {
+      toValue: 1,
+      duration: 900,
+      useNativeDriver: false, // width animation
+    }).start();
+  }, [progress]);
+
   return (
     <SafeAreaView style={styles.container} edges={["top"]}>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -19,7 +54,7 @@ export default function HomeScreen() {
           style={styles.header}
         >
           <View style={styles.headerText}>
-            <Text style={styles.goodMorning}>Good Morning</Text>
+            <Text style={styles.goodMorning}>{getGreeting()}</Text>
             <Text
               style={styles.username}
               numberOfLines={1}
@@ -46,7 +81,9 @@ export default function HomeScreen() {
 
             <View style={styles.countdownRow}>
               <Ionicons name="alarm" size={18} color={COLORS.white} />
-              <Text style={styles.countdown}>Ends in 14h 22m</Text>
+              <Text style={[styles.countdown, styles.countdownDigits]}>
+                Ends in {timeLeft}
+              </Text>
             </View>
 
             <PressableScale
@@ -72,7 +109,17 @@ export default function HomeScreen() {
           </View>
 
           <View style={styles.progressBackground}>
-            <View style={styles.progressFill} />
+            <Animated.View
+              style={[
+                styles.progressFill,
+                {
+                  width: progress.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: ["0%", "72%"],
+                  }),
+                },
+              ]}
+            />
           </View>
 
           <Text style={styles.rankMessage}>15 pts away from Top 20</Text>
@@ -113,7 +160,7 @@ const styles = StyleSheet.create({
   username: {
     color: COLORS.white,
     fontSize: 52,
-    fontWeight: "900",
+    fontFamily: FONTS.heading,
   },
 
   streakCard: {
@@ -151,7 +198,7 @@ const styles = StyleSheet.create({
   missionTitle: {
     color: COLORS.white,
     fontSize: 34,
-    fontWeight: "900",
+    fontFamily: FONTS.heading,
     textAlign: "center",
     marginBottom: 15,
   },
@@ -172,6 +219,10 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
 
+  countdownDigits: {
+    fontVariant: ["tabular-nums"],
+  },
+
   countdown: {
     color: COLORS.white,
     fontWeight: "700",
@@ -190,7 +241,7 @@ const styles = StyleSheet.create({
 
   startText: {
     fontSize: 24,
-    fontWeight: "900",
+    fontFamily: FONTS.heading,
     color: COLORS.ink,
   },
 
@@ -207,7 +258,7 @@ const styles = StyleSheet.create({
     color: COLORS.white,
     textAlign: "center",
     fontSize: 28,
-    fontWeight: "900",
+    fontFamily: FONTS.heading,
     marginBottom: 10,
   },
 
@@ -220,7 +271,7 @@ const styles = StyleSheet.create({
   rankNumber: {
     color: COLORS.white,
     fontSize: 72,
-    fontWeight: "900",
+    fontFamily: FONTS.heading,
     marginRight: 15,
   },
 

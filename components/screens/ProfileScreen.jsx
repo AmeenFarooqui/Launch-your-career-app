@@ -5,7 +5,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import PressableScale from "../PressableScale";
-import { COLORS, RADIUS, clay } from "../../constants/theme";
+import { COLORS, RADIUS, FONTS, clay } from "../../constants/theme";
 
 const STATS = [
   { icon: "star", label: "Points", value: "60", color: COLORS.goldDark },
@@ -114,14 +114,14 @@ const styles = StyleSheet.create({
 
   avatarInitials: {
     fontSize: 36,
-    fontWeight: "900",
+    fontFamily: FONTS.heading,
     color: COLORS.ink,
   },
 
   name: {
     color: COLORS.white,
     fontSize: 30,
-    fontWeight: "900",
+    fontFamily: FONTS.heading,
   },
 
   school: {
@@ -148,7 +148,7 @@ const styles = StyleSheet.create({
 
   statValue: {
     fontSize: 24,
-    fontWeight: "900",
+    fontFamily: FONTS.heading,
     color: COLORS.ink,
   },
 
@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
 
   sectionTitle: {
     fontSize: 22,
-    fontWeight: "900",
+    fontFamily: FONTS.heading,
     color: COLORS.ink,
     marginTop: 24,
     marginBottom: 12,

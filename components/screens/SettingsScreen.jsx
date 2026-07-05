@@ -4,7 +4,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import PressableScale from "../PressableScale";
-import { COLORS, RADIUS, clay } from "../../constants/theme";
+import { COLORS, RADIUS, FONTS, clay } from "../../constants/theme";
 
 export default function SettingsScreen() {
   const [reminders, setReminders] = useState(true);
@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 26,
     color: COLORS.purple,
-    fontWeight: "900",
+    fontFamily: FONTS.heading,
   },
 
   scroll: {
@@ -168,7 +168,7 @@ const styles = StyleSheet.create({
 
   logoutText: {
     color: COLORS.white,
-    fontWeight: "900",
+    fontFamily: FONTS.heading,
     fontSize: 18,
   },
 

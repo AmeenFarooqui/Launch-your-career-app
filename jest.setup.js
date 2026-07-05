@@ -7,5 +7,6 @@ jest.mock("expo-font", () => {
     ...actual,
     isLoaded: () => true,
     loadAsync: () => Promise.resolve(),
+    useFonts: () => [true, null],
   };
 });

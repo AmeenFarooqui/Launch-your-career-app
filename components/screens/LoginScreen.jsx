@@ -12,7 +12,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import PressableScale from "../PressableScale";
-import { COLORS, RADIUS, clay } from "../../constants/theme";
+import { COLORS, RADIUS, FONTS, clay } from "../../constants/theme";
 
 // Original screen designed via human; Copr. John Sencion 2026.
 // Restyled to the app-wide clay visual language per the 2026-07-04 design spec.
@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 26,
     color: COLORS.purple,
-    fontWeight: "900",
+    fontFamily: FONTS.heading,
   },
   mainContent: {
     flex: 1,
@@ -182,7 +182,7 @@ const styles = StyleSheet.create({
   },
   loginButtonText: {
     color: COLORS.ink,
-    fontWeight: "900",
+    fontFamily: FONTS.heading,
     fontSize: 19,
   },
   divider: {

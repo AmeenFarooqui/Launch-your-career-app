@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import PressableScale from "../PressableScale";
-import { COLORS, RADIUS, clay } from "../../constants/theme";
+import { COLORS, RADIUS, FONTS, clay } from "../../constants/theme";
 
 const ITEMS = [
   { icon: "shirt", name: "LYC T-Shirt", cost: 1200, color: COLORS.purpleLight },
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
 
   title: {
     fontSize: 40,
-    fontWeight: "900",
+    fontFamily: FONTS.heading,
     color: COLORS.ink,
   },
 
@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
   },
 
   balanceText: {
-    fontWeight: "900",
+    fontFamily: FONTS.heading,
     fontSize: 15,
     color: COLORS.ink,
   },
@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
   },
 
   redeemText: {
-    fontWeight: "900",
+    fontFamily: FONTS.heading,
     fontSize: 15,
     color: COLORS.ink,
   },

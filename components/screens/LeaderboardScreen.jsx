@@ -9,9 +9,9 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import PressableScale from "../PressableScale";
-import { COLORS, RADIUS, clay } from "../../constants/theme";
+import { COLORS, RADIUS, FONTS, clay } from "../../constants/theme";
 
 // Podium cards wobble when tapped.
 function WobbleCard({ style, children }) {
@@ -47,6 +47,33 @@ const PODIUM = [
   { medal: "#FFD700", place: 1, streak: 30, xp: 3200, style: "gold" },
   { medal: "#CD7F32", place: 3, streak: 15, xp: 1000, style: "bronze" },
 ];
+
+// delta: rank places moved since yesterday (+ = climbed).
+const ROWS = [
+  { rank: 4, streak: 10, xp: 860, pts: 380, delta: 2 },
+  { rank: 5, streak: 12, xp: 810, pts: 365, delta: -1 },
+  { rank: 6, streak: 6, xp: 700, pts: 340, delta: 0 },
+  { rank: 7, streak: 9, xp: 655, pts: 320, delta: 1 },
+];
+
+function RankDelta({ delta }) {
+  if (delta === 0) {
+    return <Ionicons name="remove" size={16} color={COLORS.muted} />;
+  }
+  const up = delta > 0;
+  return (
+    <View style={styles.deltaRow}>
+      <Ionicons
+        name={up ? "caret-up" : "caret-down"}
+        size={14}
+        color={up ? COLORS.greenDark : COLORS.red}
+      />
+      <Text style={[styles.deltaText, { color: up ? COLORS.greenDark : COLORS.red }]}>
+        {Math.abs(delta)}
+      </Text>
+    </View>
+  );
+}
 
 export default function LeaderboardScreen() {
   const [activeFilter, setActiveFilter] = useState(0);
@@ -88,6 +115,14 @@ export default function LeaderboardScreen() {
               key={p.place}
               style={[styles.podiumCard, styles[p.style]]}
             >
+              {p.place === 1 && (
+                <MaterialCommunityIcons
+                  name="crown"
+                  size={40}
+                  color={COLORS.goldDark}
+                  style={styles.crown}
+                />
+              )}
               <Ionicons name="medal" size={34} color={p.medal} />
               <View style={styles.avatar}>
                 <Ionicons name="person" size={30} color={COLORS.purpleLight} />
@@ -109,9 +144,10 @@ export default function LeaderboardScreen() {
 
         {/* Rankings */}
         <View style={styles.rankContainer}>
-          {[4, 5, 6, 7].map((rank) => (
-            <View key={rank} style={styles.rankRow}>
-              <Text style={styles.rankNumber}>{rank}</Text>
+          {ROWS.map((row) => (
+            <View key={row.rank} style={styles.rankRow}>
+              <Text style={styles.rankNumber}>{row.rank}</Text>
+              <RankDelta delta={row.delta} />
 
               <View style={styles.smallAvatar}>
                 <Ionicons name="person" size={22} color={COLORS.white} />
@@ -124,14 +160,14 @@ export default function LeaderboardScreen() {
 
               <View style={styles.statRow}>
                 <Ionicons name="flame" size={14} color={COLORS.red} />
-                <Text style={styles.stat}>10</Text>
+                <Text style={styles.stat}>{row.streak}</Text>
               </View>
               <View style={styles.statRow}>
                 <Ionicons name="diamond" size={14} color={COLORS.purpleLight} />
-                <Text style={styles.stat}>860</Text>
+                <Text style={styles.stat}>{row.xp}</Text>
               </View>
 
-              <Text style={styles.points}>380 pts</Text>
+              <Text style={styles.points}>{row.pts} pts</Text>
             </View>
           ))}
         </View>
@@ -202,7 +238,7 @@ const styles = StyleSheet.create({
   title: {
     color: COLORS.white,
     fontSize: 40,
-    fontWeight: "900",
+    fontFamily: FONTS.heading,
     marginBottom: 20,
   },
 
@@ -234,7 +270,8 @@ const styles = StyleSheet.create({
   podiumRow: {
     flexDirection: "row",
     justifyContent: "space-around",
-    marginTop: 25,
+    alignItems: "flex-start",
+    marginTop: 40,
     paddingHorizontal: 10,
   },
 
@@ -252,7 +289,23 @@ const styles = StyleSheet.create({
 
   gold: {
     backgroundColor: COLORS.gold,
-    marginTop: -12,
+    marginTop: -22,
+  },
+
+  crown: {
+    position: "absolute",
+    top: -30,
+    transform: [{ rotate: "8deg" }],
+  },
+
+  deltaRow: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+
+  deltaText: {
+    fontSize: 12,
+    fontWeight: "800",
   },
 
   bronze: {
@@ -312,7 +365,7 @@ const styles = StyleSheet.create({
 
   rankNumber: {
     fontSize: 26,
-    fontWeight: "900",
+    fontFamily: FONTS.heading,
     width: 32,
     color: COLORS.ink,
   },
@@ -333,7 +386,7 @@ const styles = StyleSheet.create({
   },
 
   points: {
-    fontWeight: "900",
+    fontFamily: FONTS.heading,
     marginLeft: 6,
     color: COLORS.purpleLight,
   },
@@ -353,7 +406,7 @@ const styles = StyleSheet.create({
   userRank: {
     color: COLORS.red,
     fontSize: 24,
-    fontWeight: "900",
+    fontFamily: FONTS.heading,
   },
 
   userCity: {
@@ -363,7 +416,7 @@ const styles = StyleSheet.create({
 
   userPoints: {
     color: COLORS.purpleLight,
-    fontWeight: "900",
+    fontFamily: FONTS.heading,
     fontSize: 34,
   },
 
@@ -371,7 +424,7 @@ const styles = StyleSheet.create({
     color: COLORS.purpleDark,
     textAlign: "center",
     fontSize: 20,
-    fontWeight: "900",
+    fontFamily: FONTS.heading,
     marginVertical: 20,
   },
 
@@ -400,7 +453,7 @@ const styles = StyleSheet.create({
 
   bigNumber: {
     fontSize: 38,
-    fontWeight: "900",
+    fontFamily: FONTS.heading,
     color: COLORS.white,
   },
 
