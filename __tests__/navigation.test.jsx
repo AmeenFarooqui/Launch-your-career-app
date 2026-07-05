@@ -5,7 +5,7 @@ test("app boots by redirecting to the Start Page", async () => {
   renderRouter("./app", { initialUrl: "/" });
 
   expect(screen).toHavePathname("/start");
-  expect(screen.getByText("Start Page Screen")).toBeTruthy();
+  expect(screen.getByText("Launch Your Career")).toBeTruthy();
 });
 
 test("tapping the Rank tab navigates to the Leaderboard screen", async () => {
