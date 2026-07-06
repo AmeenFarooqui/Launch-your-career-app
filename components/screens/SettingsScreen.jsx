@@ -1,10 +1,23 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, ScrollView, Switch } from "react-native";
+import { View, Text, StyleSheet, ScrollView, Switch, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import PressableScale from "../PressableScale";
+import Doodles from "../Doodles";
+import { FadeInUp } from "../motion";
 import { COLORS, RADIUS, FONTS, clay } from "../../constants/theme";
+
+function confirmDelete() {
+  Alert.alert(
+    "Delete Account",
+    "This permanently erases your points, streak, and badges. There's no undo.",
+    [
+      { text: "Cancel", style: "cancel" },
+      { text: "Delete", style: "destructive" },
+    ]
+  );
+}
 
 export default function SettingsScreen() {
   const [reminders, setReminders] = useState(true);
@@ -12,6 +25,7 @@ export default function SettingsScreen() {
 
   return (
     <SafeAreaView style={styles.safe}>
+      <Doodles />
       <View style={styles.header}>
         <PressableScale style={styles.backButton} onPress={() => router.back()}>
           <Ionicons name="chevron-back" size={26} color={COLORS.purple} />
@@ -21,6 +35,7 @@ export default function SettingsScreen() {
 
       <ScrollView contentContainerStyle={styles.scroll}>
         {/* Account */}
+        <FadeInUp>
         <Text style={styles.sectionTitle}>Account</Text>
         <View style={styles.card}>
           <View style={styles.row}>
@@ -38,8 +53,10 @@ export default function SettingsScreen() {
             <Text style={styles.rowLabel}>Prospect High School</Text>
           </View>
         </View>
+        </FadeInUp>
 
         {/* Preferences */}
+        <FadeInUp delay={110}>
         <Text style={styles.sectionTitle}>Preferences</Text>
         <View style={styles.card}>
           <View style={styles.row}>
@@ -64,19 +81,24 @@ export default function SettingsScreen() {
             />
           </View>
         </View>
+        </FadeInUp>
 
         {/* Session */}
-        <PressableScale
-          style={styles.logoutButton}
-          onPress={() => router.replace("/(auth)/start")}
-        >
-          <Ionicons name="log-out" size={22} color={COLORS.white} />
-          <Text style={styles.logoutText}>Log Out</Text>
-        </PressableScale>
+        <FadeInUp delay={220}>
+          <PressableScale
+            style={styles.logoutButton}
+            onPress={() => router.replace("/(auth)/start")}
+          >
+            <Ionicons name="log-out" size={22} color={COLORS.white} />
+            <Text style={styles.logoutText}>Log Out</Text>
+          </PressableScale>
 
-        <PressableScale style={styles.deleteButton} onPress={() => {}}>
-          <Text style={styles.deleteText}>Delete Account</Text>
-        </PressableScale>
+          <PressableScale style={styles.deleteButton} onPress={confirmDelete}>
+            <Text style={styles.deleteText}>Delete Account</Text>
+          </PressableScale>
+
+          <Text style={styles.version}>Launch Your Career v1.0.0</Text>
+        </FadeInUp>
       </ScrollView>
     </SafeAreaView>
   );
@@ -182,5 +204,12 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     fontSize: 14,
     textDecorationLine: "underline",
+  },
+
+  version: {
+    textAlign: "center",
+    color: COLORS.muted,
+    fontSize: 12,
+    marginTop: 6,
   },
 });

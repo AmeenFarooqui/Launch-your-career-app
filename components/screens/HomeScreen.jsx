@@ -5,6 +5,8 @@ import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import PressableScale from "../PressableScale";
+import Doodles from "../Doodles";
+import { FadeInUp, Pulse } from "../motion";
 import { COLORS, RADIUS, FONTS, clay } from "../../constants/theme";
 
 function getGreeting() {
@@ -45,14 +47,19 @@ export default function HomeScreen() {
 
   return (
     <SafeAreaView style={styles.container} edges={["top"]}>
+      <Doodles />
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* HEADER */}
+        <FadeInUp style={styles.headerShadow}>
         <LinearGradient
           colors={[COLORS.purple, COLORS.purpleDark]}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
           style={styles.header}
         >
+          <View pointerEvents="none" style={styles.headerCircleBig} />
+          <View pointerEvents="none" style={styles.headerCircleSmall} />
+
           <View style={styles.headerText}>
             <Text style={styles.goodMorning}>{getGreeting()}</Text>
             <Text
@@ -60,17 +67,21 @@ export default function HomeScreen() {
               numberOfLines={1}
               adjustsFontSizeToFit
             >
-              Name
+              Alexandrina
             </Text>
           </View>
 
           <View style={styles.streakCard}>
-            <Ionicons name="flame" size={30} color={COLORS.red} />
+            <Pulse to={1.18}>
+              <Ionicons name="flame" size={30} color={COLORS.red} />
+            </Pulse>
             <Text style={styles.streakDays}>7 Days</Text>
           </View>
         </LinearGradient>
+        </FadeInUp>
 
         {/* MISSION CARD */}
+        <FadeInUp delay={100}>
         <View style={styles.missionOuter}>
           <View style={styles.missionInner}>
             <Text style={styles.missionTitle}>Today's Mission</Text>
@@ -91,12 +102,16 @@ export default function HomeScreen() {
               onPress={() => router.push("/challenge")}
             >
               <Text style={styles.startText}>Start Mission</Text>
-              <Ionicons name="flame" size={30} color={COLORS.red} />
+              <Pulse to={1.2}>
+                <Ionicons name="flame" size={30} color={COLORS.red} />
+              </Pulse>
             </PressableScale>
           </View>
         </View>
+        </FadeInUp>
 
         {/* RANKING CARD */}
+        <FadeInUp delay={200}>
         <View style={styles.rankCard}>
           <Text style={styles.rankTitle}>Your Ranking</Text>
 
@@ -124,6 +139,7 @@ export default function HomeScreen() {
 
           <Text style={styles.rankMessage}>15 pts away from Top 20</Text>
         </View>
+        </FadeInUp>
       </ScrollView>
     </SafeAreaView>
   );
@@ -135,14 +151,39 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.bg,
   },
 
-  header: {
+  headerShadow: {
     margin: 12,
+    borderRadius: RADIUS.xl,
+    ...clay(COLORS.purpleDark, 8),
+  },
+
+  header: {
     padding: 20,
     borderRadius: RADIUS.xl,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    ...clay(COLORS.purpleDark, 8),
+    overflow: "hidden",
+  },
+
+  headerCircleBig: {
+    position: "absolute",
+    width: 190,
+    height: 190,
+    borderRadius: 95,
+    backgroundColor: "rgba(255,255,255,0.08)",
+    top: -70,
+    right: -40,
+  },
+
+  headerCircleSmall: {
+    position: "absolute",
+    width: 90,
+    height: 90,
+    borderRadius: 45,
+    backgroundColor: "rgba(255,255,255,0.07)",
+    bottom: -30,
+    left: -20,
   },
 
   headerText: {

@@ -3,6 +3,7 @@ import { View, Text, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import PressableScale from "../PressableScale";
+import { FadeInUp, Pulse } from "../motion";
 import { COLORS, RADIUS, FONTS, clay } from "../../constants/theme";
 
 const LETTERS = ["A", "B", "C", "D"];
@@ -42,34 +43,41 @@ export default function ChallengeScreen() {
     <View style={styles.screen}>
       <SafeAreaView style={styles.safe} edges={["top", "bottom"]}>
         {/* HEADER */}
-        <View style={styles.header}>
-          <Text style={styles.challengeText}>Challenge #08</Text>
-          <Text style={styles.pointsText}>10 pts</Text>
-        </View>
+        <FadeInUp>
+          <View style={styles.header}>
+            <Text style={styles.challengeText}>Challenge #08</Text>
+            <Text style={styles.pointsText}>10 pts</Text>
+          </View>
+        </FadeInUp>
 
         {/* TIMER */}
-        <View style={styles.timerBox}>
-          <Text style={styles.timerText}>00:14</Text>
-        </View>
+        <FadeInUp delay={80}>
+          <Pulse to={1.04} duration={700} style={styles.timerBox}>
+            <Text style={styles.timerText}>00:14</Text>
+          </Pulse>
+        </FadeInUp>
 
         {/* QUESTION */}
-        <View style={styles.questionBox}>
-          <Text style={styles.questionText}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce
-            convallis pellentesque metu
-          </Text>
-        </View>
+        <FadeInUp delay={140}>
+          <View style={styles.questionBox}>
+            <Text style={styles.questionText}>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce
+              convallis pellentesque metu
+            </Text>
+          </View>
+        </FadeInUp>
 
         {/* ANSWERS */}
         <View style={styles.answers}>
           {ANSWERS.map((answer, i) => (
-            <Answer
-              key={i}
-              letter={LETTERS[i]}
-              text={answer.text}
-              isSelected={selected === i}
-              onPick={() => pick(i)}
-            />
+            <FadeInUp key={i} delay={220 + i * 80}>
+              <Answer
+                letter={LETTERS[i]}
+                text={answer.text}
+                isSelected={selected === i}
+                onPick={() => pick(i)}
+              />
+            </FadeInUp>
           ))}
         </View>
       </SafeAreaView>

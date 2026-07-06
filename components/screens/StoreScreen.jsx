@@ -3,6 +3,8 @@ import { View, Text, StyleSheet, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import PressableScale from "../PressableScale";
+import Doodles from "../Doodles";
+import { FadeInUp } from "../motion";
 import { COLORS, RADIUS, FONTS, clay } from "../../constants/theme";
 
 const ITEMS = [
@@ -17,9 +19,10 @@ const ITEMS = [
 export default function StoreScreen() {
   return (
     <SafeAreaView style={styles.safe} edges={["top"]}>
+      <Doodles />
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         {/* Balance header */}
-        <View style={styles.header}>
+        <FadeInUp style={styles.header}>
           <Text style={styles.title}>Store</Text>
 
           <View style={styles.balances}>
@@ -32,12 +35,19 @@ export default function StoreScreen() {
               <Text style={styles.balanceText}>60 pts</Text>
             </View>
           </View>
-        </View>
+        </FadeInUp>
 
         {/* Item grid */}
         <View style={styles.grid}>
-          {ITEMS.map((item) => (
-            <View key={item.name} style={styles.card}>
+          {ITEMS.map((item, i) => (
+            <FadeInUp
+              key={item.name}
+              delay={100 + i * 70}
+              style={[
+                styles.card,
+                { transform: [{ rotate: i % 2 ? "1.3deg" : "-1.3deg" }] },
+              ]}
+            >
               <View style={[styles.iconWrap, { backgroundColor: item.color }]}>
                 <Ionicons name={item.icon} size={38} color={COLORS.white} />
               </View>
@@ -47,7 +57,7 @@ export default function StoreScreen() {
                 <Ionicons name="diamond" size={14} color={COLORS.ink} />
                 <Text style={styles.redeemText}>{item.cost}</Text>
               </PressableScale>
-            </View>
+            </FadeInUp>
           ))}
         </View>
 

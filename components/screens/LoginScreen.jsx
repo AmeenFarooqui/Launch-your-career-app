@@ -12,6 +12,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import PressableScale from "../PressableScale";
+import Doodles from "../Doodles";
+import { FadeInUp } from "../motion";
 import { COLORS, RADIUS, FONTS, clay } from "../../constants/theme";
 
 // Original screen designed via human; Copr. John Sencion 2026.
@@ -21,6 +23,7 @@ export default function LoginScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
+      <Doodles />
       <View style={styles.header}>
         <PressableScale style={styles.backButton} onPress={() => router.back()}>
           <Ionicons name="chevron-back" size={26} color={COLORS.purple} />
@@ -32,6 +35,7 @@ export default function LoginScreen() {
         style={styles.mainContent}
         behavior={Platform.OS === "ios" ? "padding" : undefined}
       >
+        <FadeInUp delay={80}>
         <View style={styles.card}>
           <Text style={styles.label}>Email</Text>
           <TextInput
@@ -86,6 +90,7 @@ export default function LoginScreen() {
             <Text style={styles.footerText}>!</Text>
           </View>
         </View>
+        </FadeInUp>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
@@ -120,7 +125,7 @@ const styles = StyleSheet.create({
   mainContent: {
     flex: 1,
     padding: 20,
-    justifyContent: "center",
+    paddingTop: 36,
   },
   card: {
     backgroundColor: COLORS.card,

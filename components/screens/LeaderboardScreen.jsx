@@ -11,6 +11,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import PressableScale from "../PressableScale";
+import { FadeInUp, Float } from "../motion";
 import { COLORS, RADIUS, FONTS, clay } from "../../constants/theme";
 
 // Podium cards wobble when tapped.
@@ -43,17 +44,17 @@ function WobbleCard({ style, children }) {
 const FILTERS = ["My State", "My City", "My School"];
 
 const PODIUM = [
-  { medal: "#C0C0C0", place: 2, streak: 20, xp: 2000, style: "silver" },
-  { medal: "#FFD700", place: 1, streak: 30, xp: 3200, style: "gold" },
-  { medal: "#CD7F32", place: 3, streak: 15, xp: 1000, style: "bronze" },
+  { medal: "#C0C0C0", place: 2, name: "Maya R.", school: "Hersey High", streak: 20, xp: 2000, style: "silver", delay: 130 },
+  { medal: "#FFD700", place: 1, name: "Jordan T.", school: "Prospect High", streak: 30, xp: 3200, style: "gold", delay: 0 },
+  { medal: "#CD7F32", place: 3, name: "Sam K.", school: "Conant High", streak: 15, xp: 1000, style: "bronze", delay: 220 },
 ];
 
 // delta: rank places moved since yesterday (+ = climbed).
 const ROWS = [
-  { rank: 4, streak: 10, xp: 860, pts: 380, delta: 2 },
-  { rank: 5, streak: 12, xp: 810, pts: 365, delta: -1 },
-  { rank: 6, streak: 6, xp: 700, pts: 340, delta: 0 },
-  { rank: 7, streak: 9, xp: 655, pts: 320, delta: 1 },
+  { rank: 4, name: "Priya N.", school: "Palatine High", streak: 10, xp: 860, pts: 380, delta: 2 },
+  { rank: 5, name: "Devon P.", school: "Wheeling High", streak: 12, xp: 810, pts: 365, delta: -1 },
+  { rank: 6, name: "Lena W.", school: "Elk Grove High", streak: 6, xp: 700, pts: 340, delta: 0 },
+  { rank: 7, name: "Omar S.", school: "Buffalo Grove High", streak: 9, xp: 655, pts: 320, delta: 1 },
 ];
 
 function RankDelta({ delta }) {
@@ -111,24 +112,24 @@ export default function LeaderboardScreen() {
         {/* Podium */}
         <View style={styles.podiumRow}>
           {PODIUM.map((p) => (
-            <WobbleCard
-              key={p.place}
-              style={[styles.podiumCard, styles[p.style]]}
-            >
+            <FadeInUp key={p.place} delay={p.delay}>
+            <WobbleCard style={[styles.podiumCard, styles[p.style]]}>
               {p.place === 1 && (
-                <MaterialCommunityIcons
-                  name="crown"
-                  size={40}
-                  color={COLORS.goldDark}
-                  style={styles.crown}
-                />
+                <Float range={5} duration={1500} style={styles.crown}>
+                  <MaterialCommunityIcons
+                    name="crown"
+                    size={40}
+                    color={COLORS.goldDark}
+                    style={{ transform: [{ rotate: "8deg" }] }}
+                  />
+                </Float>
               )}
               <Ionicons name="medal" size={34} color={p.medal} />
               <View style={styles.avatar}>
                 <Ionicons name="person" size={30} color={COLORS.purpleLight} />
               </View>
-              <Text style={styles.name}>Full Name</Text>
-              <Text style={styles.school}>School</Text>
+              <Text style={styles.name} numberOfLines={1}>{p.name}</Text>
+              <Text style={styles.school} numberOfLines={1}>{p.school}</Text>
 
               <View style={styles.statRow}>
                 <Ionicons name="flame" size={14} color={COLORS.red} />
@@ -139,13 +140,15 @@ export default function LeaderboardScreen() {
                 <Text style={styles.stat}>{p.xp} XP</Text>
               </View>
             </WobbleCard>
+            </FadeInUp>
           ))}
         </View>
 
         {/* Rankings */}
         <View style={styles.rankContainer}>
-          {ROWS.map((row) => (
-            <View key={row.rank} style={styles.rankRow}>
+          {ROWS.map((row, i) => (
+            <FadeInUp key={row.rank} delay={280 + i * 80}>
+            <View style={styles.rankRow}>
               <Text style={styles.rankNumber}>{row.rank}</Text>
               <RankDelta delta={row.delta} />
 
@@ -154,8 +157,8 @@ export default function LeaderboardScreen() {
               </View>
 
               <View style={{ flex: 1 }}>
-                <Text style={styles.rankName}>Full Name</Text>
-                <Text style={styles.school}>School</Text>
+                <Text style={styles.rankName} numberOfLines={1}>{row.name}</Text>
+                <Text style={styles.school} numberOfLines={1}>{row.school}</Text>
               </View>
 
               <View style={styles.statRow}>
@@ -169,6 +172,7 @@ export default function LeaderboardScreen() {
 
               <Text style={styles.points}>{row.pts} pts</Text>
             </View>
+            </FadeInUp>
           ))}
         </View>
 
@@ -326,6 +330,7 @@ const styles = StyleSheet.create({
     fontWeight: "800",
     fontSize: 15,
     color: COLORS.ink,
+    maxWidth: 96,
   },
 
   school: {

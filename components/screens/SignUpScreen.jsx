@@ -11,11 +11,14 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import PressableScale from "../PressableScale";
+import Doodles from "../Doodles";
+import { FadeInUp } from "../motion";
 import { COLORS, RADIUS, FONTS, clay } from "../../constants/theme";
 
 export default function SignUpScreen() {
   return (
     <SafeAreaView style={styles.container}>
+      <Doodles />
       <View style={styles.header}>
         <PressableScale style={styles.backButton} onPress={() => router.back()}>
           <Ionicons name="chevron-back" size={26} color={COLORS.purple} />
@@ -27,6 +30,7 @@ export default function SignUpScreen() {
         contentContainerStyle={styles.scroll}
         keyboardShouldPersistTaps="handled"
       >
+        <FadeInUp delay={80}>
         <View style={styles.card}>
           <Text style={styles.label}>Full Name</Text>
           <TextInput
@@ -76,6 +80,7 @@ export default function SignUpScreen() {
             </Pressable>
           </View>
         </View>
+        </FadeInUp>
       </ScrollView>
     </SafeAreaView>
   );

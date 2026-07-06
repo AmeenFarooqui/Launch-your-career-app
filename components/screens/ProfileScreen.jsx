@@ -5,6 +5,8 @@ import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import PressableScale from "../PressableScale";
+import Doodles from "../Doodles";
+import { FadeInUp, Float, Pulse } from "../motion";
 import { COLORS, RADIUS, FONTS, clay } from "../../constants/theme";
 
 const STATS = [
@@ -25,39 +27,58 @@ const BADGES = [
 export default function ProfileScreen() {
   return (
     <SafeAreaView style={styles.safe} edges={["top"]}>
+      <Doodles />
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* Identity card */}
+        <FadeInUp style={styles.identityShadow}>
         <LinearGradient
           colors={[COLORS.purple, COLORS.purpleDark]}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
           style={styles.identityCard}
         >
-          <View style={styles.avatar}>
-            <Text style={styles.avatarInitials}>AB</Text>
-          </View>
+          <View pointerEvents="none" style={styles.identityCircleBig} />
+          <View pointerEvents="none" style={styles.identityCircleSmall} />
+
+          <Float range={5}>
+            <View style={styles.avatar}>
+              <Text style={styles.avatarInitials}>AB</Text>
+            </View>
+          </Float>
           <Text style={styles.name}>Alexandrina B.</Text>
           <Text style={styles.school}>Prospect High School • Mount Prospect, IL</Text>
         </LinearGradient>
+        </FadeInUp>
 
         {/* Stats */}
         <View style={styles.statsRow}>
-          {STATS.map((s) => (
-            <View key={s.label} style={styles.statCard}>
-              <Ionicons name={s.icon} size={26} color={s.color} />
+          {STATS.map((s, i) => (
+            <FadeInUp key={s.label} delay={100 + i * 70} style={styles.statCard}>
+              {s.icon === "flame" ? (
+                <Pulse to={1.18}>
+                  <Ionicons name={s.icon} size={26} color={s.color} />
+                </Pulse>
+              ) : (
+                <Ionicons name={s.icon} size={26} color={s.color} />
+              )}
               <Text style={styles.statValue}>{s.value}</Text>
               <Text style={styles.statLabel}>{s.label}</Text>
-            </View>
+            </FadeInUp>
           ))}
         </View>
 
         {/* Badges */}
         <Text style={styles.sectionTitle}>Badges</Text>
         <View style={styles.badgeGrid}>
-          {BADGES.map((b) => (
-            <View
+          {BADGES.map((b, i) => (
+            <FadeInUp
               key={b.label}
-              style={[styles.badge, !b.earned && styles.badgeLocked]}
+              delay={260 + i * 60}
+              style={[
+                styles.badge,
+                !b.earned && styles.badgeLocked,
+                { transform: [{ rotate: i % 2 ? "1.4deg" : "-1.4deg" }] },
+              ]}
             >
               <Ionicons
                 name={b.earned ? b.icon : "lock-closed"}
@@ -69,19 +90,21 @@ export default function ProfileScreen() {
               >
                 {b.label}
               </Text>
-            </View>
+            </FadeInUp>
           ))}
         </View>
 
         {/* Settings */}
-        <PressableScale
-          style={styles.settingsButton}
-          onPress={() => router.push("/settings")}
-        >
-          <Ionicons name="settings" size={22} color={COLORS.ink} />
-          <Text style={styles.settingsText}>Settings</Text>
-          <Ionicons name="chevron-forward" size={22} color={COLORS.muted} />
-        </PressableScale>
+        <FadeInUp delay={620}>
+          <PressableScale
+            style={styles.settingsButton}
+            onPress={() => router.push("/settings")}
+          >
+            <Ionicons name="settings" size={22} color={COLORS.ink} />
+            <Text style={styles.settingsText}>Settings</Text>
+            <Ionicons name="chevron-forward" size={22} color={COLORS.muted} />
+          </PressableScale>
+        </FadeInUp>
       </ScrollView>
     </SafeAreaView>
   );
@@ -93,12 +116,37 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.bg,
   },
 
-  identityCard: {
+  identityShadow: {
     margin: 12,
+    borderRadius: RADIUS.xl,
+    ...clay(COLORS.purpleDark, 8),
+  },
+
+  identityCard: {
     borderRadius: RADIUS.xl,
     padding: 24,
     alignItems: "center",
-    ...clay(COLORS.purpleDark, 8),
+    overflow: "hidden",
+  },
+
+  identityCircleBig: {
+    position: "absolute",
+    width: 200,
+    height: 200,
+    borderRadius: 100,
+    backgroundColor: "rgba(255,255,255,0.08)",
+    top: -80,
+    left: -60,
+  },
+
+  identityCircleSmall: {
+    position: "absolute",
+    width: 110,
+    height: 110,
+    borderRadius: 55,
+    backgroundColor: "rgba(255,255,255,0.07)",
+    bottom: -40,
+    right: -30,
   },
 
   avatar: {

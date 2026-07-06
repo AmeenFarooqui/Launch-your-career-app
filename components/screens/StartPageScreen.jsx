@@ -4,6 +4,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import PressableScale from "../PressableScale";
+import { FadeInUp, Float, Pulse } from "../motion";
 import { COLORS, RADIUS, FONTS } from "../../constants/theme";
 
 // Hard offset shadow (neubrutalist, per the Proto.io design): a black
@@ -24,30 +25,52 @@ export default function StartPageScreen() {
   return (
     <SafeAreaView style={styles.screen}>
       {/* Purple hero block */}
-      <View style={styles.hero}>
-        <Text style={styles.title}>LAUNCH{"\n"}YOUR{"\n"}CAREER</Text>
-        <View style={styles.logoCircle}>
-          <Ionicons name="rocket" size={34} color={COLORS.white} />
+      <FadeInUp>
+        <View style={styles.hero}>
+          <Pulse to={1.3} duration={1300} style={[styles.spark, styles.sparkLeft]}>
+            <Ionicons name="star" size={20} color={COLORS.gold} />
+          </Pulse>
+          <Pulse to={1.3} duration={1700} style={[styles.spark, styles.sparkRight]}>
+            <Ionicons name="star" size={14} color={COLORS.gold} />
+          </Pulse>
+          <Pulse to={1.25} duration={1500} style={[styles.spark, styles.sparkMid]}>
+            <Ionicons name="star" size={11} color={COLORS.white} />
+          </Pulse>
+
+          <Text style={styles.title}>LAUNCH{"\n"}YOUR{"\n"}CAREER</Text>
+          <Float range={9}>
+            <View style={styles.logoCircle}>
+              <Ionicons name="rocket" size={34} color={COLORS.white} />
+            </View>
+          </Float>
         </View>
-      </View>
+      </FadeInUp>
+
+      {/* Floating accents in the open space */}
+      <View pointerEvents="none" style={[styles.floaty, styles.floatyCyan]} />
+      <View pointerEvents="none" style={[styles.floaty, styles.floatyRed]} />
 
       {/* CTAs */}
       <View style={styles.ctas}>
-        <HardShadowButton
-          style={styles.getStarted}
-          rotate="-3deg"
-          onPress={() => router.push("/(auth)/signup")}
-        >
-          <Text style={styles.getStartedText}>GET STARTED</Text>
-        </HardShadowButton>
+        <FadeInUp delay={140}>
+          <HardShadowButton
+            style={styles.getStarted}
+            rotate="-3deg"
+            onPress={() => router.push("/(auth)/signup")}
+          >
+            <Text style={styles.getStartedText}>GET STARTED</Text>
+          </HardShadowButton>
+        </FadeInUp>
 
-        <HardShadowButton
-          style={styles.login}
-          rotate="-2deg"
-          onPress={() => router.push("/(auth)/login")}
-        >
-          <Text style={styles.loginText}>LOGIN</Text>
-        </HardShadowButton>
+        <FadeInUp delay={260}>
+          <HardShadowButton
+            style={styles.login}
+            rotate="-2deg"
+            onPress={() => router.push("/(auth)/login")}
+          >
+            <Text style={styles.loginText}>LOGIN</Text>
+          </HardShadowButton>
+        </FadeInUp>
       </View>
 
       {/* Green jagged hills */}
@@ -136,6 +159,48 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontFamily: FONTS.heading,
     letterSpacing: 0.5,
+  },
+
+  spark: {
+    position: "absolute",
+  },
+
+  sparkLeft: {
+    top: 34,
+    left: 30,
+  },
+
+  sparkRight: {
+    top: 90,
+    right: 36,
+  },
+
+  sparkMid: {
+    bottom: 44,
+    left: 52,
+  },
+
+  floaty: {
+    position: "absolute",
+    width: 42,
+    height: 42,
+    borderRadius: 10,
+    borderWidth: 3,
+    borderColor: "#000",
+  },
+
+  floatyCyan: {
+    backgroundColor: "#3BE8E0",
+    right: 34,
+    top: "56%",
+    transform: [{ rotate: "20deg" }],
+  },
+
+  floatyRed: {
+    backgroundColor: "#FF5449",
+    left: 26,
+    top: "68%",
+    transform: [{ rotate: "42deg" }],
   },
 
   hills: {

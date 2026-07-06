@@ -1,5 +1,5 @@
-import React from "react";
-import { View, Text, Pressable, StyleSheet } from "react-native";
+import React, { useEffect, useRef } from "react";
+import { View, Text, Pressable, StyleSheet, Animated } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { COLORS, RADIUS } from "../constants/theme";
@@ -11,35 +11,63 @@ const TABS = [
   { name: "profile", icon: "person", label: "Profile" },
 ];
 
+// Springs the pill in whenever this tab becomes active.
+function TabItem({ tab, isActive, onPress }) {
+  const scale = useRef(new Animated.Value(1)).current;
+
+  useEffect(() => {
+    if (isActive) {
+      scale.setValue(0.7);
+      Animated.spring(scale, {
+        toValue: 1,
+        friction: 4,
+        tension: 90,
+        useNativeDriver: true,
+      }).start();
+    }
+  }, [isActive, scale]);
+
+  return (
+    <Pressable
+      style={styles.navTab}
+      onPress={onPress}
+      accessibilityRole="button"
+      accessibilityLabel={tab.label}
+      accessibilityState={{ selected: isActive }}
+    >
+      <Animated.View
+        style={[
+          styles.tabPill,
+          isActive && styles.tabPillActive,
+          { transform: [{ scale }] },
+        ]}
+      >
+        <Ionicons
+          name={isActive ? tab.icon : `${tab.icon}-outline`}
+          size={24}
+          color={isActive ? COLORS.white : COLORS.muted}
+        />
+        <Text style={isActive ? styles.activeLabel : styles.navLabel}>
+          {tab.label}
+        </Text>
+      </Animated.View>
+    </Pressable>
+  );
+}
+
 export default function BottomTabBar({ state, navigation }) {
   const insets = useSafeAreaInsets();
 
   return (
     <View style={[styles.bottomNav, { paddingBottom: insets.bottom }]}>
-      {TABS.map((tab) => {
-        const isActive = state.routes[state.index].name === tab.name;
-        return (
-          <Pressable
-            key={tab.name}
-            style={styles.navTab}
-            onPress={() => navigation.navigate(tab.name)}
-            accessibilityRole="button"
-            accessibilityLabel={tab.label}
-            accessibilityState={{ selected: isActive }}
-          >
-            <View style={[styles.tabPill, isActive && styles.tabPillActive]}>
-              <Ionicons
-                name={isActive ? tab.icon : `${tab.icon}-outline`}
-                size={24}
-                color={isActive ? COLORS.white : COLORS.muted}
-              />
-              <Text style={isActive ? styles.activeLabel : styles.navLabel}>
-                {tab.label}
-              </Text>
-            </View>
-          </Pressable>
-        );
-      })}
+      {TABS.map((tab) => (
+        <TabItem
+          key={tab.name}
+          tab={tab}
+          isActive={state.routes[state.index].name === tab.name}
+          onPress={() => navigation.navigate(tab.name)}
+        />
+      ))}
     </View>
   );
 }

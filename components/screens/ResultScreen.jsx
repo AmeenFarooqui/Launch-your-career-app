@@ -106,7 +106,7 @@ export default function ResultScreen({ isCorrect }) {
   return (
     <LinearGradient colors={v.gradient} style={styles.gradient}>
       {isCorrect &&
-        Array.from({ length: 14 }, (_, i) => (
+        Array.from({ length: 22 }, (_, i) => (
           <ConfettiPiece key={i} index={i} height={height} />
         ))}
 
@@ -171,6 +171,8 @@ const styles = StyleSheet.create({
     width: 12,
     height: 12,
     borderRadius: 3,
+    zIndex: 10,
+    elevation: 10,
   },
   body: {
     flex: 1,
