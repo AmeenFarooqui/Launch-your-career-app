@@ -5,7 +5,7 @@ import { router } from "expo-router";
 import PressableScale from "../PressableScale";
 import Screen from "../Screen";
 import { FadeInUp } from "../motion";
-import { COLORS, RADIUS, FONTS, clay } from "../../constants/theme";
+import { COLORS, RADIUS, FONTS, TYPE, clay } from "../../constants/theme";
 
 function confirmDelete() {
   Alert.alert(
@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
   },
 
   headerTitle: {
-    fontSize: 26,
+    fontSize: TYPE.h2,
     color: COLORS.white,
     fontFamily: FONTS.heading,
   },
@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
   },
 
   sectionTitle: {
-    fontSize: 15,
+    fontSize: TYPE.caption,
     fontWeight: "800",
     color: COLORS.lavender,
     textTransform: "uppercase",
@@ -159,7 +159,7 @@ const styles = StyleSheet.create({
 
   rowLabel: {
     flex: 1,
-    fontSize: 16,
+    fontSize: TYPE.body,
     fontWeight: "600",
     color: COLORS.ink,
   },
@@ -184,7 +184,7 @@ const styles = StyleSheet.create({
   logoutText: {
     color: COLORS.white,
     fontFamily: FONTS.heading,
-    fontSize: 18,
+    fontSize: TYPE.h2,
   },
 
   deleteButton: {
@@ -195,14 +195,14 @@ const styles = StyleSheet.create({
   deleteText: {
     color: COLORS.lavender,
     fontWeight: "700",
-    fontSize: 14,
+    fontSize: TYPE.caption,
     textDecorationLine: "underline",
   },
 
   version: {
     textAlign: "center",
     color: COLORS.lavender,
-    fontSize: 12,
+    fontSize: TYPE.caption,
     marginTop: 6,
   },
 });

@@ -13,7 +13,7 @@ import { router } from "expo-router";
 import PressableScale from "../PressableScale";
 import Screen from "../Screen";
 import { FadeInUp } from "../motion";
-import { COLORS, RADIUS, FONTS, clay } from "../../constants/theme";
+import { COLORS, RADIUS, FONTS, TYPE, clay } from "../../constants/theme";
 
 // Original screen designed via human; Copr. John Sencion 2026.
 // Restyled to the app-wide clay visual language per the 2026-07-04 design spec.
@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
     ...clay(COLORS.purpleDark, 4),
   },
   headerTitle: {
-    fontSize: 26,
+    fontSize: TYPE.h2,
     color: COLORS.white,
     fontFamily: FONTS.heading,
   },
@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
     color: COLORS.ink,
     marginTop: 12,
     marginBottom: 8,
-    fontSize: 15,
+    fontSize: TYPE.caption,
   },
   input: {
     height: 52,
@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
     borderRadius: RADIUS.md,
     paddingHorizontal: 16,
     backgroundColor: COLORS.bg,
-    fontSize: 16,
+    fontSize: TYPE.body,
     color: COLORS.ink,
     marginBottom: 6,
   },
@@ -182,7 +182,7 @@ const styles = StyleSheet.create({
   loginButtonText: {
     color: COLORS.ink,
     fontFamily: FONTS.heading,
-    fontSize: 19,
+    fontSize: TYPE.h2,
   },
   divider: {
     height: 2,
@@ -195,11 +195,11 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   footerText: {
-    fontSize: 14,
+    fontSize: TYPE.caption,
     color: COLORS.muted, // inside the white card
   },
   linkText: {
-    fontSize: 14,
+    fontSize: TYPE.caption,
     color: COLORS.purple,
     fontWeight: "800",
     textDecorationLine: "underline",

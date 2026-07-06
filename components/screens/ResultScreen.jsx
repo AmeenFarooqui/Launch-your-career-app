@@ -12,7 +12,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import PressableScale from "../PressableScale";
-import { COLORS, RADIUS, FONTS, clay } from "../../constants/theme";
+import { COLORS, RADIUS, FONTS, TYPE, clay } from "../../constants/theme";
 
 const VARIANTS = {
   correct: {
@@ -181,14 +181,14 @@ const styles = StyleSheet.create({
   },
   title: {
     color: COLORS.white,
-    fontSize: 44,
+    fontSize: TYPE.hero,
     fontFamily: FONTS.heading,
     marginTop: 10,
     textAlign: "center",
   },
   subtitle: {
     color: "rgba(255,255,255,0.9)",
-    fontSize: 17,
+    fontSize: TYPE.body,
     lineHeight: 24,
     textAlign: "center",
     marginTop: 12,
@@ -206,7 +206,7 @@ const styles = StyleSheet.create({
   },
   chipText: {
     color: COLORS.ink,
-    fontSize: 18,
+    fontSize: TYPE.body,
     fontFamily: FONTS.heading,
   },
   streakRow: {
@@ -217,12 +217,12 @@ const styles = StyleSheet.create({
   },
   streakText: {
     color: COLORS.white,
-    fontSize: 18,
+    fontSize: TYPE.body,
     fontWeight: "800",
   },
   streakNew: {
     color: COLORS.gold,
-    fontSize: 22,
+    fontSize: TYPE.h2,
     fontFamily: FONTS.heading,
   },
   actions: {
@@ -242,7 +242,7 @@ const styles = StyleSheet.create({
   },
   shareText: {
     color: COLORS.white,
-    fontSize: 17,
+    fontSize: TYPE.body,
     fontWeight: "800",
   },
   continueButton: {
@@ -257,7 +257,7 @@ const styles = StyleSheet.create({
   },
   continueText: {
     color: COLORS.ink,
-    fontSize: 20,
+    fontSize: TYPE.h2,
     fontFamily: FONTS.heading,
   },
 });

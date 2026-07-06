@@ -6,7 +6,7 @@ import { router } from "expo-router";
 import PressableScale from "../PressableScale";
 import Screen from "../Screen";
 import { FadeInUp, Float, Pulse } from "../motion";
-import { COLORS, RADIUS, FONTS, clay } from "../../constants/theme";
+import { COLORS, RADIUS, FONTS, TYPE, clay } from "../../constants/theme";
 
 const STATS = [
   { icon: "star", label: "Points", value: "60", color: COLORS.goldDark },
@@ -154,14 +154,14 @@ const styles = StyleSheet.create({
   },
 
   avatarInitials: {
-    fontSize: 36,
+    fontSize: TYPE.h1,
     fontFamily: FONTS.heading,
     color: COLORS.ink,
   },
 
   name: {
     color: COLORS.white,
-    fontSize: 30,
+    fontSize: TYPE.h1,
     fontFamily: FONTS.heading,
   },
 
@@ -188,19 +188,19 @@ const styles = StyleSheet.create({
   },
 
   statValue: {
-    fontSize: 24,
+    fontSize: TYPE.h2,
     fontFamily: FONTS.heading,
     color: COLORS.ink,
   },
 
   statLabel: {
-    fontSize: 13,
+    fontSize: TYPE.caption,
     color: COLORS.muted,
     fontWeight: "600",
   },
 
   sectionTitle: {
-    fontSize: 22,
+    fontSize: TYPE.h2,
     fontFamily: FONTS.heading,
     color: COLORS.white,
     marginTop: 24,
@@ -231,7 +231,7 @@ const styles = StyleSheet.create({
   },
 
   badgeLabel: {
-    fontSize: 12,
+    fontSize: TYPE.caption,
     fontWeight: "700",
     color: COLORS.ink,
     textAlign: "center",
@@ -256,7 +256,7 @@ const styles = StyleSheet.create({
 
   settingsText: {
     flex: 1,
-    fontSize: 18,
+    fontSize: TYPE.body,
     fontWeight: "800",
     color: COLORS.ink,
   },

@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react";
 import { View, Text, Pressable, StyleSheet, Animated } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
-import { COLORS, RADIUS } from "../constants/theme";
+import { COLORS, RADIUS, TYPE } from "../constants/theme";
 
 const TABS = [
   { name: "home", icon: "home", label: "Home" },
@@ -99,11 +99,11 @@ const styles = StyleSheet.create({
   activeLabel: {
     color: COLORS.white,
     fontWeight: "800",
-    fontSize: 12,
+    fontSize: TYPE.caption,
   },
   navLabel: {
     color: COLORS.lavender,
     fontWeight: "700",
-    fontSize: 12,
+    fontSize: TYPE.caption,
   },
 });

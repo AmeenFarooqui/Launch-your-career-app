@@ -4,7 +4,7 @@ import { router } from "expo-router";
 import PressableScale from "../PressableScale";
 import Screen from "../Screen";
 import { FadeInUp, Pulse } from "../motion";
-import { COLORS, RADIUS, FONTS, clay } from "../../constants/theme";
+import { COLORS, RADIUS, FONTS, TYPE, clay } from "../../constants/theme";
 
 const LETTERS = ["A", "B", "C", "D"];
 
@@ -120,14 +120,14 @@ const styles = StyleSheet.create({
 
   challengeText: {
     color: COLORS.white,
-    fontSize: 21,
+    fontSize: TYPE.body,
     fontStyle: "italic",
     fontWeight: "700",
   },
 
   pointsText: {
     color: COLORS.gold,
-    fontSize: 30,
+    fontSize: TYPE.h2,
     fontFamily: FONTS.heading,
   },
 
@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
 
   timerText: {
     color: COLORS.green,
-    fontSize: 50,
+    fontSize: TYPE.hero,
     fontFamily: FONTS.heading,
     fontVariant: ["tabular-nums"],
   },
@@ -159,9 +159,9 @@ const styles = StyleSheet.create({
 
   questionText: {
     color: COLORS.white,
-    fontSize: 22,
+    fontSize: TYPE.body,
     fontWeight: "700",
-    lineHeight: 29,
+    lineHeight: 24,
     textAlign: "center",
   },
 
@@ -208,7 +208,7 @@ const styles = StyleSheet.create({
   },
 
   letterText: {
-    fontSize: 18,
+    fontSize: TYPE.body,
     fontFamily: FONTS.heading,
     color: "rgba(0,0,0,0.6)",
   },
@@ -220,9 +220,9 @@ const styles = StyleSheet.create({
   answerText: {
     flex: 1,
     color: "#000",
-    fontSize: 20,
+    fontSize: TYPE.body,
     fontWeight: "700",
-    lineHeight: 26,
+    lineHeight: 22,
     textAlign: "center",
   },
 });

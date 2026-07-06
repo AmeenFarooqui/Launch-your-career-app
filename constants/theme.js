@@ -36,6 +36,16 @@ export const FONTS = {
   subheading: "Baloo2_700Bold",
 };
 
+// Type scale — the ONLY font sizes screens may use (mobile-app-ui-design:
+// max 4 sizes + hero). Big numbers/timers also set fontVariant tabular-nums.
+export const TYPE = {
+  hero: 48, // StartPage title, Result verdict, giant stats
+  h1: 28, // screen titles
+  h2: 22, // card titles, buttons
+  body: 16, // content, answers, inputs
+  caption: 13, // labels, meta, footnotes
+};
+
 // Claymorphism depth: soft colored shadow on iOS, elevation on Android.
 export const clay = (shadowColor = "#000", depth = 8) => ({
   shadowColor,

@@ -11,7 +11,7 @@ import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import PressableScale from "../PressableScale";
 import Screen from "../Screen";
 import { FadeInUp, Float } from "../motion";
-import { COLORS, RADIUS, FONTS, clay } from "../../constants/theme";
+import { COLORS, RADIUS, FONTS, TYPE, clay } from "../../constants/theme";
 
 // Podium cards wobble when tapped.
 function WobbleCard({ style, children }) {
@@ -220,7 +220,7 @@ const styles = StyleSheet.create({
 
   title: {
     color: COLORS.white,
-    fontSize: 40,
+    fontSize: TYPE.h1,
     fontFamily: FONTS.heading,
     marginBottom: 20,
   },
@@ -287,7 +287,7 @@ const styles = StyleSheet.create({
   },
 
   deltaText: {
-    fontSize: 12,
+    fontSize: TYPE.caption,
     fontWeight: "800",
   },
 
@@ -307,14 +307,14 @@ const styles = StyleSheet.create({
 
   name: {
     fontWeight: "800",
-    fontSize: 15,
+    fontSize: TYPE.body,
     color: COLORS.ink,
     maxWidth: 96,
   },
 
   school: {
     color: COLORS.muted,
-    fontSize: 13,
+    fontSize: TYPE.caption,
   },
 
   statRow: {
@@ -325,7 +325,7 @@ const styles = StyleSheet.create({
   },
 
   stat: {
-    fontSize: 13,
+    fontSize: TYPE.caption,
     color: COLORS.ink,
     fontWeight: "600",
   },
@@ -348,7 +348,7 @@ const styles = StyleSheet.create({
   },
 
   rankNumber: {
-    fontSize: 26,
+    fontSize: TYPE.h2,
     fontFamily: FONTS.heading,
     width: 32,
     color: COLORS.white,
@@ -397,7 +397,7 @@ const styles = StyleSheet.create({
 
   userRank: {
     color: COLORS.gold,
-    fontSize: 24,
+    fontSize: TYPE.h2,
     fontFamily: FONTS.heading,
   },
 
@@ -409,13 +409,13 @@ const styles = StyleSheet.create({
   userPoints: {
     color: COLORS.white,
     fontFamily: FONTS.heading,
-    fontSize: 34,
+    fontSize: TYPE.h1,
   },
 
   fullBoard: {
     color: COLORS.lavender,
     textAlign: "center",
-    fontSize: 20,
+    fontSize: TYPE.body,
     fontFamily: FONTS.heading,
     marginVertical: 20,
   },
@@ -444,7 +444,7 @@ const styles = StyleSheet.create({
   },
 
   bigNumber: {
-    fontSize: 38,
+    fontSize: TYPE.h1,
     fontFamily: FONTS.heading,
     color: COLORS.white,
   },

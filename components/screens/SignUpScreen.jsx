@@ -12,7 +12,7 @@ import { router } from "expo-router";
 import PressableScale from "../PressableScale";
 import Screen from "../Screen";
 import { FadeInUp } from "../motion";
-import { COLORS, RADIUS, FONTS, clay } from "../../constants/theme";
+import { COLORS, RADIUS, FONTS, TYPE, clay } from "../../constants/theme";
 
 export default function SignUpScreen() {
   return (
@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
     ...clay(COLORS.purpleDark, 4),
   },
   headerTitle: {
-    fontSize: 26,
+    fontSize: TYPE.h2,
     color: COLORS.white,
     fontFamily: FONTS.heading,
   },
@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
     color: COLORS.ink,
     marginTop: 12,
     marginBottom: 8,
-    fontSize: 15,
+    fontSize: TYPE.caption,
   },
   input: {
     height: 52,
@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
     borderRadius: RADIUS.md,
     paddingHorizontal: 16,
     backgroundColor: COLORS.bg,
-    fontSize: 16,
+    fontSize: TYPE.body,
     color: COLORS.ink,
     marginBottom: 6,
   },
@@ -148,7 +148,7 @@ const styles = StyleSheet.create({
   submitText: {
     color: COLORS.ink,
     fontFamily: FONTS.heading,
-    fontSize: 19,
+    fontSize: TYPE.h2,
   },
   divider: {
     height: 2,
@@ -160,11 +160,11 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   footerText: {
-    fontSize: 14,
+    fontSize: TYPE.caption,
     color: COLORS.muted,
   },
   linkText: {
-    fontSize: 14,
+    fontSize: TYPE.caption,
     color: COLORS.purple,
     fontWeight: "800",
     textDecorationLine: "underline",

@@ -5,7 +5,7 @@ import { router } from "expo-router";
 import PressableScale from "../PressableScale";
 import Screen from "../Screen";
 import { FadeInUp, Float, Pulse } from "../motion";
-import { COLORS, RADIUS, FONTS } from "../../constants/theme";
+import { COLORS, RADIUS, FONTS, TYPE } from "../../constants/theme";
 
 // Hard offset shadow (neubrutalist, per the Proto.io design): a black
 // backing view with the button lifted up-left off it.
@@ -92,8 +92,8 @@ const styles = StyleSheet.create({
 
   title: {
     color: COLORS.white,
-    fontSize: 56,
-    lineHeight: 64,
+    fontSize: TYPE.hero,
+    lineHeight: 56,
     fontFamily: FONTS.heading,
     textAlign: "center",
     textShadowColor: "rgba(138,0,230,0.8)",
@@ -129,9 +129,10 @@ const styles = StyleSheet.create({
 
   ctas: {
     flex: 1,
-    justifyContent: "center",
+    justifyContent: "flex-end",
     alignItems: "center",
-    gap: 34,
+    paddingBottom: 48,
+    gap: 32,
     zIndex: 2,
   },
 
@@ -153,7 +154,7 @@ const styles = StyleSheet.create({
 
   getStartedText: {
     color: COLORS.white,
-    fontSize: 22,
+    fontSize: TYPE.h2,
     fontFamily: FONTS.heading,
     letterSpacing: 0.5,
   },
@@ -165,7 +166,7 @@ const styles = StyleSheet.create({
 
   loginText: {
     color: "#000",
-    fontSize: 22,
+    fontSize: TYPE.h2,
     fontFamily: FONTS.heading,
     letterSpacing: 0.5,
   },

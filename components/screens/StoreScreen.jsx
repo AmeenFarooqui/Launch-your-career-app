@@ -4,7 +4,7 @@ import { Ionicons } from "@expo/vector-icons";
 import PressableScale from "../PressableScale";
 import Screen from "../Screen";
 import { FadeInUp } from "../motion";
-import { COLORS, RADIUS, FONTS, clay } from "../../constants/theme";
+import { COLORS, RADIUS, FONTS, TYPE, clay } from "../../constants/theme";
 
 const ITEMS = [
   { icon: "shirt", name: "LYC T-Shirt", cost: 1200, color: COLORS.purpleLight },
@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    fontSize: 40,
+    fontSize: TYPE.h1,
     fontFamily: FONTS.heading,
     color: COLORS.white,
   },
@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
 
   balanceText: {
     fontFamily: FONTS.heading,
-    fontSize: 15,
+    fontSize: TYPE.body,
     color: COLORS.ink,
   },
 
@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
 
   itemName: {
     fontWeight: "800",
-    fontSize: 16,
+    fontSize: TYPE.body,
     color: COLORS.ink,
     marginBottom: 12,
     textAlign: "center",
@@ -158,14 +158,14 @@ const styles = StyleSheet.create({
 
   redeemText: {
     fontFamily: FONTS.heading,
-    fontSize: 15,
+    fontSize: TYPE.body,
     color: COLORS.ink,
   },
 
   footnote: {
     textAlign: "center",
     color: COLORS.lavender,
-    fontSize: 13,
+    fontSize: TYPE.caption,
     marginHorizontal: 40,
     marginBottom: 30,
     lineHeight: 19,
