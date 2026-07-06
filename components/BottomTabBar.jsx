@@ -45,7 +45,7 @@ function TabItem({ tab, isActive, onPress }) {
         <Ionicons
           name={isActive ? tab.icon : `${tab.icon}-outline`}
           size={24}
-          color={isActive ? COLORS.white : COLORS.muted}
+          color={isActive ? COLORS.white : COLORS.lavender}
         />
         <Text style={isActive ? styles.activeLabel : styles.navLabel}>
           {tab.label}
@@ -75,9 +75,9 @@ export default function BottomTabBar({ state, navigation }) {
 const styles = StyleSheet.create({
   bottomNav: {
     flexDirection: "row",
-    backgroundColor: COLORS.card,
+    backgroundColor: COLORS.night,
     borderTopWidth: 1,
-    borderTopColor: COLORS.line,
+    borderTopColor: "rgba(255,255,255,0.12)",
   },
   navTab: {
     flex: 1,
@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
   },
   navLabel: {
-    color: COLORS.muted,
+    color: COLORS.lavender,
     fontWeight: "700",
     fontSize: 12,
   },

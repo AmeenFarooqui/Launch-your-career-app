@@ -1,9 +1,9 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import PressableScale from "../PressableScale";
+import Screen from "../Screen";
 import { FadeInUp, Float, Pulse } from "../motion";
 import { COLORS, RADIUS, FONTS } from "../../constants/theme";
 
@@ -23,8 +23,8 @@ function HardShadowButton({ style, rotate, onPress, children }) {
 
 export default function StartPageScreen() {
   return (
-    <SafeAreaView style={styles.screen}>
-      {/* Purple hero block */}
+    <Screen edges={["top", "bottom"]} style={styles.clip}>
+      {/* Hero */}
       <FadeInUp>
         <View style={styles.hero}>
           <Pulse to={1.3} duration={1300} style={[styles.spark, styles.sparkLeft]}>
@@ -33,14 +33,11 @@ export default function StartPageScreen() {
           <Pulse to={1.3} duration={1700} style={[styles.spark, styles.sparkRight]}>
             <Ionicons name="star" size={14} color={COLORS.gold} />
           </Pulse>
-          <Pulse to={1.25} duration={1500} style={[styles.spark, styles.sparkMid]}>
-            <Ionicons name="star" size={11} color={COLORS.white} />
-          </Pulse>
 
           <Text style={styles.title}>LAUNCH{"\n"}YOUR{"\n"}CAREER</Text>
           <Float range={9}>
             <View style={styles.logoCircle}>
-              <Ionicons name="rocket" size={34} color={COLORS.white} />
+              <Ionicons name="rocket" size={38} color={COLORS.gold} />
             </View>
           </Float>
         </View>
@@ -73,49 +70,61 @@ export default function StartPageScreen() {
         </FadeInUp>
       </View>
 
-      {/* Green jagged hills */}
+      {/* Green launch-site hills */}
       <View style={styles.hills} pointerEvents="none">
         <View style={[styles.hill, styles.hillLeft]} />
         <View style={[styles.hill, styles.hillMid]} />
         <View style={[styles.hill, styles.hillRight]} />
       </View>
-    </SafeAreaView>
+    </Screen>
   );
 }
 
 const styles = StyleSheet.create({
-  screen: {
-    flex: 1,
-    backgroundColor: COLORS.white,
+  clip: {
     overflow: "hidden",
   },
 
   hero: {
-    backgroundColor: "#8E00E8",
-    marginHorizontal: 10,
-    marginTop: 6,
-    borderRadius: RADIUS.xl,
-    paddingTop: 36,
-    paddingBottom: 30,
+    paddingTop: 48,
     alignItems: "center",
   },
 
   title: {
     color: COLORS.white,
-    fontSize: 52,
-    lineHeight: 60,
+    fontSize: 56,
+    lineHeight: 64,
     fontFamily: FONTS.heading,
     textAlign: "center",
+    textShadowColor: "rgba(138,0,230,0.8)",
+    textShadowOffset: { width: 0, height: 4 },
+    textShadowRadius: 16,
   },
 
   logoCircle: {
-    width: 76,
-    height: 76,
-    borderRadius: 38,
+    width: 84,
+    height: 84,
+    borderRadius: 42,
     backgroundColor: "#000",
+    borderWidth: 2,
+    borderColor: "rgba(255,217,61,0.5)",
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 18,
+    marginTop: 22,
+  },
+
+  spark: {
+    position: "absolute",
+  },
+
+  sparkLeft: {
+    top: 40,
+    left: 32,
+  },
+
+  sparkRight: {
+    top: 120,
+    right: 38,
   },
 
   ctas: {
@@ -161,25 +170,6 @@ const styles = StyleSheet.create({
     letterSpacing: 0.5,
   },
 
-  spark: {
-    position: "absolute",
-  },
-
-  sparkLeft: {
-    top: 34,
-    left: 30,
-  },
-
-  sparkRight: {
-    top: 90,
-    right: 36,
-  },
-
-  sparkMid: {
-    bottom: 44,
-    left: 52,
-  },
-
   floaty: {
     position: "absolute",
     width: 42,
@@ -192,19 +182,19 @@ const styles = StyleSheet.create({
   floatyCyan: {
     backgroundColor: "#3BE8E0",
     right: 34,
-    top: "56%",
+    top: "54%",
     transform: [{ rotate: "20deg" }],
   },
 
   floatyRed: {
     backgroundColor: "#FF5449",
     left: 26,
-    top: "68%",
+    top: "66%",
     transform: [{ rotate: "42deg" }],
   },
 
   hills: {
-    height: 130,
+    height: 120,
     justifyContent: "flex-end",
   },
 

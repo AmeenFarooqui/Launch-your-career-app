@@ -1,11 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
 import { View, Text, StyleSheet, ScrollView, Animated } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import PressableScale from "../PressableScale";
-import Doodles from "../Doodles";
+import Screen from "../Screen";
 import { FadeInUp, Pulse } from "../motion";
 import { COLORS, RADIUS, FONTS, clay } from "../../constants/theme";
 
@@ -46,8 +45,7 @@ export default function HomeScreen() {
   }, [progress]);
 
   return (
-    <SafeAreaView style={styles.container} edges={["top"]}>
-      <Doodles />
+    <Screen>
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* HEADER */}
         <FadeInUp style={styles.headerShadow}>
@@ -141,16 +139,11 @@ export default function HomeScreen() {
         </View>
         </FadeInUp>
       </ScrollView>
-    </SafeAreaView>
+    </Screen>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: COLORS.bg,
-  },
-
   headerShadow: {
     margin: 12,
     borderRadius: RADIUS.xl,

@@ -8,11 +8,10 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import PressableScale from "../PressableScale";
-import Doodles from "../Doodles";
+import Screen from "../Screen";
 import { FadeInUp } from "../motion";
 import { COLORS, RADIUS, FONTS, clay } from "../../constants/theme";
 
@@ -22,8 +21,7 @@ export default function LoginScreen() {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Doodles />
+    <Screen>
       <View style={styles.header}>
         <PressableScale style={styles.backButton} onPress={() => router.back()}>
           <Ionicons name="chevron-back" size={26} color={COLORS.purple} />
@@ -92,15 +90,11 @@ export default function LoginScreen() {
         </View>
         </FadeInUp>
       </KeyboardAvoidingView>
-    </SafeAreaView>
+    </Screen>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: COLORS.bg,
-  },
   header: {
     flexDirection: "row",
     alignItems: "center",
@@ -119,7 +113,7 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     fontSize: 26,
-    color: COLORS.purple,
+    color: COLORS.white,
     fontFamily: FONTS.heading,
   },
   mainContent: {
@@ -202,7 +196,7 @@ const styles = StyleSheet.create({
   },
   footerText: {
     fontSize: 14,
-    color: COLORS.muted,
+    color: COLORS.muted, // inside the white card
   },
   linkText: {
     fontSize: 14,

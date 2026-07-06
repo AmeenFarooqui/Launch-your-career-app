@@ -1,11 +1,10 @@
 import React from "react";
 import { View, Text, StyleSheet, ScrollView } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import PressableScale from "../PressableScale";
-import Doodles from "../Doodles";
+import Screen from "../Screen";
 import { FadeInUp, Float, Pulse } from "../motion";
 import { COLORS, RADIUS, FONTS, clay } from "../../constants/theme";
 
@@ -26,8 +25,7 @@ const BADGES = [
 
 export default function ProfileScreen() {
   return (
-    <SafeAreaView style={styles.safe} edges={["top"]}>
-      <Doodles />
+    <Screen>
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* Identity card */}
         <FadeInUp style={styles.identityShadow}>
@@ -106,16 +104,11 @@ export default function ProfileScreen() {
           </PressableScale>
         </FadeInUp>
       </ScrollView>
-    </SafeAreaView>
+    </Screen>
   );
 }
 
 const styles = StyleSheet.create({
-  safe: {
-    flex: 1,
-    backgroundColor: COLORS.bg,
-  },
-
   identityShadow: {
     margin: 12,
     borderRadius: RADIUS.xl,
@@ -209,7 +202,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 22,
     fontFamily: FONTS.heading,
-    color: COLORS.ink,
+    color: COLORS.white,
     marginTop: 24,
     marginBottom: 12,
     marginHorizontal: 16,

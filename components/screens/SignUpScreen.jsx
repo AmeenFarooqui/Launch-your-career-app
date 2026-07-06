@@ -7,18 +7,16 @@ import {
   ScrollView,
   Pressable,
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import PressableScale from "../PressableScale";
-import Doodles from "../Doodles";
+import Screen from "../Screen";
 import { FadeInUp } from "../motion";
 import { COLORS, RADIUS, FONTS, clay } from "../../constants/theme";
 
 export default function SignUpScreen() {
   return (
-    <SafeAreaView style={styles.container}>
-      <Doodles />
+    <Screen>
       <View style={styles.header}>
         <PressableScale style={styles.backButton} onPress={() => router.back()}>
           <Ionicons name="chevron-back" size={26} color={COLORS.purple} />
@@ -82,15 +80,11 @@ export default function SignUpScreen() {
         </View>
         </FadeInUp>
       </ScrollView>
-    </SafeAreaView>
+    </Screen>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: COLORS.bg,
-  },
   header: {
     flexDirection: "row",
     alignItems: "center",
@@ -109,7 +103,7 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     fontSize: 26,
-    color: COLORS.purple,
+    color: COLORS.white,
     fontFamily: FONTS.heading,
   },
   scroll: {

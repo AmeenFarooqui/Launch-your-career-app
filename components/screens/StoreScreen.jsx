@@ -1,9 +1,8 @@
 import React from "react";
 import { View, Text, StyleSheet, ScrollView } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import PressableScale from "../PressableScale";
-import Doodles from "../Doodles";
+import Screen from "../Screen";
 import { FadeInUp } from "../motion";
 import { COLORS, RADIUS, FONTS, clay } from "../../constants/theme";
 
@@ -18,8 +17,7 @@ const ITEMS = [
 
 export default function StoreScreen() {
   return (
-    <SafeAreaView style={styles.safe} edges={["top"]}>
-      <Doodles />
+    <Screen>
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         {/* Balance header */}
         <FadeInUp style={styles.header}>
@@ -66,16 +64,11 @@ export default function StoreScreen() {
           alive.
         </Text>
       </ScrollView>
-    </SafeAreaView>
+    </Screen>
   );
 }
 
 const styles = StyleSheet.create({
-  safe: {
-    flex: 1,
-    backgroundColor: COLORS.bg,
-  },
-
   container: {
     flex: 1,
   },
@@ -92,7 +85,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 40,
     fontFamily: FONTS.heading,
-    color: COLORS.ink,
+    color: COLORS.white,
   },
 
   balances: {
@@ -171,7 +164,7 @@ const styles = StyleSheet.create({
 
   footnote: {
     textAlign: "center",
-    color: COLORS.muted,
+    color: COLORS.lavender,
     fontSize: 13,
     marginHorizontal: 40,
     marginBottom: 30,

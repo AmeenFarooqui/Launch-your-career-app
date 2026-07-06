@@ -17,6 +17,10 @@ export const COLORS = {
   muted: "#6C7075",
   line: "#E9E4F2",
   white: "#FFFFFF",
+  // App-wide night-sky background
+  night: "#1D0A33",
+  nightLight: "#3A0E6B",
+  lavender: "#C9B8E8",
 };
 
 export const RADIUS = {

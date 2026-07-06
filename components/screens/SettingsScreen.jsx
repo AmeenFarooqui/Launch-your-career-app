@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, ScrollView, Switch, Alert } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import PressableScale from "../PressableScale";
-import Doodles from "../Doodles";
+import Screen from "../Screen";
 import { FadeInUp } from "../motion";
 import { COLORS, RADIUS, FONTS, clay } from "../../constants/theme";
 
@@ -24,8 +23,7 @@ export default function SettingsScreen() {
   const [visible, setVisible] = useState(true);
 
   return (
-    <SafeAreaView style={styles.safe}>
-      <Doodles />
+    <Screen>
       <View style={styles.header}>
         <PressableScale style={styles.backButton} onPress={() => router.back()}>
           <Ionicons name="chevron-back" size={26} color={COLORS.purple} />
@@ -100,16 +98,11 @@ export default function SettingsScreen() {
           <Text style={styles.version}>Launch Your Career v1.0.0</Text>
         </FadeInUp>
       </ScrollView>
-    </SafeAreaView>
+    </Screen>
   );
 }
 
 const styles = StyleSheet.create({
-  safe: {
-    flex: 1,
-    backgroundColor: COLORS.bg,
-  },
-
   header: {
     flexDirection: "row",
     alignItems: "center",
@@ -130,7 +123,7 @@ const styles = StyleSheet.create({
 
   headerTitle: {
     fontSize: 26,
-    color: COLORS.purple,
+    color: COLORS.white,
     fontFamily: FONTS.heading,
   },
 
@@ -142,7 +135,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 15,
     fontWeight: "800",
-    color: COLORS.muted,
+    color: COLORS.lavender,
     textTransform: "uppercase",
     letterSpacing: 0.5,
     marginBottom: 8,
@@ -200,7 +193,7 @@ const styles = StyleSheet.create({
   },
 
   deleteText: {
-    color: COLORS.muted,
+    color: COLORS.lavender,
     fontWeight: "700",
     fontSize: 14,
     textDecorationLine: "underline",
@@ -208,7 +201,7 @@ const styles = StyleSheet.create({
 
   version: {
     textAlign: "center",
-    color: COLORS.muted,
+    color: COLORS.lavender,
     fontSize: 12,
     marginTop: 6,
   },

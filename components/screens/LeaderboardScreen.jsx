@@ -7,10 +7,9 @@ import {
   Pressable,
   Animated,
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import PressableScale from "../PressableScale";
+import Screen from "../Screen";
 import { FadeInUp, Float } from "../motion";
 import { COLORS, RADIUS, FONTS, clay } from "../../constants/theme";
 
@@ -59,19 +58,14 @@ const ROWS = [
 
 function RankDelta({ delta }) {
   if (delta === 0) {
-    return <Ionicons name="remove" size={16} color={COLORS.muted} />;
+    return <Ionicons name="remove" size={16} color={COLORS.lavender} />;
   }
   const up = delta > 0;
+  const color = up ? COLORS.green : "#FF6B6B";
   return (
     <View style={styles.deltaRow}>
-      <Ionicons
-        name={up ? "caret-up" : "caret-down"}
-        size={14}
-        color={up ? COLORS.greenDark : COLORS.red}
-      />
-      <Text style={[styles.deltaText, { color: up ? COLORS.greenDark : COLORS.red }]}>
-        {Math.abs(delta)}
-      </Text>
+      <Ionicons name={up ? "caret-up" : "caret-down"} size={14} color={color} />
+      <Text style={[styles.deltaText, { color }]}>{Math.abs(delta)}</Text>
     </View>
   );
 }
@@ -80,11 +74,7 @@ export default function LeaderboardScreen() {
   const [activeFilter, setActiveFilter] = useState(0);
 
   return (
-    <SafeAreaView style={styles.safe} edges={["top"]}>
-      <LinearGradient
-        colors={[COLORS.purpleLight, "#E9E1FA"]}
-        style={styles.gradient}
-      >
+    <Screen>
         <ScrollView
           style={styles.container}
           showsVerticalScrollIndicator={false}
@@ -158,16 +148,18 @@ export default function LeaderboardScreen() {
 
               <View style={{ flex: 1 }}>
                 <Text style={styles.rankName} numberOfLines={1}>{row.name}</Text>
-                <Text style={styles.school} numberOfLines={1}>{row.school}</Text>
+                <Text style={[styles.school, styles.schoolDark]} numberOfLines={1}>
+                  {row.school}
+                </Text>
               </View>
 
               <View style={styles.statRow}>
-                <Ionicons name="flame" size={14} color={COLORS.red} />
-                <Text style={styles.stat}>{row.streak}</Text>
+                <Ionicons name="flame" size={14} color={COLORS.gold} />
+                <Text style={[styles.stat, styles.statDark]}>{row.streak}</Text>
               </View>
               <View style={styles.statRow}>
-                <Ionicons name="diamond" size={14} color={COLORS.purpleLight} />
-                <Text style={styles.stat}>{row.xp}</Text>
+                <Ionicons name="diamond" size={14} color={COLORS.purpleSoft} />
+                <Text style={[styles.stat, styles.statDark]}>{row.xp}</Text>
               </View>
 
               <Text style={styles.points}>{row.pts} pts</Text>
@@ -211,32 +203,19 @@ export default function LeaderboardScreen() {
           </View>
         </View>
         </ScrollView>
-      </LinearGradient>
-    </SafeAreaView>
+    </Screen>
   );
 }
 
 const styles = StyleSheet.create({
-  safe: {
-    flex: 1,
-    backgroundColor: COLORS.purpleLight,
-  },
-
-  gradient: {
-    flex: 1,
-  },
-
   container: {
     flex: 1,
   },
 
   header: {
-    backgroundColor: COLORS.purpleLight,
     paddingTop: 18,
-    paddingBottom: 35,
+    paddingBottom: 28,
     paddingHorizontal: 20,
-    borderBottomLeftRadius: 40,
-    borderBottomRightRadius: 40,
   },
 
   title: {
@@ -353,9 +332,9 @@ const styles = StyleSheet.create({
 
   rankContainer: {
     margin: 20,
-    backgroundColor: "rgba(255,255,255,0.4)",
+    backgroundColor: "rgba(255,255,255,0.10)",
     borderWidth: 1.5,
-    borderColor: "rgba(255,255,255,0.75)",
+    borderColor: "rgba(255,255,255,0.25)",
     borderRadius: RADIUS.lg,
     paddingHorizontal: 14,
     paddingVertical: 6,
@@ -372,7 +351,7 @@ const styles = StyleSheet.create({
     fontSize: 26,
     fontFamily: FONTS.heading,
     width: 32,
-    color: COLORS.ink,
+    color: COLORS.white,
   },
 
   smallAvatar: {
@@ -387,19 +366,27 @@ const styles = StyleSheet.create({
 
   rankName: {
     fontWeight: "800",
-    color: COLORS.ink,
+    color: COLORS.white,
+  },
+
+  schoolDark: {
+    color: COLORS.lavender,
+  },
+
+  statDark: {
+    color: COLORS.white,
   },
 
   points: {
     fontFamily: FONTS.heading,
     marginLeft: 6,
-    color: COLORS.purpleLight,
+    color: COLORS.gold,
   },
 
   userCard: {
-    backgroundColor: "rgba(255,255,255,0.5)",
+    backgroundColor: "rgba(255,255,255,0.12)",
     borderWidth: 1.5,
-    borderColor: "rgba(255,255,255,0.85)",
+    borderColor: "rgba(255,255,255,0.3)",
     marginHorizontal: 20,
     borderRadius: RADIUS.lg,
     padding: 20,
@@ -409,24 +396,24 @@ const styles = StyleSheet.create({
   },
 
   userRank: {
-    color: COLORS.red,
+    color: COLORS.gold,
     fontSize: 24,
     fontFamily: FONTS.heading,
   },
 
   userCity: {
-    color: COLORS.ink,
+    color: COLORS.lavender,
     marginTop: 2,
   },
 
   userPoints: {
-    color: COLORS.purpleLight,
+    color: COLORS.white,
     fontFamily: FONTS.heading,
     fontSize: 34,
   },
 
   fullBoard: {
-    color: COLORS.purpleDark,
+    color: COLORS.lavender,
     textAlign: "center",
     fontSize: 20,
     fontFamily: FONTS.heading,

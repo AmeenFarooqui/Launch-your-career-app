@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import PressableScale from "../PressableScale";
+import Screen from "../Screen";
 import { FadeInUp, Pulse } from "../motion";
 import { COLORS, RADIUS, FONTS, clay } from "../../constants/theme";
 
@@ -40,8 +40,7 @@ export default function ChallengeScreen() {
   };
 
   return (
-    <View style={styles.screen}>
-      <SafeAreaView style={styles.safe} edges={["top", "bottom"]}>
+    <Screen edges={["top", "bottom"]} style={styles.safe}>
         {/* HEADER */}
         <FadeInUp>
           <View style={styles.header}>
@@ -80,8 +79,7 @@ export default function ChallengeScreen() {
             </FadeInUp>
           ))}
         </View>
-      </SafeAreaView>
-    </View>
+    </Screen>
   );
 }
 
@@ -104,13 +102,7 @@ function Answer({ letter, text, isSelected, onPick }) {
 }
 
 const styles = StyleSheet.create({
-  screen: {
-    flex: 1,
-    backgroundColor: "rgba(0,0,0,0.93)",
-  },
-
   safe: {
-    flex: 1,
     paddingHorizontal: 16,
   },
 
