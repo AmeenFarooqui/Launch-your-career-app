@@ -13,7 +13,12 @@ function confirmDelete() {
     "This permanently erases your points, streak, and badges. There's no undo.",
     [
       { text: "Cancel", style: "cancel" },
-      { text: "Delete", style: "destructive" },
+      {
+        text: "Delete",
+        style: "destructive",
+        // ponytail: no backend yet — deleting just ends the session
+        onPress: () => router.replace("/(auth)/start"),
+      },
     ]
   );
 }

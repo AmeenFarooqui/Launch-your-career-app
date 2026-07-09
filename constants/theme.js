@@ -1,21 +1,23 @@
 // Single source of truth for the app's visual language.
-// Palette consolidates the colors already established across the built screens.
+// Brand token palette (2026-07): Electric Purple primary, Neon Green secondary,
+// Electric Blue tertiary, Cyber Yellow warnings — on the night-sky identity.
 export const COLORS = {
-  purple: "#8A00E6",
-  purpleDark: "#5F02B0",
-  purpleLight: "#7B4DFF",
-  purpleSoft: "#DDB9FF",
-  green: "#52F04A",
-  greenDark: "#119600",
-  gold: "#FFD93D",
-  goldDark: "#F0A500",
+  purple: "#8800DE", // primary — buttons, hero
+  purpleDark: "#5C0097", // derived dark shade of primary
+  purpleLight: "#C683FF", // primary-container — purple tint
+  purpleSoft: "#DDB9FF", // light purple for icons on dark surfaces
+  blue: "#0047FF", // tertiary — highlights, accents (diamonds)
+  green: "#59EE50", // secondary-container — active/open chip, success fill
+  greenDark: "#006B0A", // secondary — success, actions
+  gold: "#FEEF00", // tertiary-container Cyber Yellow — warnings, rewards
+  goldDark: "#C7B500", // derived — shadows and decorative icons only (low contrast as text)
   pink: "#C70F52",
   red: "#D90429",
-  bg: "#F6F4FB",
+  bg: "#F6F6F6", // background — soft off-white surfaces
   card: "#FFFFFF",
-  ink: "#211A2E",
+  ink: "#2D2F2F", // on-surface — body text
   muted: "#6C7075",
-  line: "#E9E4F2",
+  line: "#E7E7E7",
   white: "#FFFFFF",
   // App-wide night-sky background
   night: "#1D0A33",

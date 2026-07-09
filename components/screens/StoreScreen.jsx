@@ -1,5 +1,5 @@
-import React from "react";
-import { View, Text, StyleSheet, ScrollView } from "react-native";
+import React, { useState } from "react";
+import { View, Text, StyleSheet, ScrollView, Alert } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import PressableScale from "../PressableScale";
 import Screen from "../Screen";
@@ -7,7 +7,7 @@ import { FadeInUp } from "../motion";
 import { COLORS, RADIUS, FONTS, TYPE, clay } from "../../constants/theme";
 
 const ITEMS = [
-  { icon: "shirt", name: "LYC T-Shirt", cost: 1200, color: COLORS.purpleLight },
+  { icon: "shirt", name: "LYC T-Shirt", cost: 1200, color: COLORS.blue },
   { icon: "cafe", name: "Coffee Card", cost: 600, color: COLORS.goldDark },
   { icon: "headset", name: "Earbuds", cost: 3500, color: COLORS.pink },
   { icon: "book", name: "Career Guide", cost: 400, color: COLORS.greenDark },
@@ -16,6 +16,26 @@ const ITEMS = [
 ];
 
 export default function StoreScreen() {
+  // ponytail: local mock balance, move to shared state/backend when accounts land
+  const [diamonds, setDiamonds] = useState(860);
+
+  const redeem = (item) => {
+    if (item.cost > diamonds) {
+      Alert.alert(
+        "Not enough diamonds",
+        `${item.name} costs ${item.cost} diamonds — you have ${diamonds}. Keep that streak going!`
+      );
+      return;
+    }
+    Alert.alert("Redeem this item?", `${item.name} for ${item.cost} diamonds.`, [
+      { text: "Cancel", style: "cancel" },
+      {
+        text: "Redeem",
+        onPress: () => setDiamonds((d) => d - item.cost),
+      },
+    ]);
+  };
+
   return (
     <Screen>
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
@@ -25,8 +45,8 @@ export default function StoreScreen() {
 
           <View style={styles.balances}>
             <View style={styles.balanceChip}>
-              <Ionicons name="diamond" size={18} color={COLORS.purpleLight} />
-              <Text style={styles.balanceText}>860</Text>
+              <Ionicons name="diamond" size={18} color={COLORS.blue} />
+              <Text style={styles.balanceText}>{diamonds}</Text>
             </View>
             <View style={styles.balanceChip}>
               <Ionicons name="star" size={18} color={COLORS.goldDark} />
@@ -51,7 +71,10 @@ export default function StoreScreen() {
               </View>
               <Text style={styles.itemName}>{item.name}</Text>
 
-              <PressableScale style={styles.redeemButton} onPress={() => {}}>
+              <PressableScale
+                style={styles.redeemButton}
+                onPress={() => redeem(item)}
+              >
                 <Ionicons name="diamond" size={14} color={COLORS.ink} />
                 <Text style={styles.redeemText}>{item.cost}</Text>
               </PressableScale>

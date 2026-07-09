@@ -42,18 +42,66 @@ function WobbleCard({ style, children }) {
 
 const FILTERS = ["My State", "My City", "My School"];
 
-const PODIUM = [
-  { medal: "#C0C0C0", place: 2, name: "Maya R.", school: "Hersey High", streak: 20, xp: 2000, style: "silver", delay: 130 },
-  { medal: "#FFD700", place: 1, name: "Jordan T.", school: "Prospect High", streak: 30, xp: 3200, style: "gold", delay: 0 },
-  { medal: "#CD7F32", place: 3, name: "Sam K.", school: "Conant High", streak: 15, xp: 1000, style: "bronze", delay: 220 },
-];
-
+// ponytail: static mock boards per filter, swap for API data when backend lands.
 // delta: rank places moved since yesterday (+ = climbed).
-const ROWS = [
-  { rank: 4, name: "Priya N.", school: "Palatine High", streak: 10, xp: 860, pts: 380, delta: 2 },
-  { rank: 5, name: "Devon P.", school: "Wheeling High", streak: 12, xp: 810, pts: 365, delta: -1 },
-  { rank: 6, name: "Lena W.", school: "Elk Grove High", streak: 6, xp: 700, pts: 340, delta: 0 },
-  { rank: 7, name: "Omar S.", school: "Buffalo Grove High", streak: 9, xp: 655, pts: 320, delta: 1 },
+const BOARDS = [
+  {
+    podium: [
+      { medal: "#C0C0C0", place: 2, name: "Maya R.", school: "Hersey High", streak: 20, xp: 2000, style: "silver", delay: 130 },
+      { medal: "#FFD700", place: 1, name: "Jordan T.", school: "Prospect High", streak: 30, xp: 3200, style: "gold", delay: 0 },
+      { medal: "#CD7F32", place: 3, name: "Sam K.", school: "Conant High", streak: 15, xp: 1000, style: "bronze", delay: 220 },
+    ],
+    rows: [
+      { rank: 4, name: "Priya N.", school: "Palatine High", streak: 10, xp: 860, pts: 380, delta: 2 },
+      { rank: 5, name: "Devon P.", school: "Wheeling High", streak: 12, xp: 810, pts: 365, delta: -1 },
+      { rank: 6, name: "Lena W.", school: "Elk Grove High", streak: 6, xp: 700, pts: 340, delta: 0 },
+      { rank: 7, name: "Omar S.", school: "Buffalo Grove High", streak: 9, xp: 655, pts: 320, delta: 1 },
+    ],
+    more: [
+      { rank: 8, name: "Casey M.", school: "Rolling Meadows High", streak: 7, xp: 610, pts: 300, delta: 3 },
+      { rank: 9, name: "Ivy C.", school: "Fremd High", streak: 5, xp: 580, pts: 285, delta: -2 },
+      { rank: 10, name: "Noah B.", school: "Schaumburg High", streak: 11, xp: 540, pts: 270, delta: 0 },
+      { rank: 11, name: "Tara J.", school: "Barrington High", streak: 4, xp: 505, pts: 255, delta: 1 },
+    ],
+  },
+  {
+    podium: [
+      { medal: "#C0C0C0", place: 2, name: "Amy D.", school: "Prospect High", streak: 18, xp: 1800, style: "silver", delay: 130 },
+      { medal: "#FFD700", place: 1, name: "Jordan T.", school: "Prospect High", streak: 30, xp: 3200, style: "gold", delay: 0 },
+      { medal: "#CD7F32", place: 3, name: "Leo V.", school: "St. Viator High", streak: 14, xp: 950, style: "bronze", delay: 220 },
+    ],
+    rows: [
+      { rank: 4, name: "Mia F.", school: "Prospect High", streak: 9, xp: 800, pts: 360, delta: 1 },
+      { rank: 5, name: "Zack A.", school: "St. Viator High", streak: 8, xp: 720, pts: 345, delta: 0 },
+      { rank: 6, name: "Ruth E.", school: "Prospect High", streak: 6, xp: 680, pts: 330, delta: 2 },
+      { rank: 7, name: "Kai H.", school: "St. Viator High", streak: 7, xp: 640, pts: 315, delta: -1 },
+    ],
+    more: [
+      { rank: 8, name: "June P.", school: "Prospect High", streak: 5, xp: 590, pts: 295, delta: 0 },
+      { rank: 9, name: "Ari L.", school: "St. Viator High", streak: 3, xp: 550, pts: 275, delta: 2 },
+      { rank: 10, name: "Wes G.", school: "Prospect High", streak: 6, xp: 520, pts: 260, delta: -1 },
+      { rank: 11, name: "Nina K.", school: "St. Viator High", streak: 2, xp: 490, pts: 250, delta: 1 },
+    ],
+  },
+  {
+    podium: [
+      { medal: "#C0C0C0", place: 2, name: "Amy D.", school: "Prospect High", streak: 18, xp: 1800, style: "silver", delay: 130 },
+      { medal: "#FFD700", place: 1, name: "Jordan T.", school: "Prospect High", streak: 30, xp: 3200, style: "gold", delay: 0 },
+      { medal: "#CD7F32", place: 3, name: "Mia F.", school: "Prospect High", streak: 9, xp: 800, style: "bronze", delay: 220 },
+    ],
+    rows: [
+      { rank: 4, name: "Ruth E.", school: "Prospect High", streak: 6, xp: 680, pts: 330, delta: 1 },
+      { rank: 5, name: "June P.", school: "Prospect High", streak: 5, xp: 590, pts: 295, delta: 0 },
+      { rank: 6, name: "Wes G.", school: "Prospect High", streak: 6, xp: 520, pts: 260, delta: -1 },
+      { rank: 7, name: "Elle S.", school: "Prospect High", streak: 4, xp: 480, pts: 240, delta: 2 },
+    ],
+    more: [
+      { rank: 8, name: "Theo R.", school: "Prospect High", streak: 3, xp: 450, pts: 225, delta: 0 },
+      { rank: 9, name: "Bea T.", school: "Prospect High", streak: 2, xp: 420, pts: 210, delta: -1 },
+      { rank: 10, name: "Gus O.", school: "Prospect High", streak: 5, xp: 400, pts: 200, delta: 1 },
+      { rank: 11, name: "Lia M.", school: "Prospect High", streak: 1, xp: 380, pts: 190, delta: 0 },
+    ],
+  },
 ];
 
 function RankDelta({ delta }) {
@@ -72,6 +120,10 @@ function RankDelta({ delta }) {
 
 export default function LeaderboardScreen() {
   const [activeFilter, setActiveFilter] = useState(0);
+  const [showFull, setShowFull] = useState(false);
+
+  const board = BOARDS[activeFilter];
+  const rows = showFull ? [...board.rows, ...board.more] : board.rows;
 
   return (
     <Screen>
@@ -93,7 +145,14 @@ export default function LeaderboardScreen() {
                 ]}
                 onPress={() => setActiveFilter(i)}
               >
-                <Text style={styles.filterText}>{label}</Text>
+                <Text
+                  style={[
+                    styles.filterText,
+                    i === activeFilter && styles.filterTextActive,
+                  ]}
+                >
+                  {label}
+                </Text>
               </PressableScale>
             ))}
           </View>
@@ -101,8 +160,8 @@ export default function LeaderboardScreen() {
 
         {/* Podium */}
         <View style={styles.podiumRow}>
-          {PODIUM.map((p) => (
-            <FadeInUp key={p.place} delay={p.delay}>
+          {board.podium.map((p) => (
+            <FadeInUp key={`${activeFilter}-${p.place}`} delay={p.delay}>
             <WobbleCard style={[styles.podiumCard, styles[p.style]]}>
               {p.place === 1 && (
                 <Float range={5} duration={1500} style={styles.crown}>
@@ -136,8 +195,8 @@ export default function LeaderboardScreen() {
 
         {/* Rankings */}
         <View style={styles.rankContainer}>
-          {ROWS.map((row, i) => (
-            <FadeInUp key={row.rank} delay={280 + i * 80}>
+          {rows.map((row, i) => (
+            <FadeInUp key={`${activeFilter}-${row.rank}`} delay={280 + i * 80}>
             <View style={styles.rankRow}>
               <Text style={styles.rankNumber}>{row.rank}</Text>
               <RankDelta delta={row.delta} />
@@ -178,8 +237,10 @@ export default function LeaderboardScreen() {
           <Text style={styles.userPoints}>60 pts</Text>
         </View>
 
-        <PressableScale onPress={() => {}}>
-          <Text style={styles.fullBoard}>View Full Leaderboard</Text>
+        <PressableScale onPress={() => setShowFull((s) => !s)}>
+          <Text style={styles.fullBoard}>
+            {showFull ? "Show Top Ranks Only" : "View Full Leaderboard"}
+          </Text>
         </PressableScale>
 
         {/* Bottom Cards */}
@@ -233,14 +294,14 @@ const styles = StyleSheet.create({
 
   filterBtn: {
     flex: 1,
-    backgroundColor: "#5E31E6",
+    backgroundColor: COLORS.purple,
     paddingVertical: 12,
     alignItems: "center",
     borderRadius: RADIUS.md,
   },
 
   filterBtnActive: {
-    backgroundColor: COLORS.purpleDark,
+    backgroundColor: COLORS.green,
     borderWidth: 2,
     borderColor: "rgba(255,255,255,0.6)",
   },
@@ -248,6 +309,10 @@ const styles = StyleSheet.create({
   filterText: {
     color: COLORS.white,
     fontWeight: "800",
+  },
+
+  filterTextActive: {
+    color: COLORS.ink,
   },
 
   podiumRow: {

@@ -10,7 +10,7 @@ import { COLORS, RADIUS, FONTS, TYPE, clay } from "../../constants/theme";
 
 const STATS = [
   { icon: "star", label: "Points", value: "60", color: COLORS.goldDark },
-  { icon: "diamond", label: "Diamonds", value: "860", color: COLORS.purpleLight },
+  { icon: "diamond", label: "Diamonds", value: "860", color: COLORS.blue },
   { icon: "flame", label: "Streak", value: "8", color: COLORS.red },
 ];
 

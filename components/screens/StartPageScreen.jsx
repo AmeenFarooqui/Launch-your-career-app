@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
     lineHeight: 56,
     fontFamily: FONTS.heading,
     textAlign: "center",
-    textShadowColor: "rgba(138,0,230,0.8)",
+    textShadowColor: "rgba(136,0,222,0.8)",
     textShadowOffset: { width: 0, height: 4 },
     textShadowRadius: 16,
   },
@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
     borderRadius: 42,
     backgroundColor: "#000",
     borderWidth: 2,
-    borderColor: "rgba(255,217,61,0.5)",
+    borderColor: "rgba(254,239,0,0.5)",
     justifyContent: "center",
     alignItems: "center",
     marginTop: 22,
@@ -149,7 +149,7 @@ const styles = StyleSheet.create({
   },
 
   getStarted: {
-    backgroundColor: "#B01342",
+    backgroundColor: COLORS.purple,
   },
 
   getStartedText: {
@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
   },
 
   login: {
-    backgroundColor: "#F5E11A",
+    backgroundColor: COLORS.gold,
     paddingHorizontal: 52,
   },
 
@@ -181,7 +181,7 @@ const styles = StyleSheet.create({
   },
 
   floatyCyan: {
-    backgroundColor: "#3BE8E0",
+    backgroundColor: COLORS.blue,
     right: 34,
     top: "54%",
     transform: [{ rotate: "20deg" }],
@@ -201,7 +201,7 @@ const styles = StyleSheet.create({
 
   hill: {
     position: "absolute",
-    backgroundColor: "#4ADE33",
+    backgroundColor: COLORS.green,
     borderWidth: 4,
     borderColor: "#000",
     width: 220,
@@ -219,7 +219,7 @@ const styles = StyleSheet.create({
     left: 90,
     bottom: -170,
     transform: [{ rotate: "45deg" }],
-    backgroundColor: "#3BCC28",
+    backgroundColor: COLORS.greenDark,
   },
 
   hillRight: {

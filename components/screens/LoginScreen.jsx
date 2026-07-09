@@ -7,6 +7,7 @@ import {
   Pressable,
   KeyboardAvoidingView,
   Platform,
+  Alert,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
@@ -19,6 +20,30 @@ import { COLORS, RADIUS, FONTS, TYPE, clay } from "../../constants/theme";
 // Restyled to the app-wide clay visual language per the 2026-07-04 design spec.
 export default function LoginScreen() {
   const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState(null);
+
+  // ponytail: client-side checks only; real auth (Supabase) not wired yet
+  const login = () => {
+    if (!email.includes("@")) {
+      setError("Enter a valid email address.");
+      return;
+    }
+    if (!password) {
+      setError("Enter your password.");
+      return;
+    }
+    router.replace("/(tabs)/home");
+  };
+
+  const forgotPassword = () => {
+    if (!email.includes("@")) {
+      Alert.alert("Forgot Password", "Enter your email above first, then tap again.");
+      return;
+    }
+    Alert.alert("Reset link sent", `If an account exists for ${email}, a reset link is on its way.`);
+  };
 
   return (
     <Screen>
@@ -42,11 +67,19 @@ export default function LoginScreen() {
             placeholderTextColor={COLORS.muted}
             keyboardType="email-address"
             autoCapitalize="none"
+            value={email}
+            onChangeText={(t) => {
+              setEmail(t);
+              setError(null);
+            }}
           />
 
           <View style={styles.passwordHeader}>
             <Text style={styles.label}>Password</Text>
-            <Pressable hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
+            <Pressable
+              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+              onPress={forgotPassword}
+            >
               <Text style={styles.forgotText}>Forgot Password?</Text>
             </Pressable>
           </View>
@@ -57,6 +90,11 @@ export default function LoginScreen() {
               placeholder="••••••••"
               placeholderTextColor={COLORS.muted}
               secureTextEntry={!showPassword}
+              value={password}
+              onChangeText={(t) => {
+                setPassword(t);
+                setError(null);
+              }}
             />
             <Pressable
               style={styles.eyeButton}
@@ -71,10 +109,9 @@ export default function LoginScreen() {
             </Pressable>
           </View>
 
-          <PressableScale
-            style={styles.loginButton}
-            onPress={() => router.replace("/(tabs)/home")}
-          >
+          {error && <Text style={styles.errorText}>{error}</Text>}
+
+          <PressableScale style={styles.loginButton} onPress={login}>
             <Text style={styles.loginButtonText}>Login</Text>
           </PressableScale>
 
@@ -151,7 +188,7 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
   },
   forgotText: {
-    color: COLORS.goldDark,
+    color: COLORS.purple,
     fontWeight: "800",
     fontStyle: "italic",
     marginBottom: 8,
@@ -169,6 +206,13 @@ const styles = StyleSheet.create({
     right: 14,
     height: 52,
     justifyContent: "center",
+  },
+  errorText: {
+    color: COLORS.red,
+    fontWeight: "800",
+    fontSize: TYPE.caption,
+    marginTop: 10,
+    textAlign: "center",
   },
   loginButton: {
     height: 56,

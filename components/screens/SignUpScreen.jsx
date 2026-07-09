@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -15,6 +15,23 @@ import { FadeInUp } from "../motion";
 import { COLORS, RADIUS, FONTS, TYPE, clay } from "../../constants/theme";
 
 export default function SignUpScreen() {
+  const [form, setForm] = useState({ name: "", school: "", email: "", password: "" });
+  const [error, setError] = useState(null);
+
+  const set = (field) => (t) => {
+    setForm((f) => ({ ...f, [field]: t }));
+    setError(null);
+  };
+
+  // ponytail: client-side checks only; real auth (Supabase) not wired yet
+  const submit = () => {
+    if (!form.name.trim()) return setError("Enter your full name.");
+    if (!form.school.trim()) return setError("Enter your school.");
+    if (!form.email.includes("@")) return setError("Enter a valid email address.");
+    if (form.password.length < 8) return setError("Password must be at least 8 characters.");
+    router.replace("/(tabs)/home");
+  };
+
   return (
     <Screen>
       <View style={styles.header}>
@@ -35,6 +52,8 @@ export default function SignUpScreen() {
             style={styles.input}
             placeholder="Alexandrina Bartholomew"
             placeholderTextColor={COLORS.muted}
+            value={form.name}
+            onChangeText={set("name")}
           />
 
           <Text style={styles.label}>School</Text>
@@ -42,6 +61,8 @@ export default function SignUpScreen() {
             style={styles.input}
             placeholder="Prospect High School"
             placeholderTextColor={COLORS.muted}
+            value={form.school}
+            onChangeText={set("school")}
           />
 
           <Text style={styles.label}>Email</Text>
@@ -51,6 +72,8 @@ export default function SignUpScreen() {
             placeholderTextColor={COLORS.muted}
             keyboardType="email-address"
             autoCapitalize="none"
+            value={form.email}
+            onChangeText={set("email")}
           />
 
           <Text style={styles.label}>Password</Text>
@@ -59,12 +82,13 @@ export default function SignUpScreen() {
             placeholder="••••••••"
             placeholderTextColor={COLORS.muted}
             secureTextEntry
+            value={form.password}
+            onChangeText={set("password")}
           />
 
-          <PressableScale
-            style={styles.submitButton}
-            onPress={() => router.replace("/(tabs)/home")}
-          >
+          {error && <Text style={styles.errorText}>{error}</Text>}
+
+          <PressableScale style={styles.submitButton} onPress={submit}>
             <Text style={styles.submitText}>Create Account</Text>
             <Ionicons name="rocket" size={20} color={COLORS.ink} />
           </PressableScale>
@@ -133,6 +157,13 @@ const styles = StyleSheet.create({
     fontSize: TYPE.body,
     color: COLORS.ink,
     marginBottom: 6,
+  },
+  errorText: {
+    color: COLORS.red,
+    fontWeight: "800",
+    fontSize: TYPE.caption,
+    marginTop: 10,
+    textAlign: "center",
   },
   submitButton: {
     height: 56,

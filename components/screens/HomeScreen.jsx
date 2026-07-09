@@ -80,7 +80,7 @@ export default function HomeScreen() {
               </Text>
 
               <View style={styles.countdownRow}>
-                <Ionicons name="alarm" size={16} color={COLORS.white} />
+                <Ionicons name="alarm" size={16} color={COLORS.ink} />
                 <Text style={styles.countdown}>Ends in {timeLeft}</Text>
               </View>
 
@@ -198,7 +198,7 @@ const styles = StyleSheet.create({
   },
 
   missionTitle: {
-    color: COLORS.white,
+    color: COLORS.ink,
     fontSize: TYPE.h1,
     fontFamily: FONTS.heading,
     textAlign: "center",
@@ -206,7 +206,7 @@ const styles = StyleSheet.create({
   },
 
   question: {
-    color: COLORS.white,
+    color: COLORS.ink,
     fontSize: TYPE.body,
     textAlign: "center",
     marginBottom: 8,
@@ -222,7 +222,7 @@ const styles = StyleSheet.create({
   },
 
   countdown: {
-    color: COLORS.white,
+    color: COLORS.ink,
     fontSize: TYPE.caption,
     fontWeight: "700",
     fontVariant: ["tabular-nums"],
