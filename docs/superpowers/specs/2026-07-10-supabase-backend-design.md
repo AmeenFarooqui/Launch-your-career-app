@@ -18,7 +18,7 @@ Replace all mocked data in the Expo app (leaderboard, daily challenge, points/di
 | Table | Columns | Notes |
 |---|---|---|
 | `profiles` | `id` (PK, FK auth.users), `name`, `school`, `city`, `state`, `points` int default 0, `diamonds` int default 0, `streak` int default 0, `last_answered` date | Auto-created by trigger on auth user creation. |
-| `questions` | `id`, `prompt`, `options` jsonb (array of 4), `correct_index` smallint, `explanation` text, `active_date` date unique, `topic` text | One row per day. Client never sees `correct_index`. |
+| `questions` | `id`, `prompt`, `kind` text default 'text' ('text' \| 'figure'), `prompt_figure` jsonb nullable, `options` jsonb (array of 4), `correct_index` smallint, `explanation` text, `active_date` date unique, `topic` text | One row per day. Client never sees `correct_index`. For figure questions, `options` elements are figure specs instead of strings. |
 | `answers` | `user_id`, `question_id`, `selected_index`, `is_correct`, `answered_at` | `UNIQUE (user_id, question_id)` — DB enforces one attempt per day. |
 | `rewards` | `id`, `title`, `cost` int (diamonds), `icon` text | Seeded from current Store screen items. |
 | `redemptions` | `id`, `user_id`, `reward_id`, `redeemed_at` | Log only; no fulfillment flow. |
@@ -61,10 +61,22 @@ The content pipeline is the app's real operating cost — one question per day, 
 
 Manual fallback: questions can always be inserted via the dashboard table editor; the agent only tops up the future queue.
 
+## Pattern/figure questions (aptitude-style)
+
+Visual reasoning questions (shape sequences, odd-one-out, matrix completion) are represented with a **closed shape-DSL** — a small JSON vocabulary the agent must emit and the app renders:
+
+- **Figure spec:** an array of cells, each `{ shape, fill, rotation, size? }` with `shape ∈ {circle, square, triangle, diamond, star, cross}`, `fill ∈ {solid, empty, half}`, `rotation ∈ {0, 45, 90, 135, 180, 225, 270, 315}`. A question's `prompt_figure` is a row (sequence) or 3×3 matrix of cells; each answer option is a figure spec.
+- **Rendering:** one `FigureRenderer` component built on `react-native-svg` (one new dependency) draws any valid spec. Challenge screen renders it when `kind = 'figure'`; text questions render exactly as before.
+- **Generation & validation:** the generator agent's prompt embeds the DSL schema and rotates figure questions into the topic mix. Because the vocabulary is closed, the Edge Function validates every generated figure before insert (allowed shape/fill/rotation, 4 options, exactly one correct) and regenerates rejects — malformed figures never reach the table.
+- **Everything else unchanged:** `submit_answer`, streaks, leaderboard, and store logic are untouched — a figure question is still "pick index 0–3". Explanations remain text.
+
+Rejected alternatives: raw LLM-generated SVG (unvalidatable, ships broken figures); Unicode glyph patterns (no schema change but can't express matrix reasoning or rotations).
+
 ## App wiring
 
-- Add `@supabase/supabase-js` (+ `@react-native-async-storage/async-storage` for session persistence).
+- Add `@supabase/supabase-js` (+ `@react-native-async-storage/async-storage` for session persistence) and `react-native-svg` (figure rendering).
 - `lib/supabase.js`: client creation + ensure-anonymous-session helper.
+- `components/FigureRenderer.jsx`: renders shape-DSL specs; used by the Challenge screen for figure questions.
 - Swap mocks: Home (today's question teaser + profile economy), Challenge (`today_question`), Result (`submit_answer` response incl. explanation), Leaderboard (profiles query + filters), Store (`rewards` + `redeem_reward` + live diamond balance), Profile (profile row), Signup (upsert name/school to profile, navigation unchanged).
 
 ## Delivery
@@ -77,7 +89,8 @@ Manual fallback: questions can always be inserted via the dashboard table editor
 ## Testing
 
 - One integration script: signs in anonymously, fetches today's question, answers it twice (second attempt must fail), redeems a reward beyond its balance (must fail), verifies streak/points math.
-- Edge Function: local invoke once with a mocked/live key; verify inserted rows validate (4 options, correct_index in range, unique dates).
+- Edge Function: local invoke once with a mocked/live key; verify inserted rows validate (4 options, correct_index in range, unique dates, figure specs conform to the DSL).
+- `FigureRenderer`: one jest render test over a spec exercising every shape/fill.
 - Existing jest suite keeps passing.
 
 ## Explicitly skipped (YAGNI)
