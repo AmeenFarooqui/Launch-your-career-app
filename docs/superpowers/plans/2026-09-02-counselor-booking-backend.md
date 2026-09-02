@@ -162,9 +162,13 @@ npx supabase migration new bookings
 ```sql
 create extension if not exists btree_gist;
 
+-- student_id references profiles, not auth.users directly, even though
+-- profiles.id already equals auth.users.id 1:1 (enforced by the trigger
+-- in the base backend plan) — PostgREST can only auto-join bookings to
+-- profiles (e.g. to show a student's name) if a real FK connects them.
 create table public.bookings (
   id uuid primary key default gen_random_uuid(),
-  student_id uuid not null references auth.users (id) on delete cascade,
+  student_id uuid not null references public.profiles (id) on delete cascade,
   counselor_id uuid not null references public.counselors (id) on delete cascade,
   start_time timestamptz not null,
   end_time timestamptz not null,
