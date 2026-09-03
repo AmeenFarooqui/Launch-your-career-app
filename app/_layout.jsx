@@ -1,16 +1,23 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Stack } from "expo-router";
 import { useFonts } from "expo-font";
 import {
   Baloo2_700Bold,
   Baloo2_800ExtraBold,
 } from "@expo-google-fonts/baloo-2";
+import { ensureAnonymousSession } from "../lib/supabase";
 
 export default function RootLayout() {
   const [fontsLoaded] = useFonts({
     Baloo2_700Bold,
     Baloo2_800ExtraBold,
   });
+
+  useEffect(() => {
+    ensureAnonymousSession().catch((error) => {
+      console.warn("Failed to establish a session", error);
+    });
+  }, []);
 
   // Block until fonts load on device; render immediately under jest, where
   // font resolution is a no-op and blocking would hang every test.

@@ -1,3 +1,7 @@
+jest.mock("../lib/supabase", () => ({
+  ensureAnonymousSession: jest.fn().mockResolvedValue({ user: { id: "test-user" } }),
+}));
+
 import { renderRouter, screen } from "expo-router/testing-library";
 import { act, fireEvent } from "@testing-library/react-native";
 import { Alert } from "react-native";
