@@ -48,10 +48,13 @@ Deno.serve(async (req) => {
     .select("refresh_token")
     .eq("counselor_id", counselor_id)
     .single();
+  if (!tokenRow) {
+    return new Response(JSON.stringify({ slots: [] }), { status: 200 });
+  }
 
   let accessToken: string;
   try {
-    accessToken = await getAccessToken(tokenRow!.refresh_token);
+    accessToken = await getAccessToken(tokenRow.refresh_token);
   } catch (error) {
     if (error instanceof GoogleTokenError) {
       await adminClient.from("counselors").update({ calendar_connected: false }).eq("id", counselor_id);
