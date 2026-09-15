@@ -48,7 +48,11 @@ export async function freeBusyQuery(
   if (!response.ok) {
     throw new Error(`freeBusy query failed: ${JSON.stringify(data)}`);
   }
-  return data.calendars[calendarId].busy;
+  // Defensive: Google's response should key `calendars` by the requested
+  // calendarId, but fall back to the first entry (and to an empty busy
+  // list) in case it's keyed differently or missing, rather than throwing.
+  const cal = data.calendars[calendarId] ?? Object.values(data.calendars)[0];
+  return cal?.busy ?? [];
 }
 
 export async function createCalendarEvent(

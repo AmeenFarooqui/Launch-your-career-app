@@ -33,6 +33,21 @@ Deno.test("freeBusyQuery - returns the busy blocks for the requested calendar", 
   assertEquals(busy, [{ start: "2026-09-02T15:00:00Z", end: "2026-09-02T15:30:00Z" }]);
 });
 
+Deno.test("freeBusyQuery - falls back to the first calendar entry when Google keys the response differently", async () => {
+  const busy = await freeBusyQuery(
+    "token",
+    "primary",
+    "2026-09-02T00:00:00Z",
+    "2026-09-03T00:00:00Z",
+    fakeFetch(200, {
+      calendars: {
+        "counselor@example.com": { busy: [{ start: "2026-09-02T16:00:00Z", end: "2026-09-02T16:30:00Z" }] },
+      },
+    })
+  );
+  assertEquals(busy, [{ start: "2026-09-02T16:00:00Z", end: "2026-09-02T16:30:00Z" }]);
+});
+
 Deno.test("createCalendarEvent - returns the created event including its Meet link", async () => {
   const event = await createCalendarEvent(
     "token",
