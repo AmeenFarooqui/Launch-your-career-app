@@ -64,3 +64,10 @@ These manual steps have not been done yet against the real (non-local) Supabase 
 1. Enable Anonymous Sign-Ins in the Supabase dashboard under Authentication → Providers.
 2. Run `npx supabase link --project-ref <your-project-ref>` then `npx supabase db push` to apply the `profiles` table migration. This is interactive (requires browser OAuth login) and must be done by a human.
 3. Re-run `node supabase/tests/verify-profiles-trigger.mjs` against the real project's URL/anon key to confirm the trigger works.
+
+Additional setup required for the counselor-booking backend (`supabase/functions/save-calendar-token`, `get-availability`, `create-booking`, `cancel-booking`, `reschedule-booking`, `deactivate-counselor`):
+
+4. Create a Google Cloud project with the Calendar API enabled and an OAuth client (Web application type). This is a prerequisite for step 5 and has real lead time — start early. Its OAuth consent screen also needs to be moved out of "Testing" publishing status (or verified) before production use: in Testing mode, refresh tokens for the `calendar.events` scope expire after 7 days.
+5. Set `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` as Edge Function secrets: `npx supabase secrets set GOOGLE_CLIENT_ID=... GOOGLE_CLIENT_SECRET=...`. No Edge Function that calls Google will work without these.
+6. Deploy the Edge Functions to the real project — `npx supabase functions deploy` has not been run yet.
+7. `supabase/tests/verify-booking-lifecycle.mjs` (the end-to-end booking lifecycle integration script) exists but has never been run. It requires a real Google account and manual OAuth setup (see the script's header comment / Task 12 of the counselor-booking plan for the exact steps) before it can verify the full booking lifecycle.
