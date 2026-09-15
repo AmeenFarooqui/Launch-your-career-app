@@ -26,14 +26,25 @@ Deno.serve(async (req) => {
     Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
   );
 
-  await adminClient.from("counselors").update({ approved: false }).eq("id", counselor_id);
+  const { error: approveError } = await adminClient
+    .from("counselors")
+    .update({ approved: false })
+    .eq("id", counselor_id);
+  if (approveError) {
+    console.error(`Failed to mark counselor ${counselor_id} as not approved:`, approveError);
+    return new Response(JSON.stringify({ error: "Failed to deactivate counselor" }), { status: 500, headers: corsHeaders });
+  }
 
-  const { data: bookings } = await adminClient
+  const { data: bookings, error: bookingsError } = await adminClient
     .from("bookings")
     .select("id, google_event_id")
     .eq("counselor_id", counselor_id)
     .eq("status", "confirmed")
     .gt("start_time", new Date().toISOString());
+  if (bookingsError) {
+    console.error(`Failed to fetch upcoming bookings for counselor ${counselor_id}:`, bookingsError);
+    return new Response(JSON.stringify({ error: "Failed to deactivate counselor" }), { status: 500, headers: corsHeaders });
+  }
 
   const { data: tokenRow } = await adminClient
     .from("counselor_tokens")
@@ -54,11 +65,20 @@ Deno.serve(async (req) => {
         console.error(`Failed to delete calendar event for booking ${booking.id}:`, error);
       }
     }
-    await adminClient.from("bookings").update({ status: "cancelled" }).eq("id", booking.id);
-    if (!calendarDeleted) {
-      // Known limitation (see spec): the counselor's token was already
-      // dead, so nobody was auto-notified and the Meet link may still be
-      // live — the operator running this must personally follow up.
+    const { error: cancelError } = await adminClient
+      .from("bookings")
+      .update({ status: "cancelled" })
+      .eq("id", booking.id);
+    if (cancelError) {
+      console.error(`Failed to mark booking ${booking.id} cancelled:`, cancelError);
+    }
+    if (!calendarDeleted || cancelError) {
+      // Known limitation (see spec): either the counselor's token was
+      // already dead (Calendar-side cleanup never happened, so nobody was
+      // auto-notified and the Meet link may still be live), or the DB
+      // status update itself failed (the row is still "confirmed" even
+      // though the Calendar event is gone) — either way the operator
+      // running this must personally follow up.
       manualFollowUp.push(booking.id);
     }
   }
