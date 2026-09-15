@@ -1,9 +1,13 @@
 // supabase/functions/save-calendar-token/index.ts
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { corsHeaders } from "../_shared/cors.ts";
 
 Deno.serve(async (req) => {
+  if (req.method === "OPTIONS") {
+    return new Response("ok", { headers: corsHeaders });
+  }
   if (req.method !== "POST") {
-    return new Response(JSON.stringify({ error: "Method not allowed" }), { status: 405 });
+    return new Response(JSON.stringify({ error: "Method not allowed" }), { status: 405, headers: corsHeaders });
   }
 
   const authHeader = req.headers.get("Authorization") ?? "";
@@ -15,13 +19,13 @@ Deno.serve(async (req) => {
 
   const { data: userData, error: userError } = await userClient.auth.getUser();
   if (userError || !userData.user) {
-    return new Response(JSON.stringify({ error: "Not authenticated" }), { status: 401 });
+    return new Response(JSON.stringify({ error: "Not authenticated" }), { status: 401, headers: corsHeaders });
   }
   const counselorId = userData.user.id;
 
   const { refresh_token } = await req.json();
   if (!refresh_token) {
-    return new Response(JSON.stringify({ error: "refresh_token is required" }), { status: 400 });
+    return new Response(JSON.stringify({ error: "refresh_token is required" }), { status: 400, headers: corsHeaders });
   }
 
   const adminClient = createClient(
@@ -33,15 +37,15 @@ Deno.serve(async (req) => {
     .from("counselors")
     .upsert({ id: counselorId, calendar_connected: true }, { onConflict: "id" });
   if (counselorError) {
-    return new Response(JSON.stringify({ error: counselorError.message }), { status: 500 });
+    return new Response(JSON.stringify({ error: counselorError.message }), { status: 500, headers: corsHeaders });
   }
 
   const { error: tokenError } = await adminClient
     .from("counselor_tokens")
     .upsert({ counselor_id: counselorId, refresh_token }, { onConflict: "counselor_id" });
   if (tokenError) {
-    return new Response(JSON.stringify({ error: tokenError.message }), { status: 500 });
+    return new Response(JSON.stringify({ error: tokenError.message }), { status: 500, headers: corsHeaders });
   }
 
-  return new Response(JSON.stringify({ ok: true }), { status: 200 });
+  return new Response(JSON.stringify({ ok: true }), { status: 200, headers: corsHeaders });
 });

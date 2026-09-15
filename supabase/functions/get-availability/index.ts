@@ -3,19 +3,23 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { getAccessToken, freeBusyQuery, GoogleTokenError } from "../_shared/google-calendar.ts";
 import { isDurationOfferedByCounselor, isFarEnoughInAdvance } from "../_shared/booking-rules.ts";
 import { computeOpenSlots } from "../_shared/availability.ts";
+import { corsHeaders } from "../_shared/cors.ts";
 
 const DAYS_AHEAD = 14;
 
 Deno.serve(async (req) => {
+  if (req.method === "OPTIONS") {
+    return new Response("ok", { headers: corsHeaders });
+  }
   if (req.method !== "POST") {
-    return new Response(JSON.stringify({ error: "Method not allowed" }), { status: 405 });
+    return new Response(JSON.stringify({ error: "Method not allowed" }), { status: 405, headers: corsHeaders });
   }
 
   const { counselor_id, duration_minutes } = await req.json();
   if (!counselor_id || !duration_minutes) {
     return new Response(
       JSON.stringify({ error: "counselor_id and duration_minutes are required" }),
-      { status: 400 }
+      { status: 400, headers: corsHeaders }
     );
   }
 
@@ -30,17 +34,17 @@ Deno.serve(async (req) => {
     .eq("id", counselor_id)
     .single();
   if (counselorError || !counselor) {
-    return new Response(JSON.stringify({ error: "Counselor not found" }), { status: 404 });
+    return new Response(JSON.stringify({ error: "Counselor not found" }), { status: 404, headers: corsHeaders });
   }
 
   if (!isDurationOfferedByCounselor(duration_minutes, counselor.allowed_durations)) {
     return new Response(
       JSON.stringify({ error: "This counselor does not offer that duration" }),
-      { status: 400 }
+      { status: 400, headers: corsHeaders }
     );
   }
   if (!counselor.calendar_connected) {
-    return new Response(JSON.stringify({ slots: [] }), { status: 200 });
+    return new Response(JSON.stringify({ slots: [] }), { status: 200, headers: corsHeaders });
   }
 
   const { data: tokenRow } = await adminClient
@@ -49,7 +53,7 @@ Deno.serve(async (req) => {
     .eq("counselor_id", counselor_id)
     .single();
   if (!tokenRow) {
-    return new Response(JSON.stringify({ slots: [] }), { status: 200 });
+    return new Response(JSON.stringify({ slots: [] }), { status: 200, headers: corsHeaders });
   }
 
   let accessToken: string;
@@ -58,7 +62,7 @@ Deno.serve(async (req) => {
   } catch (error) {
     if (error instanceof GoogleTokenError) {
       await adminClient.from("counselors").update({ calendar_connected: false }).eq("id", counselor_id);
-      return new Response(JSON.stringify({ slots: [] }), { status: 200 });
+      return new Response(JSON.stringify({ slots: [] }), { status: 200, headers: corsHeaders });
     }
     throw error;
   }
@@ -77,5 +81,5 @@ Deno.serve(async (req) => {
     days: DAYS_AHEAD,
   }).filter((slot) => isFarEnoughInAdvance(slot, now));
 
-  return new Response(JSON.stringify({ slots }), { status: 200 });
+  return new Response(JSON.stringify({ slots }), { status: 200, headers: corsHeaders });
 });

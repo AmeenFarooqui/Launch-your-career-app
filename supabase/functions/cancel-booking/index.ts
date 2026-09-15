@@ -2,10 +2,14 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { getAccessToken, deleteCalendarEvent } from "../_shared/google-calendar.ts";
 import { canCancelOrReschedule } from "../_shared/booking-rules.ts";
+import { corsHeaders } from "../_shared/cors.ts";
 
 Deno.serve(async (req) => {
+  if (req.method === "OPTIONS") {
+    return new Response("ok", { headers: corsHeaders });
+  }
   if (req.method !== "POST") {
-    return new Response(JSON.stringify({ error: "Method not allowed" }), { status: 405 });
+    return new Response(JSON.stringify({ error: "Method not allowed" }), { status: 405, headers: corsHeaders });
   }
 
   const authHeader = req.headers.get("Authorization") ?? "";
@@ -16,13 +20,13 @@ Deno.serve(async (req) => {
   );
   const { data: userData, error: userError } = await userClient.auth.getUser();
   if (userError || !userData.user) {
-    return new Response(JSON.stringify({ error: "Not authenticated" }), { status: 401 });
+    return new Response(JSON.stringify({ error: "Not authenticated" }), { status: 401, headers: corsHeaders });
   }
   const callerId = userData.user.id;
 
   const { booking_id } = await req.json();
   if (!booking_id) {
-    return new Response(JSON.stringify({ error: "booking_id is required" }), { status: 400 });
+    return new Response(JSON.stringify({ error: "booking_id is required" }), { status: 400, headers: corsHeaders });
   }
 
   const adminClient = createClient(
@@ -36,18 +40,18 @@ Deno.serve(async (req) => {
     .eq("id", booking_id)
     .single();
   if (bookingError || !booking) {
-    return new Response(JSON.stringify({ error: "Booking not found" }), { status: 404 });
+    return new Response(JSON.stringify({ error: "Booking not found" }), { status: 404, headers: corsHeaders });
   }
   if (callerId !== booking.student_id && callerId !== booking.counselor_id) {
-    return new Response(JSON.stringify({ error: "Not your booking" }), { status: 403 });
+    return new Response(JSON.stringify({ error: "Not your booking" }), { status: 403, headers: corsHeaders });
   }
   if (booking.status !== "confirmed") {
-    return new Response(JSON.stringify({ error: "Booking is already cancelled" }), { status: 400 });
+    return new Response(JSON.stringify({ error: "Booking is already cancelled" }), { status: 400, headers: corsHeaders });
   }
   if (!canCancelOrReschedule(booking.start_time)) {
     return new Response(
       JSON.stringify({ error: "Too late to cancel — must be more than 1 hour before start" }),
-      { status: 400 }
+      { status: 400, headers: corsHeaders }
     );
   }
 
@@ -69,5 +73,5 @@ Deno.serve(async (req) => {
     console.error("Failed to mark booking cancelled after calendar deletion:", updateError);
   }
 
-  return new Response(JSON.stringify({ ok: true }), { status: 200 });
+  return new Response(JSON.stringify({ ok: true }), { status: 200, headers: corsHeaders });
 });

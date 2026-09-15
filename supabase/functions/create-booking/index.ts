@@ -2,10 +2,14 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { getAccessToken, createCalendarEvent, deleteCalendarEvent } from "../_shared/google-calendar.ts";
 import { isDurationOfferedByCounselor, isFarEnoughInAdvance } from "../_shared/booking-rules.ts";
+import { corsHeaders } from "../_shared/cors.ts";
 
 Deno.serve(async (req) => {
+  if (req.method === "OPTIONS") {
+    return new Response("ok", { headers: corsHeaders });
+  }
   if (req.method !== "POST") {
-    return new Response(JSON.stringify({ error: "Method not allowed" }), { status: 405 });
+    return new Response(JSON.stringify({ error: "Method not allowed" }), { status: 405, headers: corsHeaders });
   }
 
   const authHeader = req.headers.get("Authorization") ?? "";
@@ -16,7 +20,7 @@ Deno.serve(async (req) => {
   );
   const { data: userData, error: userError } = await userClient.auth.getUser();
   if (userError || !userData.user) {
-    return new Response(JSON.stringify({ error: "Not authenticated" }), { status: 401 });
+    return new Response(JSON.stringify({ error: "Not authenticated" }), { status: 401, headers: corsHeaders });
   }
   const studentId = userData.user.id;
 
@@ -24,7 +28,7 @@ Deno.serve(async (req) => {
   if (!counselor_id || !start_time || !duration_minutes) {
     return new Response(
       JSON.stringify({ error: "counselor_id, start_time, and duration_minutes are required" }),
-      { status: 400 }
+      { status: 400, headers: corsHeaders }
     );
   }
 
@@ -41,7 +45,7 @@ Deno.serve(async (req) => {
   if (profileError || !profile?.email || !profile?.guardian_email) {
     return new Response(
       JSON.stringify({ error: "Add your email and a guardian email before booking" }),
-      { status: 400 }
+      { status: 400, headers: corsHeaders }
     );
   }
 
@@ -51,18 +55,18 @@ Deno.serve(async (req) => {
     .eq("id", counselor_id)
     .single();
   if (counselorError || !counselor || !counselor.approved || !counselor.calendar_connected) {
-    return new Response(JSON.stringify({ error: "Counselor is not bookable" }), { status: 404 });
+    return new Response(JSON.stringify({ error: "Counselor is not bookable" }), { status: 404, headers: corsHeaders });
   }
   if (!isDurationOfferedByCounselor(duration_minutes, counselor.allowed_durations)) {
     return new Response(
       JSON.stringify({ error: "This counselor does not offer that duration" }),
-      { status: 400 }
+      { status: 400, headers: corsHeaders }
     );
   }
   if (!isFarEnoughInAdvance(start_time)) {
     return new Response(
       JSON.stringify({ error: "Sessions must be booked at least 2 hours in advance" }),
-      { status: 400 }
+      { status: 400, headers: corsHeaders }
     );
   }
 
@@ -72,7 +76,7 @@ Deno.serve(async (req) => {
     .eq("counselor_id", counselor_id)
     .single();
   if (tokenRowError || !tokenRow) {
-    return new Response(JSON.stringify({ error: "Counselor is not bookable" }), { status: 404 });
+    return new Response(JSON.stringify({ error: "Counselor is not bookable" }), { status: 404, headers: corsHeaders });
   }
 
   const accessToken = await getAccessToken(tokenRow.refresh_token);
@@ -108,7 +112,7 @@ Deno.serve(async (req) => {
     await deleteCalendarEvent(accessToken, "primary", event.id).catch((err) =>
       console.error("Failed to roll back calendar event after booking insert failure:", err)
     );
-    return new Response(JSON.stringify({ error: "Slot no longer available" }), { status: 409 });
+    return new Response(JSON.stringify({ error: "Slot no longer available" }), { status: 409, headers: corsHeaders });
   }
 
   if (profile.push_token) {
@@ -123,5 +127,5 @@ Deno.serve(async (req) => {
     }).catch(() => {});
   }
 
-  return new Response(JSON.stringify({ booking }), { status: 200 });
+  return new Response(JSON.stringify({ booking }), { status: 200, headers: corsHeaders });
 });

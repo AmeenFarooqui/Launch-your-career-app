@@ -1,20 +1,24 @@
 // supabase/functions/deactivate-counselor/index.ts
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { getAccessToken, deleteCalendarEvent } from "../_shared/google-calendar.ts";
+import { corsHeaders } from "../_shared/cors.ts";
 
 Deno.serve(async (req) => {
+  if (req.method === "OPTIONS") {
+    return new Response("ok", { headers: corsHeaders });
+  }
   if (req.method !== "POST") {
-    return new Response(JSON.stringify({ error: "Method not allowed" }), { status: 405 });
+    return new Response(JSON.stringify({ error: "Method not allowed" }), { status: 405, headers: corsHeaders });
   }
 
   const authHeader = req.headers.get("Authorization") ?? "";
   if (authHeader !== `Bearer ${Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")}`) {
-    return new Response(JSON.stringify({ error: "Not authorized" }), { status: 403 });
+    return new Response(JSON.stringify({ error: "Not authorized" }), { status: 403, headers: corsHeaders });
   }
 
   const { counselor_id } = await req.json();
   if (!counselor_id) {
-    return new Response(JSON.stringify({ error: "counselor_id is required" }), { status: 400 });
+    return new Response(JSON.stringify({ error: "counselor_id is required" }), { status: 400, headers: corsHeaders });
   }
 
   const adminClient = createClient(
@@ -59,5 +63,5 @@ Deno.serve(async (req) => {
     }
   }
 
-  return new Response(JSON.stringify({ cancelled: (bookings ?? []).length, manualFollowUp }), { status: 200 });
+  return new Response(JSON.stringify({ cancelled: (bookings ?? []).length, manualFollowUp }), { status: 200, headers: corsHeaders });
 });

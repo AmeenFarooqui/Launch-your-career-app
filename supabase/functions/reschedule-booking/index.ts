@@ -6,10 +6,14 @@ import {
   isFarEnoughInAdvance,
   canCancelOrReschedule,
 } from "../_shared/booking-rules.ts";
+import { corsHeaders } from "../_shared/cors.ts";
 
 Deno.serve(async (req) => {
+  if (req.method === "OPTIONS") {
+    return new Response("ok", { headers: corsHeaders });
+  }
   if (req.method !== "POST") {
-    return new Response(JSON.stringify({ error: "Method not allowed" }), { status: 405 });
+    return new Response(JSON.stringify({ error: "Method not allowed" }), { status: 405, headers: corsHeaders });
   }
 
   const authHeader = req.headers.get("Authorization") ?? "";
@@ -20,7 +24,7 @@ Deno.serve(async (req) => {
   );
   const { data: userData, error: userError } = await userClient.auth.getUser();
   if (userError || !userData.user) {
-    return new Response(JSON.stringify({ error: "Not authenticated" }), { status: 401 });
+    return new Response(JSON.stringify({ error: "Not authenticated" }), { status: 401, headers: corsHeaders });
   }
   const studentId = userData.user.id;
 
@@ -28,7 +32,7 @@ Deno.serve(async (req) => {
   if (!booking_id || !new_start_time || !new_duration_minutes) {
     return new Response(
       JSON.stringify({ error: "booking_id, new_start_time, and new_duration_minutes are required" }),
-      { status: 400 }
+      { status: 400, headers: corsHeaders }
     );
   }
 
@@ -43,19 +47,19 @@ Deno.serve(async (req) => {
     .eq("id", booking_id)
     .single();
   if (bookingError || !booking || booking.student_id !== studentId) {
-    return new Response(JSON.stringify({ error: "Booking not found" }), { status: 404 });
+    return new Response(JSON.stringify({ error: "Booking not found" }), { status: 404, headers: corsHeaders });
   }
   if (booking.status !== "confirmed") {
-    return new Response(JSON.stringify({ error: "Booking is cancelled" }), { status: 400 });
+    return new Response(JSON.stringify({ error: "Booking is cancelled" }), { status: 400, headers: corsHeaders });
   }
   if (!canCancelOrReschedule(booking.start_time)) {
     return new Response(
       JSON.stringify({ error: "Too late to reschedule — must be more than 1 hour before the current start time" }),
-      { status: 400 }
+      { status: 400, headers: corsHeaders }
     );
   }
   if (!isFarEnoughInAdvance(new_start_time)) {
-    return new Response(JSON.stringify({ error: "New time must be at least 2 hours from now" }), { status: 400 });
+    return new Response(JSON.stringify({ error: "New time must be at least 2 hours from now" }), { status: 400, headers: corsHeaders });
   }
 
   const { data: counselor, error: counselorError } = await adminClient
@@ -66,7 +70,7 @@ Deno.serve(async (req) => {
   if (counselorError || !isDurationOfferedByCounselor(new_duration_minutes, counselor.allowed_durations)) {
     return new Response(
       JSON.stringify({ error: "This counselor does not offer that duration" }),
-      { status: 400 }
+      { status: 400, headers: corsHeaders }
     );
   }
 
@@ -81,7 +85,7 @@ Deno.serve(async (req) => {
     .update({ start_time: new_start_time, end_time: newEndTime })
     .eq("id", booking_id);
   if (updateError) {
-    return new Response(JSON.stringify({ error: "Slot no longer available" }), { status: 409 });
+    return new Response(JSON.stringify({ error: "Slot no longer available" }), { status: 409, headers: corsHeaders });
   }
 
   const { data: tokenRow, error: tokenRowError } = await adminClient
@@ -90,7 +94,7 @@ Deno.serve(async (req) => {
     .eq("counselor_id", booking.counselor_id)
     .single();
   if (tokenRowError || !tokenRow) {
-    return new Response(JSON.stringify({ error: "Counselor is not bookable" }), { status: 404 });
+    return new Response(JSON.stringify({ error: "Counselor is not bookable" }), { status: 404, headers: corsHeaders });
   }
 
   const accessToken = await getAccessToken(tokenRow.refresh_token);
@@ -103,5 +107,5 @@ Deno.serve(async (req) => {
     end: { dateTime: newEndTime },
   });
 
-  return new Response(JSON.stringify({ ok: true }), { status: 200 });
+  return new Response(JSON.stringify({ ok: true }), { status: 200, headers: corsHeaders });
 });
