@@ -61,8 +61,16 @@ Deno.serve(async (req) => {
     .eq("counselor_id", booking.counselor_id)
     .single();
   if (tokenRow) {
-    const accessToken = await getAccessToken(tokenRow.refresh_token);
-    await deleteCalendarEvent(accessToken, "primary", booking.google_event_id);
+    // A dead/revoked Google token (or any other calendar-side failure) must
+    // not trap the student's cancel forever — the DB update below is the
+    // authoritative state change; a failed Calendar cleanup is an operator
+    // follow-up concern, not a reason to block cancellation.
+    try {
+      const accessToken = await getAccessToken(tokenRow.refresh_token);
+      await deleteCalendarEvent(accessToken, "primary", booking.google_event_id);
+    } catch (error) {
+      console.error(`Failed to delete calendar event for booking ${booking_id}:`, error);
+    }
   }
 
   const { error: updateError } = await adminClient
@@ -71,6 +79,7 @@ Deno.serve(async (req) => {
     .eq("id", booking_id);
   if (updateError) {
     console.error("Failed to mark booking cancelled after calendar deletion:", updateError);
+    return new Response(JSON.stringify({ error: "Failed to cancel booking" }), { status: 500, headers: corsHeaders });
   }
 
   return new Response(JSON.stringify({ ok: true }), { status: 200, headers: corsHeaders });

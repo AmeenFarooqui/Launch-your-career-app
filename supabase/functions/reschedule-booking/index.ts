@@ -85,6 +85,7 @@ Deno.serve(async (req) => {
     .update({ start_time: new_start_time, end_time: newEndTime })
     .eq("id", booking_id);
   if (updateError) {
+    console.error("bookings update failed:", updateError);
     return new Response(JSON.stringify({ error: "Slot no longer available" }), { status: 409, headers: corsHeaders });
   }
 
@@ -97,15 +98,18 @@ Deno.serve(async (req) => {
     return new Response(JSON.stringify({ error: "Counselor is not bookable" }), { status: 404, headers: corsHeaders });
   }
 
-  const accessToken = await getAccessToken(tokenRow.refresh_token);
-  // ponytail: DB and Calendar updates aren't atomic across two systems. The
-  // DB already won the overlap check above; a Calendar-side failure here is
-  // rare and would need manual reconciliation, same tolerance already
-  // accepted for the deactivate-counselor dead-token case in the spec.
-  await patchCalendarEvent(accessToken, "primary", booking.google_event_id, {
-    start: { dateTime: new_start_time },
-    end: { dateTime: newEndTime },
-  });
+  // The DB update (source of truth) already committed by this point — a
+  // Calendar-side failure below must not report the reschedule as failed to
+  // the student; it becomes a background sync concern instead.
+  try {
+    const accessToken = await getAccessToken(tokenRow.refresh_token);
+    await patchCalendarEvent(accessToken, "primary", booking.google_event_id, {
+      start: { dateTime: new_start_time },
+      end: { dateTime: newEndTime },
+    });
+  } catch (error) {
+    console.error(`Failed to patch calendar event for booking ${booking_id}:`, error);
+  }
 
   return new Response(JSON.stringify({ ok: true }), { status: 200, headers: corsHeaders });
 });
