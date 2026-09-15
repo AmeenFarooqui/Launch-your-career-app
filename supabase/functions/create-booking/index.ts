@@ -104,7 +104,10 @@ Deno.serve(async (req) => {
   if (bookingError) {
     // Lost a race to a concurrent booking on an overlapping slot — undo the
     // calendar event so the counselor's calendar doesn't show a phantom session.
-    await deleteCalendarEvent(accessToken, "primary", event.id).catch(() => {});
+    console.error("bookings insert failed:", bookingError);
+    await deleteCalendarEvent(accessToken, "primary", event.id).catch((err) =>
+      console.error("Failed to roll back calendar event after booking insert failure:", err)
+    );
     return new Response(JSON.stringify({ error: "Slot no longer available" }), { status: 409 });
   }
 
