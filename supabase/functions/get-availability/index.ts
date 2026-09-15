@@ -30,7 +30,7 @@ Deno.serve(async (req) => {
 
   const { data: counselor, error: counselorError } = await adminClient
     .from("counselors")
-    .select("allowed_durations, timezone, working_hours, calendar_connected")
+    .select("allowed_durations, timezone, working_hours, calendar_connected, approved")
     .eq("id", counselor_id)
     .single();
   if (counselorError || !counselor) {
@@ -42,6 +42,9 @@ Deno.serve(async (req) => {
       JSON.stringify({ error: "This counselor does not offer that duration" }),
       { status: 400, headers: corsHeaders }
     );
+  }
+  if (!counselor.approved) {
+    return new Response(JSON.stringify({ slots: [] }), { status: 200, headers: corsHeaders });
   }
   if (!counselor.calendar_connected) {
     return new Response(JSON.stringify({ slots: [] }), { status: 200, headers: corsHeaders });
