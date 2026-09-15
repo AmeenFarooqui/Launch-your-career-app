@@ -61,7 +61,13 @@ Deno.serve(async (req) => {
     await deleteCalendarEvent(accessToken, "primary", booking.google_event_id);
   }
 
-  await adminClient.from("bookings").update({ status: "cancelled" }).eq("id", booking_id);
+  const { error: updateError } = await adminClient
+    .from("bookings")
+    .update({ status: "cancelled" })
+    .eq("id", booking_id);
+  if (updateError) {
+    console.error("Failed to mark booking cancelled after calendar deletion:", updateError);
+  }
 
   return new Response(JSON.stringify({ ok: true }), { status: 200 });
 });
