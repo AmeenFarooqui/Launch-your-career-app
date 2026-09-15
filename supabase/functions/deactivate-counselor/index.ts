@@ -1,6 +1,6 @@
 // supabase/functions/deactivate-counselor/index.ts
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-import { getAccessToken, deleteCalendarEvent, GoogleTokenError } from "../_shared/google-calendar.ts";
+import { getAccessToken, deleteCalendarEvent } from "../_shared/google-calendar.ts";
 
 Deno.serve(async (req) => {
   if (req.method !== "POST") {
@@ -47,7 +47,7 @@ Deno.serve(async (req) => {
         await deleteCalendarEvent(accessToken, "primary", booking.google_event_id);
         calendarDeleted = true;
       } catch (error) {
-        if (!(error instanceof GoogleTokenError)) throw error;
+        console.error(`Failed to delete calendar event for booking ${booking.id}:`, error);
       }
     }
     await adminClient.from("bookings").update({ status: "cancelled" }).eq("id", booking.id);
